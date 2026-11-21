@@ -8,7 +8,17 @@ export enum Direction {
     BottomLeft,
     TopLeft,
 }
+
 export namespace Direction {
+    export const ALL: Direction[] = [
+        Direction.Top,
+        Direction.TopRight,
+        Direction.BottomRight,
+        Direction.Bottom,
+        Direction.BottomLeft,
+        Direction.TopLeft
+    ];
+
     const DIRECTION_COORDINATES: Record<Direction, AxialCoordinates> = {
         [Direction.Top]: new AxialCoordinates(0, -1, 1),
         [Direction.TopRight]: new AxialCoordinates(1, -1, 0),
