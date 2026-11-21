@@ -1,5 +1,5 @@
 export enum AbilityType {
-  Active,
-  Passive,
-  Special,
+    Active,
+    Passive,
+    Special,
 }
