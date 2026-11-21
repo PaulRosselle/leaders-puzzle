@@ -12,6 +12,7 @@ export class Position {
     }
 
     this.coordinates = new AxialCoordinates(q, r, s);
+    Object.freeze(this);
   }
 
   /**
