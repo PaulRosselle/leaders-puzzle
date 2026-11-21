@@ -1,0 +1,22 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-0: #1C1E20;
+  --text-1: #EBDFC7;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Bebas neue', sans-serif;
+  background: var(--bg-0);
+  color: var(--text-1);
+  overflow: hidden;
+  user-select: none;
+}

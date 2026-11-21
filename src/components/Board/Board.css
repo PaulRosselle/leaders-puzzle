@@ -1,0 +1,37 @@
+.board {
+  container-type: size;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.board__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+
+  --margin-ratio: 0.9;
+
+  /* Displayed width using the source image ratio. */
+  --img-w: calc(min(100cqw, 100cqh * 683 / 785) * var(--margin-ratio));
+
+  /* 1 unit = 1 pixel in the source image. */
+  --u: calc(var(--img-w) / 683);
+
+  /* Values based on the source image. */
+  --sp: calc(var(--u) * 61.25); /* Cells margin */
+  --cell_size: calc(var(--u) * 97); /* Cell diameter */
+}
+
+.board__image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--img-w);
+  height: calc(var(--img-w) * 785 / 683);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}

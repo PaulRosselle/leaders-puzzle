@@ -1,0 +1,36 @@
+.character-piece {
+  border-radius: 50%;
+  box-shadow:
+    calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.04)
+    rgba(0, 0, 0, 0.3);
+}
+
+.character-piece__content {
+  position: absolute;
+  inset: 0;
+}
+
+.character-piece__content--highlighted {
+  inset: 6.5%;
+}
+
+.character-piece__layer,
+.character-piece__highlight {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.character-piece__highlight--animated {
+  animation: character-piece-rotation 800ms linear infinite;
+}
+
+@keyframes character-piece-rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,15 @@
+.cell {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--cell_size);
+  height: var(--cell_size);
+
+  --x: calc(var(--sp) * 1.5 * var(--q));
+  --y: calc(var(--sp) * 1.7320508 * (var(--q) * 0.5 + var(--r)));
+
+  transform: translate(
+    calc(var(--x) - var(--cell_size) / 2),
+    calc(var(--y) - var(--cell_size) / 2)
+  );
+}
