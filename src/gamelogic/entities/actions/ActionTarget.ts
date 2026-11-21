@@ -1,5 +1,5 @@
-import { Character } from "../projection/entities/Character";
-import { Position } from "../projection/entities/Position";
+import { Character } from "../core/Character";
+import { Position } from "../core/Position";
 
 export class ActionTarget {
     public readonly character: Character;

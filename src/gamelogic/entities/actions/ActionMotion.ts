@@ -1,4 +1,4 @@
-import { ActionMotionType } from "./ActionMotionType";
+import { ActionMotionType } from "../../enums/ActionMotionType";
 import { ActionTarget } from "./ActionTarget";
 
 export class ActionMotion {

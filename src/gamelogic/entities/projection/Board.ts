@@ -1,5 +1,5 @@
 
-import { Position } from "./Position";
+import { Position } from "../core/Position";
 import { Cell } from "./Cell";
 
 export class Board {

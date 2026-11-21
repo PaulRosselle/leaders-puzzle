@@ -1,4 +1,4 @@
-import { Direction } from "../enums/Direction";
+import { Direction } from "../../enums/Direction";
 import { AxialCoordinates } from "./AxialCoordinates";
 
 export class Position {
