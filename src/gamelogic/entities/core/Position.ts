@@ -1,10 +1,12 @@
-import { Direction } from "../enums/Direction";
+import { Direction } from "../../enums/Direction";
 import { AxialCoordinates } from "./AxialCoordinates";
 
 export class Position {
     public static readonly HEX_RADIUS = 3;
 
-    private constructor(public readonly coordinates: AxialCoordinates) {
+    public readonly coordinates;
+
+    private constructor(coordinates: AxialCoordinates) {
         const { q, r, s } = coordinates;
 
         if (!Position.isWithinHexagon(q, r, s)) {

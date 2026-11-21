@@ -1,4 +1,4 @@
-import { Character } from './Character';
+import { Character } from '../core/Character';
 
 export class TransformedState {
     public readonly characterBefore: Character;

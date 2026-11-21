@@ -1,5 +1,5 @@
 import { Board } from './Board';
-import { Character } from './Character';
+import { Character } from '../core/Character';
 import { TransformedState } from './TransformedState';
 
 export class Game {

@@ -1,5 +1,5 @@
-import { Position } from "./Position";
-import { Character } from "./Character";
+import { Position } from "../core/Position";
+import { Character } from "../core/Character";
 
 export class Cell {
     private readonly position: Position;

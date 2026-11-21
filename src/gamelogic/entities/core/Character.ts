@@ -1,5 +1,5 @@
-import { CharacterType } from '../enums/CharacterType';
-import { Team } from '../enums/Team';
+import { CharacterType } from '../../enums/CharacterType';
+import { Team } from '../../enums/Team';
 
 export class Character {
     public readonly id: string;
