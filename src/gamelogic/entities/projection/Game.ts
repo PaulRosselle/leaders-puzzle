@@ -35,8 +35,9 @@ export class Game {
      * @param characterId the identifier of the character
      * @returns the transformed state, or undefined if the character is not transformed
      */
-    public getTransformedState(characterId: string): TransformedState | undefined {
-        return this.charactersTransformedState.get(characterId);
+    public getTransformedState(characterId: string): TransformedState | null {
+        const state = this.charactersTransformedState.get(characterId);
+        return state !== undefined ? state : null;
     }
 
     /**
