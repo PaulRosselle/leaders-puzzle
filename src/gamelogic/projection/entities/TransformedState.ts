@@ -4,7 +4,7 @@ export class TransformedState {
     public readonly characterBefore: Character;
     public readonly characterAfter: Character;
 
-    private constructor(characterBefore: Character, characterAfter: Character) {
+    public constructor(characterBefore: Character, characterAfter: Character) {
         if (characterBefore.id !== characterAfter.id) {
             throw new Error('Cannot create a transformed state for two different characters');
         }
