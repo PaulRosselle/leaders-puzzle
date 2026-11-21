@@ -6,9 +6,11 @@ export class ActionTarget {
     public readonly originPos: Position | null;
     public readonly destPos: Position | null;
 
-    constructor(character: Character, originPos: Position | null, destPos: Position | null) {
+    public constructor(character: Character, originPos: Position | null, destPos: Position | null) {
         this.character = character;
         this.originPos = originPos;
         this.destPos = destPos;
+
+        Object.freeze(this);
     }
 }

@@ -1,4 +1,4 @@
-import { AxialCoordinates } from "../entities/AxialCoordinates";
+import { AxialCoordinates } from "../entities/core/AxialCoordinates";
 
 export enum Direction {
     Top,
