@@ -1,10 +1,10 @@
 import { CharacterId } from './CharacterId'
-import { Team } from './Team'
 
 import bgWhite from '../assets/pieces/character_piece_bg_white.webp'
 import bgBlack from '../assets/pieces/character_piece_bg_black.webp'
 import outlineLeader from '../assets/pieces/character_piece_outline_leader.webp'
 import highlight from '../assets/highlights/character_piece_highlight_default.webp'
+import { Team } from '../gamelogic/enums/Team'
 
 /** Team background resource name. */
 export const PIECE_BACKGROUNDS: Record<Team, string> = {
