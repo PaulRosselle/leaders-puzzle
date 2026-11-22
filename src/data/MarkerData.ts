@@ -5,4 +5,6 @@ import type { MarkerType } from './MarkerType'
 export type MarkerData = {
   type: MarkerType
   position: Position
+  /** Clockwise rotation in degrees (0 = default orientation of the image). */
+  rotation?: number
 }

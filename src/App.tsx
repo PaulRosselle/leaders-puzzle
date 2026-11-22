@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Board } from './components/Board/Board'
+import { createMarkers } from './data/MarkerAsset'
 import { createPieceData } from './data/PieceData'
 import { GameLoader } from './data/parser/import/GameLoader'
 import type { InteractionTarget } from './gamelogic/entities/interactions/InteractionTarget'
@@ -16,7 +17,7 @@ export default function App() {
     ? context.getCharacterStates().map((state) => createPieceData(state, false))
     : []
 
-  // Index the legal targets of the current request by position.
+  // Both are derived from the current request, and recomputed only when it changes.
   const targetsByPosition = useMemo(() => {
     const map = new Map<string, InteractionTarget>()
     for (const target of request?.getLegalTargets() ?? []) {
@@ -25,10 +26,13 @@ export default function App() {
     return map
   }, [request])
 
+  // The game context is also needed to find where the moving character stands.
+  const markers = useMemo(() => createMarkers(request, context), [request, context])
+
   return (
     <Board
       pieces={pieces}
-      markers={[]}
+      markers={markers}
       targetsByPosition={targetsByPosition}
       onSelectTarget={selectTarget}
       onCancel={cancel}
