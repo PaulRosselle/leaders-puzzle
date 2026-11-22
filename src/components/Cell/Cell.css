@@ -13,3 +13,10 @@
     calc(var(--y) - var(--cell_size) / 2)
   );
 }
+
+/* Temporary visual feedback for a legal target (replaced by markers later). */
+.cell--targetable {
+  cursor: pointer;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
