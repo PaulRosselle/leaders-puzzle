@@ -15,7 +15,7 @@ import { InteractionTargetType } from "../../enums/interactions/InteractionTarge
 import { AbilityQuery } from "../../queries/AbilityQuery";
 import { BoardQuery } from "../../queries/BoardQuery";
 import { ResolverQuery } from "../../queries/ResolverQuery";
-import { CharacterActionResolver } from "../CharacterActionResolver";
+import { ActionResolver } from "../ActionResolver";
 
 /**
  * Resolves the Royal Guard's active ability.
@@ -27,7 +27,7 @@ import { CharacterActionResolver } from "../CharacterActionResolver";
  * the Royal Guard. The intermediate position adjacent to the Leader is
  * determined automatically.
  */
-export class RoyalGuardActionResolver extends CharacterActionResolver {
+export class RoyalGuardActionResolver extends ActionResolver {
     public constructor(game: Game, gameHistory: GameHistory, character: Character) {
         super(game, gameHistory, character);
     }
