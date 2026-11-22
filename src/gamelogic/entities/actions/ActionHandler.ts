@@ -3,6 +3,7 @@ import { ActionMotion } from "./ActionMotion";
 import { Game } from "../projection/Game";
 import { TransformedState } from "../projection/TransformedState";
 import { ActionMotionType } from "../../enums/ActionMotionType";
+import { CharacterTransformQuery } from "../../queries/CharacterTransformQuery";
 
 export class ActionHandler {
     private readonly game: Game;
@@ -81,28 +82,17 @@ export class ActionHandler {
      * @param undoAction Whether the action is being undone.
      */
     private updateTransformedState( motion: ActionMotion, undoAction: boolean): void {
-        if (!this.isTransformMotion(motion)) {
+        if (!CharacterTransformQuery.isTransformMotion(motion)) {
             return;
         }
 
-        const newState = this.getStateFromTransformMotion(motion);
+        const newState = CharacterTransformQuery.getStateFromTransformMotion(motion);
 
         if (motion.motionType === ActionMotionType.Transform) {
             this.applyTransformState(newState, undoAction);
         } else if (motion.motionType === ActionMotionType.Untransform) {
             this.applyUntransformState(newState, undoAction);
         }
-    }
-
-    private isTransformMotion(motion: ActionMotion): boolean {
-        // TODO - replace by CharacterTransformQuery.isTransformMotion(motion)
-        return false;
-    }
-
-    private getStateFromTransformMotion(motion: ActionMotion): TransformedState {
-
-        // TODO - replace by CharacterTransformQuery.getStateFromTranformMotion(motion);
-        return new TransformedState(this.action.srcCharacter, this.action.srcCharacter);
     }
 
     /**
