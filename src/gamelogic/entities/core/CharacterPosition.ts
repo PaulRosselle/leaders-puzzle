@@ -11,4 +11,8 @@ export class CharacterPosition {
 
         Object.freeze(this);
     }
+
+    public static copy(characterPosition: CharacterPosition): CharacterPosition {
+        return new CharacterPosition(characterPosition.character, characterPosition.position);
+    }
 }
