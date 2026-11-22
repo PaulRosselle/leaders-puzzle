@@ -16,8 +16,16 @@ export default function App() {
 
   useUndoShortcut(canUndo, undo)
 
+  // The character the player is currently acting with (null if none is selected yet).
+  // At most one piece can be selected, so a single id is enough.
+  const selectedCharacterId = request?.getContext().getTargetCharacter()?.id ?? null
+
   const pieces = context
-    ? context.getCharacterStates().map((state) => createPieceData(state, false))
+    ? context
+        .getCharacterStates()
+        .map((state) =>
+          createPieceData(state, state.getCharacter().id === selectedCharacterId),
+        )
     : []
 
   // Both are derived from the current request, and recomputed only when it changes.
