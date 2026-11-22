@@ -13,7 +13,11 @@ import { InteractionResultType } from '../gamelogic/enums/interactions/Interacti
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {
-    animateMotion(motion: ActionMotion): Promise<void>
+    /**
+     * `commit` makes React render the state after the motion; the animator
+     * calls it at the right moment of the animation.
+     */
+    animateMotion(motion: ActionMotion, commit: () => void): Promise<void>
 }
 
 export function useGameController(gameHistory: GameHistory | null, animator: MotionAnimator) {
@@ -34,17 +38,27 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
 
         let active = true
 
-        /** Shows then animates each motion of a feedback, one after the other. */
+        /** Plays each motion of a feedback, one after the other. */
         const playFeedback = async (feedback: InteractionFeedback): Promise<void> => {
             for (const motion of feedback.getActionsMotions()) {
                 if (!active) return
 
-                // 1. Render the state AFTER the motion. flushSync makes React update
-                //    the DOM right now, so the animator finds it up to date.
-                flushSync(() => setMotions((previous) => [...previous, motion]))
+                // Renders the state AFTER the motion. flushSync makes React update the
+                // DOM right now, so the animator finds it up to date. Idempotent.
+                let committed = false
+                const commit = (): void => {
+                    if (committed) return
+                    committed = true
+                    flushSync(() => setMotions((previous) => [...previous, motion]))
+                }
 
-                // 2. Animate from the previous state to this one.
-                await animator.animateMotion(motion)
+                try {
+                    await animator.animateMotion(motion, commit)
+                } finally {
+                    // Safety net: the motion is always applied, even if the animator
+                    // did not handle it or failed (no-op if already committed).
+                    commit()
+                }
             }
         }
 

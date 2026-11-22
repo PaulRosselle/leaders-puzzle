@@ -1,13 +1,16 @@
 .character-piece {
   border-radius: 50%;
-  box-shadow:
-    calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.04)
-    rgba(0, 0, 0, 0.3);
 }
 
+/* The shadow is on the content (not on the outer element) so that it fades
+   and scales together with the piece. */
 .character-piece__content {
   position: absolute;
   inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.04)
+    rgba(0, 0, 0, 0.3);
 }
 
 .character-piece__content--highlighted {
@@ -25,11 +28,6 @@
   object-fit: cover;
 }
 
-/* Pointer cursor when the piece is a legal target. */
-.character-piece--targetable {
-  cursor: pointer;
-}
-
 .character-piece__highlight--animated {
   animation: character-piece-rotation 800ms linear infinite;
 }
@@ -38,4 +36,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Pointer cursor when the piece is a legal target. */
+.character-piece--targetable {
+  cursor: pointer;
 }
