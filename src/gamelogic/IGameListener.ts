@@ -1,7 +1,7 @@
 import type { InteractionFeedback } from "./entities/interactions/InteractionFeedback";
 import type { InteractionRequest } from "./entities/interactions/InteractionRequest";
 import type { InteractionResult } from "./entities/interactions/InteractionResult";
-import type { Game } from "./entities/projection/Game";
+import type { GameContext } from "./entities/states/GameContext";
 
 /**
  * Observer interface to be implemented by an external component
@@ -15,26 +15,27 @@ export interface IGameListener {
     /**
      * Fired once when the game session starts, before the first turn.
      *
-     * @param game The current game state at session start.
+     * @param gameContext The current game context.
      * @returns A promise completed when the caller has finished handling the event.
      */
-    onGameStarted(game: Game): Promise<void>;
+    onGameStarted(gameContext: GameContext): Promise<void>;
 
     /**
      * Fired once when the game session ends.
      *
+     * @param gameContext The current game context.
      * @param playerWon true if the player won the game.
      * @returns A promise completed when the caller has finished handling the event.
      */
-    onGameEnded(playerWon: boolean): Promise<void>;
+    onGameEnded(gameContext: GameContext, playerWon: boolean): Promise<void>;
 
     /**
      * Fired whenever an action is undone.
      *
-     * @param game The game in which the action was undone.
+     * @param gameContext The current game context.
      * @returns A promise completed when the undo handling is complete.
      */
-    onActionUndone(game: Game): Promise<void>;
+    onActionUndone(gameContext: GameContext): Promise<void>;
 
     /**
      * Fired whenever the game requires an input from the caller.
@@ -44,10 +45,11 @@ export interface IGameListener {
      * The caller must return an InteractionResult
      * that satisfies the request contract.
      *
+     * @param gameContext The current game context.
      * @param request The requested interaction context.
      * @returns A promise completed with the caller's response.
      */
-    onInputRequired(request: InteractionRequest): Promise<InteractionResult>;
+    onInputRequired(gameContext: GameContext, request: InteractionRequest): Promise<InteractionResult>;
 
     /**
      * Fired whenever the game produces feedback that must be handled
@@ -56,8 +58,9 @@ export interface IGameListener {
      * The game flow waits for the returned promise to complete
      * before continuing.
      *
+     * @param gameContext The current game context.
      * @param feedback The feedback to handle.
      * @returns A promise completed when the caller has finished handling the feedback.
      */
-    onFeedback(feedback: InteractionFeedback): Promise<void>;
+    onFeedback(gameContext: GameContext, feedback: InteractionFeedback): Promise<void>;
 }
