@@ -1,8 +1,8 @@
 import type { Character } from "../core/Character";
 
 export class InteractionContext {
-    public readonly sourceCharacter: Character | null;
-    public readonly targetCharacter: Character | null;
+    private readonly sourceCharacter: Character | null;
+    private readonly targetCharacter: Character | null;
 
     /**
      * Creates an empty interaction context.
