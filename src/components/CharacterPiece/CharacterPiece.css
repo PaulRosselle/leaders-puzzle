@@ -2,6 +2,12 @@
   border-radius: 50%;
 }
 
+.character-piece img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
 
 /* Shadow on the whole component, highlight included. */
 .character-piece--highlighted {
