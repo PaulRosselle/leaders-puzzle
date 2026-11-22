@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import {
   CHARACTER_ILLUSTRATIONS,
   HIGHLIGHT,
@@ -14,15 +15,28 @@ import { CharacterType } from '../../gamelogic/enums/CharacterType'
 
 type CharacterPieceProps = {
   piece: PieceData
+  /** Defined only if this piece's position is a legal target of the current request. */
+  onSelect?: () => void
 }
 
-export function CharacterPiece({ piece }: CharacterPieceProps) {
+export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
   const { character, team, position, highlightStatus } = piece
   const isHighlighted = highlightStatus !== HighlightStatus.Disabled
   const isAnimated = highlightStatus === HighlightStatus.Animated
+  const isTargetable = onSelect !== undefined
+
+  const handleClick = (event: MouseEvent) => {
+    // Prevents the click from bubbling up to the board (which would cancel the action).
+    event.stopPropagation()
+    onSelect?.()
+  }
 
   return (
-    <div className="character-piece cell" style={cellStyle(position)}>
+    <div
+      className={`character-piece cell ${isTargetable ? 'character-piece--targetable' : ''}`}
+      style={cellStyle(position)}
+      onClick={isTargetable ? handleClick : undefined}
+    >
       {isHighlighted && (
         <img
           className={`character-piece__highlight ${isAnimated ? 'character-piece__highlight--animated' : ''}`}
