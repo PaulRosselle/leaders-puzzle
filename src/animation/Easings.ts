@@ -5,6 +5,27 @@ export type Easing = (t: number) => number
 export const accelerateDecelerate: Easing = (t) => Math.cos((t + 1) * Math.PI) / 2 + 0.5
 
 /**
+ * Same formula as Android's AnticipateInterpolator: the value first goes
+ * slightly backward (below 0) before going forward to 1.
+ */
+export const anticipate =
+  (tension = 2): Easing =>
+  (t) =>
+    t * t * ((tension + 1) * t - tension)
+
+/** Same formula as Android's AccelerateInterpolator. */
+export const accelerate =
+  (factor = 1): Easing =>
+  (t) =>
+    factor === 1 ? t * t : Math.pow(t, 2 * factor)
+
+/** Same formula as Android's DecelerateInterpolator. */
+export const decelerate =
+  (factor = 1): Easing =>
+  (t) =>
+    factor === 1 ? 1 - (1 - t) * (1 - t) : 1 - Math.pow(1 - t, 2 * factor)
+
+/**
  * Converts an easing function into a CSS `linear(...)` easing string,
  * which the Web Animations API understands. The curve is sampled, so
  * the result is a very close approximation of the original function.

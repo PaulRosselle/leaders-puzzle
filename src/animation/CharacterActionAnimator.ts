@@ -2,7 +2,7 @@ import type { ActionMotion } from '../gamelogic/entities/actions/ActionMotion'
 import type { ActionTarget } from '../gamelogic/entities/actions/ActionTarget'
 import type { Position } from '../gamelogic/entities/core/Position'
 import { ActionMotionType } from '../gamelogic/enums/ActionMotionType'
-import { accelerateDecelerate, toCssEasing } from './Easings'
+import { accelerate, accelerateDecelerate, anticipate, decelerate, toCssEasing } from './Easings'
 
 const DURATION_ADD = 200
 const DURATION_REMOVE = 200
@@ -10,6 +10,10 @@ const DURATION_MOVE = 400
 const DURATION_JUMP = 400
 const DURATION_FLY = 600
 const DURATION_TELEPORT = 800
+const DURATION_PUSH = 400
+
+/** How far (ratio of the push distance) the pushing piece pulls back before pushing. */
+const PUSH_ANTICIPATION_RATIO = 0.08
 
 /**
  * Height of the arc of a flight. Android uses 50 px; here it is expressed as
@@ -62,6 +66,9 @@ export class CharacterActionAnimator {
         break
       case ActionMotionType.Teleport:
         await this.animateTeleportCharacter(motion.targets, commit)
+        break
+      case ActionMotionType.Push:
+        await this.animatePushCharacter(motion.targets, commit)
         break
       case ActionMotionType.Remove:
         await this.animateRemoveCharacter(motion.targets, commit)
@@ -128,6 +135,79 @@ export class CharacterActionAnimator {
     await Promise.all(fadeIns.map((animation) => animation?.finished))
   }
 
+  // ---------------------------------------------------------------- Push
+
+  private async animatePushCharacter(targets: readonly ActionTarget[], commit: () => void): Promise<void> {
+    if (targets.length !== 2) {
+      throw new Error('Invalid push motion : expected exactly 2 targets')
+    }
+    const [pushingTarget, pushedTarget] = targets
+    const pushing = requirePositions(pushingTarget, 'pushing')
+    const pushed = requirePositions(pushedTarget, 'pushed')
+
+    // Both pieces are rendered at their destination, then animated from their origin.
+    commit()
+
+    const pushingElement = findPieceElement(pushingTarget.character.id)
+    const pushedElement = findPieceElement(pushedTarget.character.id)
+    if (pushingElement === null || pushedElement === null) {
+      return
+    }
+
+    // The pushing piece is drawn above the pushed one.
+    const restorePushed = this.setupForMovement(pushedElement, 1)
+    const restorePushing = this.setupForMovement(pushingElement, 2)
+
+    // Durations computed like in Java: integer divisions of the scaled total.
+    const totalDuration = this.getAnimationDuration(DURATION_PUSH)
+    const anticipationDuration = Math.floor(totalDuration / 5)
+    const pushDuration = totalDuration - anticipationDuration
+    const pushedDuration = Math.floor(totalDuration / 1.5)
+
+    try {
+      // ANIMATION SEQUENCE : Anticipation -> Pushing -> Pushed
+      // Each phase is an animation delayed by the previous ones. `fill:
+      // 'backwards'` keeps a piece at its start position until its turn comes.
+      // When two animations act on the same piece at the same time, the one
+      // created LAST wins: that is why the anticipation is created after the push.
+
+      // PUSHING ANIMATION
+      const push = pushingElement.animate(travelKeyframes(pushing.origin, pushing.dest), {
+        duration: pushDuration,
+        delay: anticipationDuration,
+        easing: toCssEasing(accelerate(1.5)),
+        fill: 'backwards',
+      })
+
+      // ANTICIPATION ANIMATION: starts slightly behind the origin (on the line
+      // opposite to the push), then comes back to it.
+      const anticipationStart = {
+        '--q': pushing.origin.getQ() - (pushing.dest.getQ() - pushing.origin.getQ()) * PUSH_ANTICIPATION_RATIO,
+        '--r': pushing.origin.getR() - (pushing.dest.getR() - pushing.origin.getR()) * PUSH_ANTICIPATION_RATIO,
+      }
+      const anticipation = pushingElement.animate(
+        [anticipationStart, { '--q': pushing.origin.getQ(), '--r': pushing.origin.getR() }],
+        {
+          duration: anticipationDuration,
+          easing: toCssEasing(anticipate(1.5)),
+        },
+      )
+
+      // PUSHED ANIMATION: starts once the pushing piece has arrived.
+      const pushedMove = pushedElement.animate(travelKeyframes(pushed.origin, pushed.dest), {
+        duration: pushedDuration,
+        delay: totalDuration,
+        easing: toCssEasing(decelerate(1)),
+        fill: 'backwards',
+      })
+
+      await Promise.all([push.finished, anticipation.finished, pushedMove.finished])
+    } finally {
+      restorePushed()
+      restorePushing()
+    }
+  }
+
   // ---------------------------------------------------------------- Move, Jump, Fly
 
   private async animateMoveCharacter(targets: readonly ActionTarget[], commit: () => void): Promise<void> {
@@ -188,13 +268,7 @@ export class CharacterActionAnimator {
     try {
       // The position: animates the cell coordinates (--q / --r, see @property in Cell.css).
       const animations: Animation[] = [
-        element.animate(
-          [
-            { '--q': origin.getQ(), '--r': origin.getR() },
-            { '--q': dest.getQ(), '--r': dest.getR() },
-          ],
-          options,
-        ),
+        element.animate(travelKeyframes(origin, dest), options),
       ]
 
       // The effect, on the inner content so that it acts around the center of the piece.
@@ -214,9 +288,9 @@ export class CharacterActionAnimator {
    * Prepares a piece for its movement and returns a function undoing it.
    * (The highlight is already off: applyMotions disables it for moved pieces.)
    */
-  private setupForMovement(element: HTMLElement): () => void {
+  private setupForMovement(element: HTMLElement, zIndex = 1): () => void {
     // Equivalent of bringToFront(): the moving piece is drawn above the others.
-    element.style.zIndex = '1'
+    element.style.zIndex = String(zIndex)
 
     return () => {
       element.style.zIndex = ''
@@ -287,6 +361,24 @@ export class CharacterActionAnimator {
   private getAnimationDuration(duration: number): number {
     return duration * this.speedMultiplier
   }
+}
+
+// ---------------------------------------------------------------- Travel
+
+/** Keyframes of a straight movement (the cell coordinates are animated). */
+function travelKeyframes(origin: Position, dest: Position): Keyframe[] {
+  return [
+    { '--q': origin.getQ(), '--r': origin.getR() },
+    { '--q': dest.getQ(), '--r': dest.getR() },
+  ]
+}
+
+/** Returns the origin and destination of a target, or throws if one is missing. */
+function requirePositions(target: ActionTarget, name: string): { origin: Position; dest: Position } {
+  if (target.originPos === null || target.destPos === null) {
+    throw new Error(`Invalid ${name} target : missing origin or destination position`)
+  }
+  return { origin: target.originPos, dest: target.destPos }
 }
 
 // ---------------------------------------------------------------- Effects
