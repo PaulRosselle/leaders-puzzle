@@ -8,22 +8,16 @@ export class GameContext {
     private readonly characterStates: readonly CharacterState[];
 
     public constructor(game: Game, gameHistory: GameHistory) {
-        const playableCharacters = PlayabilityQuery.getPlayableCharacters(game, gameHistory);
-        const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
+        const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(game, gameHistory);
 
         const characterStates: CharacterState[] = [];
 
-        for (const characterPosition of characterPositions) {
-            const playable = playableCharacters.some(
-                playableCharacter =>
-                    playableCharacter.getPosition().equals(characterPosition.position)
-            );
-
+        for (const characterPosition of BoardQuery.findCharacterPositions(game.board, null, null)) {
             characterStates.push(
                 new CharacterState(
                     characterPosition.character,
                     characterPosition.position,
-                    playable
+                    playableCharacterPositions.includes(characterPosition.position)
                 )
             );
         }

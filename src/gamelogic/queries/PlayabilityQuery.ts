@@ -1,6 +1,4 @@
-
 import type { Character } from "../entities/core/Character";
-import { PlayableCharacter } from "../entities/core/PlayableCharacter";
 import type { Game } from "../entities/projection/Game";
 import type { GameHistory } from "../entities/actions/GameHistory";
 import { AbilityQuery } from "./AbilityQuery";
@@ -8,6 +6,7 @@ import { BoardQuery } from "./BoardQuery";
 import { ActionResolverFactory } from "../factories/ActionResolverFactory";
 import { ActionBuilder } from "../entities/interactions/ActionBuilder";
 import type { InteractionRequest } from "../entities/interactions/InteractionRequest";
+import type { Position } from "../entities/core/Position";
 
 export class PlayabilityQuery {
 
@@ -45,9 +44,7 @@ export class PlayabilityQuery {
     }
 
     /**
-     * Returns the playable characters for the current action phase.
-     *
-     * A character can only be playable during a valid ActionsPhase.
+     * Returns playable character positions.
      *
      * If a character has an immediate action requirement, only that
      * character is returned. Otherwise, all characters currently
@@ -55,11 +52,10 @@ export class PlayabilityQuery {
      *
      * @param game The current game state.
      * @param gameHistory The game history.
-     * @returns The list of playable characters.
-     * @throws Error if the current phase is not an ActionsPhase.
+     * @returns The list of playable character positions.
      */
-    public static getPlayableCharacters(game: Game, gameHistory: GameHistory): PlayableCharacter[] {
-        const playableCharacters: PlayableCharacter[] = [];
+    public static getPlayableCharacterPositions(game: Game, gameHistory: GameHistory): Position[] {
+        const playableCharacterPositions: Position[] = [];
 
         const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
 
@@ -69,15 +65,15 @@ export class PlayabilityQuery {
             // If a character is forced to play immediately, we return them alone.
             if (AbilityQuery.mustActNow(gameHistory, character) &&
                 this.hasValidAction(game, gameHistory, character)) {
-                return [new PlayableCharacter(characterPos, true)];
+                return [characterPos.position];
             }
 
             // If a character is allowed to act, we add them to the list.
             if (AbilityQuery.canAct(game, gameHistory, character)) {
-                playableCharacters.push(new PlayableCharacter(characterPos, false));
+                playableCharacterPositions.push(characterPos.position);
             }
         }
 
-        return playableCharacters;
+        return playableCharacterPositions;
     }
 }

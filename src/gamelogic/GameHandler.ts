@@ -2,7 +2,7 @@ import type { IGameListener } from "./IGameListener";
 import type { Action } from "./entities/actions/Action";
 import { ActionHandler } from "./entities/actions/ActionHandler";
 import { GameHistory } from "./entities/actions/GameHistory";
-import type { PlayableCharacter } from "./entities/core/PlayableCharacter";
+import type { Character } from "./entities/core/Character";
 import { ActionBuilder } from "./entities/interactions/ActionBuilder";
 import { InteractionContext } from "./entities/interactions/InteractionContext";
 import { InteractionRequest } from "./entities/interactions/InteractionRequest";
@@ -17,6 +17,7 @@ import { InteractionResultType } from "./enums/interactions/InteractionResultTyp
 import { InteractionTargetType } from "./enums/interactions/InteractionTargetType";
 import { ActionResolverFactory } from "./factories/ActionResolverFactory";
 import { GameFactory } from "./factories/GameFactory";
+import { BoardQuery } from "./queries/BoardQuery";
 import { GameQuery } from "./queries/GameQuery";
 import { PlayabilityQuery } from "./queries/PlayabilityQuery";
 
@@ -59,7 +60,7 @@ export class GameHandler {
      * Returns a snapshot of the current game context.
      */
     private getCurrentContext(): GameContext {
-        return new GameContext();
+        return new GameContext(this.game, this.gameHistory);
     }
 
     /**
@@ -117,8 +118,8 @@ export class GameHandler {
         const result = await this.selectPlayableCharacterAsync();
 
         switch (result.getResultType()) {
-            case InteractionResultType.PlayableCharacterChosen:
-                await this.playCharacterAsync(getPlayableCharacterFromResult(result));
+            case InteractionResultType.PositionChosen:
+                await this.playCharacterAsync(this.getPlayableCharacterFromResult(result));
                 break;
             case InteractionResultType.UndoLastAction:
                 await this.undoLastActionAsync();
@@ -131,13 +132,13 @@ export class GameHandler {
     }
 
     private selectPlayableCharacterAsync(): Promise<InteractionResult> {
-        const playableCharacters = PlayabilityQuery.getPlayableCharacters(this.game, this.gameHistory);
+        const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(this.game, this.gameHistory);
 
-        const legalTargets = playableCharacters.map(playableCharacter =>
-            InteractionTarget.fromPlayableCharacter(InteractionTargetType.PlayableCharacter, playableCharacter)
+        const legalTargets = playableCharacterPositions.map(position =>
+            new InteractionTarget(InteractionTargetType.PlayableCharacterPosition, position)
         );
 
-        const legalResults = [InteractionResultType.PlayableCharacterChosen];
+        const legalResults = [InteractionResultType.PositionChosen];
 
         if (this.gameHistory.actions.length > 0) {
             legalResults.push(InteractionResultType.UndoLastAction);
@@ -156,10 +157,9 @@ export class GameHandler {
      * the required inputs until the action is complete or cancelled.
      * A cancelled action is never applied to the game.
      */
-    private async playCharacterAsync(playableCharacter: PlayableCharacter): Promise<void> {
-        const character = playableCharacter.getCharacter();
-        const builder = new ActionBuilder(character);
-        const resolver = ActionResolverFactory.create(this.game, this.gameHistory, character);
+    private async playCharacterAsync(playableCharacter: Character): Promise<void> {
+        const builder = new ActionBuilder(playableCharacter);
+        const resolver = ActionResolverFactory.create(this.game, this.gameHistory, playableCharacter);
 
         while (true) {
             this.checkStopped();
@@ -239,13 +239,14 @@ export class GameHandler {
             throw new GameEndedError(winnerTeam === GameQuery.getPlayerTeam());
         }
     }
-}
 
-function getPlayableCharacterFromResult(result: InteractionResult): PlayableCharacter {
-    const target = result.getNonNullChosenTarget();
+    private getPlayableCharacterFromResult(result: InteractionResult): Character {
+        const target = result.getNonNullChosenTarget();
 
-    if (target.getTargetType() !== InteractionTargetType.PlayableCharacter) {
-        throw new Error("Invalid interaction result: playable character missing");
+        if (target.getTargetType() !== InteractionTargetType.PlayableCharacterPosition) {
+            throw new Error("Invalid interaction result: playable character missing");
+        }
+        
+        return BoardQuery.getNonNullCharacterAt(this.game.board, target.getChosenPosition());
     }
-    return target.getChosenPlayableCharacter();
 }
