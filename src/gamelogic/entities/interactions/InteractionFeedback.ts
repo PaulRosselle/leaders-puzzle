@@ -8,4 +8,8 @@ export class InteractionFeedback {
 
         Object.freeze(this);
     }
+
+    public getActionsMotions(): readonly ActionMotion[] {
+        return this.actionMotions;
+    }
 }
