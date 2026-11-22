@@ -7,7 +7,7 @@ export class Game {
 
     private readonly charactersTransformedState: Map<string, TransformedState>;
 
-    private constructor(board: Board, charactersTransformedState: Map<string, TransformedState>) {
+    public constructor(board: Board, charactersTransformedState: Map<string, TransformedState>) {
         this.board = board;
         this.charactersTransformedState = charactersTransformedState;
     }
