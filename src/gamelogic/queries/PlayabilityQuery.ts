@@ -14,20 +14,6 @@ export class PlayabilityQuery {
     }
 
     /**
-     * Creates a playable state for a character located on the given position.
-     *
-     * @param characterPosition The board position containing the character.
-     * @param mandatory Whether the character is required to act before the end of the turn.
-     * @returns The playable state of the character.
-     */
-    private static getPlayableCharacter(characterPos: CharacterPosition, mandatory: boolean): PlayableCharacter {
-        return new PlayableCharacter(
-            new CharacterPosition(characterPos.character, characterPos.position),
-            mandatory
-        );
-    }
-
-    /**
      * Gets the next interaction request for a character.
      *
      * @param game The current game state.
@@ -82,14 +68,12 @@ export class PlayabilityQuery {
             // If a character is forced to play immediately, we return them alone.
             if (AbilityQuery.mustActNow(gameHistory, character) &&
                 this.hasValidAction(game, gameHistory, character)) {
-                return [this.getPlayableCharacter(characterPos, true)];
+                return [new PlayableCharacter(characterPos, true)];
             }
 
             // If a character is allowed to act, we add them to the list.
             if (AbilityQuery.canAct(game, gameHistory, character)) {
-                playableCharacters.push(
-                    this.getPlayableCharacter(characterPos, false)
-                );
+                playableCharacters.push(new PlayableCharacter(characterPos, false));
             }
         }
 

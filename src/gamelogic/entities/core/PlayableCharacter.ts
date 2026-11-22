@@ -1,5 +1,5 @@
 import type { Character } from "./Character";
-import type { CharacterPosition } from "./CharacterPosition";
+import { CharacterPosition } from "./CharacterPosition";
 import type { Position } from "./Position";
 
 export class PlayableCharacter {
@@ -7,7 +7,7 @@ export class PlayableCharacter {
     private readonly mandatory: boolean;
 
     public constructor(characherPosition: CharacterPosition, mandatory: boolean) {
-        this.characherPosition = characherPosition;
+        this.characherPosition = CharacterPosition.copy(characherPosition);
         this.mandatory = mandatory;
 
         Object.freeze(this);
