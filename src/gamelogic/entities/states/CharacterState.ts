@@ -2,14 +2,19 @@ import type { Character } from "../core/Character";
 import type { Position } from "../core/Position";
 
 export class CharacterState {
-    public readonly character: Character;
-    public readonly position: Position;
+    private readonly character: Character;
+    private readonly position: Position;
     private readonly playable: boolean;
+    private readonly transformedCharacter: Character | null;
 
-    public constructor(character: Character, position: Position, mandatory: boolean) {
+    public constructor(character: Character,
+                       position: Position, 
+                       mandatory: boolean,
+                       transformedCharacter: Character | null) {
         this.character = character;
         this.position = position;
         this.playable = mandatory;
+        this.transformedCharacter = transformedCharacter;
 
         Object.freeze(this);
     }
@@ -24,5 +29,9 @@ export class CharacterState {
 
     public isPlayable(): boolean {
         return this.playable;
+    }
+    
+    public getTransformedCharacter(): Character | null {
+        return this.transformedCharacter;
     }
 }

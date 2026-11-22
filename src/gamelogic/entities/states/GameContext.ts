@@ -13,11 +13,14 @@ export class GameContext {
         const characterStates: CharacterState[] = [];
 
         for (const characterPosition of BoardQuery.findCharacterPositions(game.board, null, null)) {
+            const transformedState = game.getTransformedState(characterPosition.character.id);
+            
             characterStates.push(
                 new CharacterState(
                     characterPosition.character,
                     characterPosition.position,
-                    playableCharacterPositions.includes(characterPosition.position)
+                    playableCharacterPositions.includes(characterPosition.position),
+                    transformedState !== null ? transformedState.characterBefore : null
                 )
             );
         }
