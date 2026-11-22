@@ -1,13 +1,28 @@
 import type { Position } from '../gamelogic/entities/core/Position'
+import type { CharacterState } from '../gamelogic/entities/states/CharacterState'
+import type { CharacterType } from '../gamelogic/enums/CharacterType'
 import type { Team } from '../gamelogic/enums/Team'
-import type { CharacterId } from './CharacterId'
-import type { HighlightStatus } from './HighlightStatus'
+import { HighlightStatus } from './HighlightStatus'
 
 /** Board character piece representation. */
 export type PieceData = {
-  id: string
-  character: CharacterId
-  team: Team
-  position: Position
-  highlightStatus: HighlightStatus
+    id: string
+    character: CharacterType
+    team: Team
+    position: Position
+    highlightStatus: HighlightStatus
+}
+
+export function createPieceData(
+    characterState: CharacterState,
+    isSelected: boolean
+): PieceData {
+    return {
+        id: characterState.character.id,
+        character: characterState.character.characterType,
+        team: characterState.character.team,
+        position: characterState.position,
+        highlightStatus: isSelected ? HighlightStatus.Animated : 
+            characterState.isPlayable() ? HighlightStatus.Enabled : HighlightStatus.Disabled
+    }
 }

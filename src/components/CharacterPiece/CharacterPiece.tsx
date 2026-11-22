@@ -4,13 +4,13 @@ import {
   LEADER_OUTLINE,
   PIECE_BACKGROUNDS,
 } from '../../data/CharacterAsset'
-import { CharacterId } from '../../data/CharacterId'
 import type { PieceData } from '../../data/PieceData'
 import { cellStyle } from '../../utils/cellStyle'
 import './CharacterPiece.css'
 import '../Cell/Cell.css'
 import { HighlightStatus } from '../../data/HighlightStatus'
 import { Team } from '../../gamelogic/enums/Team'
+import { CharacterType } from '../../gamelogic/enums/CharacterType'
 
 type CharacterPieceProps = {
   piece: PieceData
@@ -36,13 +36,13 @@ export function CharacterPiece({ piece }: CharacterPieceProps) {
           src={PIECE_BACKGROUNDS[team]}
           alt={Team[team]}
         />
-        {CharacterId.isLeader(character) && (
+        {CharacterType.isLeader(character) && (
           <img className="character-piece__layer" src={LEADER_OUTLINE} alt="" />
         )}
         <img
           className="character-piece__layer"
           src={CHARACTER_ILLUSTRATIONS[character]}
-          alt={CharacterId[character]}
+          alt={CharacterType[character]}
         />
       </div>
     </div>
