@@ -5,7 +5,9 @@ import type { Game } from "../entities/projection/Game";
 import type { GameHistory } from "../entities/actions/GameHistory";
 import { AbilityQuery } from "./AbilityQuery";
 import { BoardQuery } from "./BoardQuery";
-import { CharacterPosition } from "../entities/core/CharacterPosition";
+import { ActionResolverFactory } from "../factories/ActionResolverFactory";
+import { ActionBuilder } from "../entities/interactions/ActionBuilder";
+import type { InteractionRequest } from "../entities/interactions/InteractionRequest";
 
 export class PlayabilityQuery {
 
@@ -21,12 +23,12 @@ export class PlayabilityQuery {
      * @param character The character to evaluate.
      * @returns The next interaction request, or null if none exists.
      */
-    // private static getCharacterActionRequest(game: Game, gameHistory: GameHistory, character: Character): InteractionRequest | null {
-    //     const resolver = CharacterActionResolverFactory.create(game, gameHistory, character);
-    //     const builder = new CharacterActionBuilder(character);
+    private static getCharacterActionRequest(game: Game, gameHistory: GameHistory, character: Character): InteractionRequest | null {
+        const resolver = ActionResolverFactory.create(game, gameHistory, character);
+        const builder = new ActionBuilder(character);
 
-    //     return resolver.getNextInteraction(builder);
-    // }
+        return resolver.getNextInteraction(builder);
+    }
 
     /**
      * Checks whether a character has at least one valid action.
@@ -37,10 +39,9 @@ export class PlayabilityQuery {
      * @returns True if the character has at least one legal target.
      */
     private static hasValidAction(game: Game, gameHistory: GameHistory, character: Character): boolean {
-        // const request = this.getCharacterActionRequest(game, gameHistory, character);
+        const request = this.getCharacterActionRequest(game, gameHistory, character);
 
-        // return request !== null && request.legalTargets.length > 0;
-        return false; // TODO
+        return request !== null && request.getLegalTargets().length > 0;
     }
 
     /**
