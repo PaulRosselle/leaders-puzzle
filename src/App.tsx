@@ -4,20 +4,19 @@ import { createPieceData } from './data/PieceData'
 import { GameLoader } from './data/parser/import/GameLoader'
 import type { InteractionTarget } from './gamelogic/entities/interactions/InteractionTarget'
 import { useGameController } from './hooks/useGameController'
-import { positionKey } from './data/positionKey'
+import { positionKey } from './utils/positionKey'
 
 // Computed once, outside the component, so the reference stays stable.
 const gameHistory = GameLoader.fromUrl()
 
 export default function App() {
-  const { context, request, selectTarget } = useGameController(gameHistory)
+  const { context, request, selectTarget, cancel } = useGameController(gameHistory)
 
   const pieces = context
     ? context.getCharacterStates().map((state) => createPieceData(state, false))
     : []
 
   // Index the legal targets of the current request by position.
-  // Recomputed only when the request changes.
   const targetsByPosition = useMemo(() => {
     const map = new Map<string, InteractionTarget>()
     for (const target of request?.getLegalTargets() ?? []) {
@@ -32,6 +31,7 @@ export default function App() {
       markers={[]}
       targetsByPosition={targetsByPosition}
       onSelectTarget={selectTarget}
+      onCancel={cancel}
     />
   )
 }
