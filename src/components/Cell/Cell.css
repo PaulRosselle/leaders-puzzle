@@ -20,3 +20,6 @@
   cursor: pointer;
   border-radius: 50%;
 }
+
+@property --q { syntax: '<number>'; inherits: false; initial-value: 0; }
+@property --r { syntax: '<number>'; inherits: false; initial-value: 0; }

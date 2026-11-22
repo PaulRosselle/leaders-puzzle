@@ -7,9 +7,9 @@ import targetMovement from '../assets/markers/target_movement.webp'
 import targetAbilityCharacter from '../assets/markers/target_ability_character.webp'
 import targetAbilityMovement from '../assets/markers/target_ability_movement.webp'
 import type { InteractionRequest } from '../gamelogic/entities/interactions/InteractionRequest'
-import type { GameContext } from '../gamelogic/entities/states/GameContext'
 import type { Position } from '../gamelogic/entities/core/Position'
 import { angleBetween } from '../utils/hexGeometry'
+import type { PieceData } from './PieceData'
 
 export const MARKER_IMAGES: Record<MarkerType, string> = {
     [MarkerType.MovementTarget]: targetMovement,
@@ -34,21 +34,14 @@ const MARKER_BY_TARGET_TYPE: Record<InteractionTargetType, MarkerType | null> = 
  * Position of the character the player just clicked on
  * (the target character of the request context).
  */
-function findOriginPosition(request: InteractionRequest, gameContext: GameContext): Position | null {
-    const characterId = request.getContext().getNonNullTargetCharacter().id
-
-    const state = gameContext.getCharacterStates()
-        .find((characterState) => characterState.getCharacter().id === characterId)
-
-    return state?.getPosition() ?? null
+function findOriginPosition(request: InteractionRequest, pieces: readonly PieceData[]): Position | null {
+  const characterId = request.getContext().getNonNullTargetCharacter().id
+  return pieces.find((piece) => piece.id === characterId)?.position ?? null
 }
 
 /** Builds the markers to display from the legal targets of a request. */
-export function createMarkers(
-    request: InteractionRequest | null,
-    gameContext: GameContext | null,
-): MarkerData[] {
-    if (request === null || gameContext === null) {
+export function createMarkers(request: InteractionRequest | null, pieces: readonly PieceData[]): MarkerData[] {
+    if (request === null) {
         return []
     }
 
@@ -71,7 +64,7 @@ export function createMarkers(
 
         if (type === InteractionTargetType.MovementDestination) {
             if (origin === undefined) {
-                origin = findOriginPosition(request, gameContext)
+                origin = findOriginPosition(request, pieces)
             }
             // The marker points away from the moving character.
             if (origin !== null) {

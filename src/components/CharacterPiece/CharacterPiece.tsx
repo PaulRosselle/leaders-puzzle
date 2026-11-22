@@ -34,6 +34,7 @@ export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
   return (
     <div
       className={`character-piece cell ${isTargetable ? 'character-piece--targetable' : ''}`}
+      data-piece-id={piece.id}
       style={cellStyle(position)}
       onClick={isTargetable ? handleClick : undefined}
     >
