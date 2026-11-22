@@ -2,8 +2,15 @@
   border-radius: 50%;
 }
 
-/* The shadow is on the content (not on the outer element) so that it fades
-   and scales together with the piece. */
+
+/* Shadow on the whole component, highlight included. */
+.character-piece--highlighted {
+  filter: drop-shadow(
+    calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.04)
+    rgba(0, 0, 0, 0.3)
+  );
+}
+/* Shadow on the piece only. */
 .character-piece__content {
   position: absolute;
   inset: 0;
@@ -15,6 +22,11 @@
 
 .character-piece__content--highlighted {
   inset: 6.5%;
+}
+
+/* No shadow box on the piece when its highlighted. */
+.character-piece--highlighted .character-piece__content {
+  box-shadow: none;
 }
 
 .character-piece__layer,
