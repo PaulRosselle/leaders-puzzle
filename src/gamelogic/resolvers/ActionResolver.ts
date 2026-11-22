@@ -32,7 +32,7 @@ import { ActionHandler } from "../entities/actions/ActionHandler";
  * getNextInteraction() to provide custom interaction flows depending
  * on the character abilities and action rules.
  */
-export class CharacterActionResolver {
+export class ActionResolver {
     protected readonly game: Game;
     protected readonly gameHistory: GameHistory;
 
