@@ -3,7 +3,7 @@ import type { Position } from "../core/Position";
 import { InteractionTargetType } from "../../enums/interactions/InteractionTargetType";
 
 export class InteractionTarget {
-    private readonly type: InteractionTargetType;
+    private readonly targetType: InteractionTargetType;
     private readonly chosenPlayableCharacter: PlayableCharacter | null;
     private readonly chosenPosition: Position | null;
 
@@ -14,7 +14,7 @@ export class InteractionTarget {
             throw new Error("There can be only one target data per interaction");
         }
 
-        this.type = category;
+        this.targetType = category;
         this.chosenPlayableCharacter = chosenPlayableCharacter;
         this.chosenPosition = chosenPosition;
 
@@ -24,20 +24,20 @@ export class InteractionTarget {
     /**
      * Creates an interaction target representing a playable character.
      */
-    public static fromPlayableCharacter(type: InteractionTargetType, 
+    public static fromPlayableCharacter(targetType: InteractionTargetType, 
                                         chosenPlayableCharacter: PlayableCharacter): InteractionTarget {
-        return new InteractionTarget(type, chosenPlayableCharacter, null);
+        return new InteractionTarget(targetType, chosenPlayableCharacter, null);
     }
 
     /**
      * Creates an interaction target representing a position.
      */
-    public static fromPosition(type: InteractionTargetType, chosenPosition: Position): InteractionTarget {
-        return new InteractionTarget(type, null, chosenPosition);
+    public static fromPosition(targetType: InteractionTargetType, chosenPosition: Position): InteractionTarget {
+        return new InteractionTarget(targetType, null, chosenPosition);
     }
 
-    public getType(): InteractionTargetType {
-        return this.type;
+    public getTargetType(): InteractionTargetType {
+        return this.targetType;
     }
 
     public getChosenPlayableCharacter(): PlayableCharacter {
@@ -59,7 +59,7 @@ export class InteractionTarget {
      */
     public equals(other: InteractionTarget): boolean {
         return (
-            this.type === other.type &&
+            this.targetType === other.targetType &&
             this.chosenPlayableCharacter === other.chosenPlayableCharacter &&
             (
                 this.chosenPosition === other.chosenPosition ||
@@ -76,6 +76,6 @@ export class InteractionTarget {
         const characterStr = this.chosenPlayableCharacter !== null ? `, character=${this.chosenPlayableCharacter}` : "";
         const positionStr = this.chosenPosition !== null ? `, position=${this.chosenPosition}` : "";
 
-        return `InteractionTarget{category=${this.type}${characterStr}${positionStr}}`;
+        return `InteractionTarget{category=${this.targetType}${characterStr}${positionStr}}`;
     }
 }
