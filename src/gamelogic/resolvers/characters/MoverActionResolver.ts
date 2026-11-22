@@ -13,12 +13,12 @@ import { InteractionTargetType } from "../../enums/interactions/InteractionTarge
 import { AbilityQuery } from "../../queries/AbilityQuery";
 import { BoardQuery } from "../../queries/BoardQuery";
 import { ResolverQuery } from "../../queries/ResolverQuery";
-import { CharacterActionResolver } from "../CharacterActionResolver";
+import { ActionResolver } from "../ActionResolver";
 
 /**
  * Base archetype for characters able to move other characters as an Active Ability.
  */
-export abstract class MoverActionResolver extends CharacterActionResolver {
+export abstract class MoverActionResolver extends ActionResolver {
     public constructor(game: Game, gameHistory: GameHistory, character: Character) {
         super(game, gameHistory, character);
     }

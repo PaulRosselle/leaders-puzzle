@@ -14,7 +14,7 @@ import { InteractionTargetType } from "../../enums/interactions/InteractionTarge
 import { AbilityQuery } from "../../queries/AbilityQuery";
 import { BoardQuery } from "../../queries/BoardQuery";
 import { ResolverQuery } from "../../queries/ResolverQuery";
-import { CharacterActionResolver } from "../CharacterActionResolver";
+import { ActionResolver } from "../ActionResolver";
 
 /**
  * Resolves the Claw Launcher's active ability.
@@ -27,7 +27,7 @@ import { CharacterActionResolver } from "../CharacterActionResolver";
  * type selected by the player. The ability therefore requires
  * only a single interaction.
  */
-export class ClawLauncherActionResolver extends CharacterActionResolver {
+export class ClawLauncherActionResolver extends ActionResolver {
     public constructor(game: Game, gameHistory: GameHistory, character: Character) {
         super(game, gameHistory, character);
     }

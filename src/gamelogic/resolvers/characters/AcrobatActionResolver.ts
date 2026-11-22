@@ -16,7 +16,7 @@ import { InteractionTargetType } from "../../enums/interactions/InteractionTarge
 import { AbilityQuery } from "../../queries/AbilityQuery";
 import { BoardQuery } from "../../queries/BoardQuery";
 import { ResolverQuery } from "../../queries/ResolverQuery";
-import { CharacterActionResolver } from "../CharacterActionResolver";
+import { ActionResolver } from "../ActionResolver";
 
 /**
  * Resolves the Acrobat's active ability.
@@ -24,7 +24,7 @@ import { CharacterActionResolver } from "../CharacterActionResolver";
  * The Acrobat can jump over an adjacent character and land on the
  * following empty cell. It can perform up to two consecutive jumps.
  */
-export class AcrobatActionResolver extends CharacterActionResolver {
+export class AcrobatActionResolver extends ActionResolver {
     public constructor(game: Game, gameHistory: GameHistory, character: Character) {
         super(game, gameHistory, character);
     }
