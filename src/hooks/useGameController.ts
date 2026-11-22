@@ -119,7 +119,9 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
     )
 
     const cancel = useCallback(() => {
-        if (request !== null) controllerRef.current?.cancelAction(request)
+        if (request !== null && request.getLegalResults().includes(InteractionResultType.CancelAction)) {
+            controllerRef.current?.cancelAction(request);
+        }
     }, [request])
 
     const undo = useCallback(() => {
