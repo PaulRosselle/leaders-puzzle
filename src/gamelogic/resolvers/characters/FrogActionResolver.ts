@@ -11,7 +11,7 @@ import type { InteractionTarget } from "../../entities/interactions/InteractionT
 import { ActionMotionType } from "../../enums/ActionMotionType";
 import { InteractionTargetType } from "../../enums/interactions/InteractionTargetType";
 import { ResolverQuery } from "../../queries/ResolverQuery";
-import { CharacterActionResolver } from "../CharacterActionResolver";
+import { ActionResolver } from "../ActionResolver";
 
 /**
  * Resolves the Frog's special ability.
@@ -22,7 +22,7 @@ import { CharacterActionResolver } from "../CharacterActionResolver";
  * interaction. The selected destination is then used to build the movement
  * feedback.
  */
-export class FrogActionResolver extends CharacterActionResolver {
+export class FrogActionResolver extends ActionResolver {
     public constructor(game: Game, gameHistory: GameHistory, character: Character) {
         super(game, gameHistory, character);
     }
