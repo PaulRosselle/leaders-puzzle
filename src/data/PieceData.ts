@@ -18,10 +18,10 @@ export function createPieceData(
     isSelected: boolean
 ): PieceData {
     return {
-        id: characterState.character.id,
-        character: characterState.character.characterType,
-        team: characterState.character.team,
-        position: characterState.position,
+        id: characterState.getCharacter().id,
+        character: characterState.getCharacter().characterType,
+        team: characterState.getCharacter().team,
+        position: characterState.getPosition(),
         highlightStatus: isSelected ? HighlightStatus.Animated : 
             characterState.isPlayable() ? HighlightStatus.Enabled : HighlightStatus.Disabled
     }

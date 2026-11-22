@@ -14,10 +14,7 @@ export class GameStateSerializer {
             const character = state.getCharacter();
 
             const characterType = character.characterType;
-
-            const transformedCharacter = state.getTransformedCharacter();
-            const isFrog = transformedCharacter !== null && 
-                transformedCharacter?.characterType === CharacterType.Frog;
+            const isFrog = characterType === CharacterType.Frog && state.getTransformedCharacter() !== null;
 
             const characterId = getCharacterExportId(characterType);
             const position = PositionLabelMapper.toLabel(state.getPosition());

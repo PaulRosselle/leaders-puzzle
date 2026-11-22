@@ -20,7 +20,7 @@ export class GameContext {
                     characterPosition.character,
                     characterPosition.position,
                     playableCharacterPositions.includes(characterPosition.position),
-                    transformedState !== null ? transformedState.characterAfter : null
+                    transformedState !== null ? transformedState.characterBefore : null
                 )
             );
         }
