@@ -1,7 +1,7 @@
 import { GameUrlReader } from "./GameUrlReader";
 import { GameStateParser } from "./GameStateParser";
 import { GameHistoryFactory } from "./GameHistoryFactory";
-import type { GameHistory } from "../../gamelogic/entities/actions/GameHistory";
+import type { GameHistory } from "../../../gamelogic/entities/actions/GameHistory";
 
 export class GameLoader {
 

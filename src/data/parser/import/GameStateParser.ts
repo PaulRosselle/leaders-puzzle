@@ -1,5 +1,5 @@
-import type { ParsedCharacter, ParsedGameState } from "./ParsedCharacter";
-import { PositionLabelMapper } from "./PositionLabelMapper";
+import type { ParsedCharacter, ParsedGameState } from "../ParsedCharacter";
+import { PositionLabelMapper } from "../PositionLabelMapper";
 
 type TeamCode = "w" | "b";
 

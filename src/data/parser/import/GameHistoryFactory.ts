@@ -1,14 +1,14 @@
-import { Action } from "../../gamelogic/entities/actions/Action";
-import { ActionMotion } from "../../gamelogic/entities/actions/ActionMotion";
-import { ActionTarget } from "../../gamelogic/entities/actions/ActionTarget";
-import { GameHistory } from "../../gamelogic/entities/actions/GameHistory";
-import { Character } from "../../gamelogic/entities/core/Character";
-import { Position } from "../../gamelogic/entities/core/Position";
-import { ActionMotionType } from "../../gamelogic/enums/ActionMotionType";
-import { CharacterType } from "../../gamelogic/enums/CharacterType";
-import { Team } from "../../gamelogic/enums/Team";
-import { CHARACTER_ID_MAPPING } from "./CharacterIdMapping";
-import type { ParsedGameState } from "./ParsedCharacter";
+import { Action } from "../../../gamelogic/entities/actions/Action";
+import { ActionMotion } from "../../../gamelogic/entities/actions/ActionMotion";
+import { ActionTarget } from "../../../gamelogic/entities/actions/ActionTarget";
+import { GameHistory } from "../../../gamelogic/entities/actions/GameHistory";
+import { Character } from "../../../gamelogic/entities/core/Character";
+import { Position } from "../../../gamelogic/entities/core/Position";
+import { ActionMotionType } from "../../../gamelogic/enums/ActionMotionType";
+import { CharacterType } from "../../../gamelogic/enums/CharacterType";
+import { Team } from "../../../gamelogic/enums/Team";
+import { CHARACTER_ID_MAPPING } from "../CharacterIdMapping";
+import type { ParsedGameState } from "../ParsedCharacter";
 
 export class GameHistoryFactory {
 
