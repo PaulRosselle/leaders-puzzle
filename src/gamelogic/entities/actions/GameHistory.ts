@@ -2,9 +2,9 @@ import type { Action } from "./Action";
 
 export class GameHistory {
     public readonly initialActions: readonly Action[];
-    public readonly actions: readonly Action[];
+    public readonly actions: Action[];
 
-    public constructor(initialActions: readonly Action[], actions: readonly Action[]) {
+    public constructor(initialActions: readonly Action[], actions: Action[]) {
         this.initialActions = initialActions;
         this.actions = actions;
     }

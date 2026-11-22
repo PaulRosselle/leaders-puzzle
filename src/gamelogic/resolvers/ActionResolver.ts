@@ -270,17 +270,9 @@ export class ActionResolver {
     }
 
     /**
-     * Returns the character standing on a cell.
-     *
-     * @throws Error if the cell is empty.
+     * Returns the character standing on a position.
      */
     protected getCharacterAt(position: Position): Character {
-        const character = this.game.getBoard().getCell(position).getCharacter();
-
-        if (character === null) {
-            throw new Error(`No character at position ${position.toString()}`);
-        }
-
-        return character;
+        return BoardQuery.getNonNullCharacterAt(this.game.getBoard(), position);
     }
 }

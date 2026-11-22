@@ -6,11 +6,11 @@ import {
 } from '../../data/CharacterAsset'
 import { CharacterId } from '../../data/CharacterId'
 import type { PieceData } from '../../data/PieceData'
-import { Team } from '../../data/Team'
 import { cellStyle } from '../../utils/cellStyle'
 import './CharacterPiece.css'
 import '../Cell/Cell.css'
 import { HighlightStatus } from '../../data/HighlightStatus'
+import { Team } from '../../gamelogic/enums/Team'
 
 type CharacterPieceProps = {
   piece: PieceData

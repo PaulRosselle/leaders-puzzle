@@ -84,4 +84,16 @@ export class Position {
         const { q, r, s } = this.coordinates;
         return `Position{q=${q}, r=${r}, s=${s}}`;
     }
+
+    public getQ(): number {
+        return this.coordinates.q;
+    }
+
+    public getR(): number {
+        return this.coordinates.r;
+    }
+
+    public getS(): number {
+        return this.coordinates.s;
+    }
 }

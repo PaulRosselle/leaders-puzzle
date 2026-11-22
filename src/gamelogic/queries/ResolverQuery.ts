@@ -34,7 +34,7 @@ export class ResolverQuery {
     }
 
     static getChosenPosition(result: InteractionResult): Position {
-        return result.getNonNullChosenTarget().getNonNullChosenPosition();
+        return result.getNonNullChosenTarget().getChosenPosition();
     }
 
     static createPositionResult(context: InteractionContext, 
@@ -43,7 +43,7 @@ export class ResolverQuery {
         return new InteractionResult(
             InteractionResultType.PositionChosen,
             context,
-            InteractionTarget.fromPosition(targetType, position)
+            new InteractionTarget(targetType, position)
         );
     }
 
@@ -51,7 +51,7 @@ export class ResolverQuery {
                       targetType: InteractionTargetType,
                       positions: readonly Position[]): void {
         for (const position of positions) {
-            targets.push(InteractionTarget.fromPosition(targetType, position));
+            targets.push(new InteractionTarget(targetType, position));
         }
     }
 
