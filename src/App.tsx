@@ -5,13 +5,16 @@ import { createPieceData } from './data/PieceData'
 import { GameLoader } from './data/parser/import/GameLoader'
 import type { InteractionTarget } from './gamelogic/entities/interactions/InteractionTarget'
 import { useGameController } from './hooks/useGameController'
+import { useUndoShortcut } from './hooks/useUndoShortcut'
 import { positionKey } from './utils/positionKey'
 
 // Computed once, outside the component, so the reference stays stable.
 const gameHistory = GameLoader.fromUrl()
 
 export default function App() {
-  const { context, request, selectTarget, cancel } = useGameController(gameHistory)
+  const { context, request, selectTarget, cancel, undo, canUndo } = useGameController(gameHistory)
+
+  useUndoShortcut(canUndo, undo)
 
   const pieces = context
     ? context.getCharacterStates().map((state) => createPieceData(state, false))
@@ -26,7 +29,6 @@ export default function App() {
     return map
   }, [request])
 
-  // The game context is also needed to find where the moving character stands.
   const markers = useMemo(() => createMarkers(request, context), [request, context])
 
   return (
