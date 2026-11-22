@@ -9,6 +9,7 @@ const DURATION_REMOVE = 200
 const DURATION_MOVE = 400
 const DURATION_JUMP = 400
 const DURATION_FLY = 600
+const DURATION_TELEPORT = 800
 
 /**
  * Height of the arc of a flight. Android uses 50 px; here it is expressed as
@@ -29,7 +30,8 @@ const FLY_SAMPLES = 20
  *    (Add, Move, Jump, Fly): the animation only plays the way from the old
  *    state to the new one;
  *  - after animating, when pieces must stay on screen until the end of
- *    their animation (Remove).
+ *    their animation (Remove);
+ *  - in the middle of the animation (Teleport: the pieces are moved while invisible).
  */
 export class CharacterActionAnimator {
   private readonly speedMultiplier: number
@@ -58,6 +60,9 @@ export class CharacterActionAnimator {
       case ActionMotionType.Fly:
         await this.animateFlyCharacter(motion.targets, commit)
         break
+      case ActionMotionType.Teleport:
+        await this.animateTeleportCharacter(motion.targets, commit)
+        break
       case ActionMotionType.Remove:
         await this.animateRemoveCharacter(motion.targets, commit)
         break
@@ -75,17 +80,52 @@ export class CharacterActionAnimator {
     // fully visible state).
     commit()
 
-    await Promise.all(targets.map((target) => this.animateFadeIn(target.character.id, DURATION_ADD)))
+    const fadeIns = targets.map((target) => this.startFadeIn(target.character.id, DURATION_ADD))
+    await Promise.all(fadeIns.map((animation) => animation?.finished))
   }
 
   // ---------------------------------------------------------------- Remove
 
   private async animateRemoveCharacter(targets: readonly ActionTarget[], commit: () => void): Promise<void> {
     // The pieces are still on screen: fade them out first...
-    await Promise.all(targets.map((target) => this.animateFadeOut(target.character.id, DURATION_REMOVE)))
+    const fadeOuts = targets.map((target) => this.startFadeOut(target.character.id, DURATION_REMOVE))
+    await Promise.all(fadeOuts.map((animation) => animation?.finished))
 
     // ...then remove them (equivalent of releaseCharacterDisplay).
     commit()
+  }
+
+  // ---------------------------------------------------------------- Teleport
+
+  private async animateTeleportCharacter(targets: readonly ActionTarget[], commit: () => void): Promise<void> {
+    // Same integer division as in Java.
+    const respawnDelay = Math.floor(DURATION_TELEPORT / 6)
+    const fadingDuration = DURATION_TELEPORT / 2 - respawnDelay
+
+    // 1. Fade out the pieces at their origin positions.
+    const fadeOuts = targets.map((target) => this.startFadeOut(target.character.id, fadingDuration))
+    await Promise.all(fadeOuts.map((animation) => animation?.finished))
+
+    // 2. Move the pieces to their destinations. They are still invisible: the
+    //    fade out holds its last frame (fill: 'forwards') during the re-render.
+    commit()
+
+    // React now renders the pieces without highlight, so the inline styles
+    // set by startFadeOut are no longer needed (and would hide a future highlight).
+    for (const target of targets) {
+      resetFadeOutStyles(target.character.id)
+    }
+
+    // 3. Fade in at the destinations after a short delay. The fade in holds its
+    //    first frame during the delay (fill: 'backwards'), so the fade outs can
+    //    be cancelled right away without the pieces flashing.
+    const fadeIns = targets.map((target) =>
+      this.startFadeIn(target.character.id, fadingDuration, respawnDelay),
+    )
+    for (const animation of fadeOuts) {
+      animation?.cancel()
+    }
+    await Promise.all(fadeIns.map((animation) => animation?.finished))
   }
 
   // ---------------------------------------------------------------- Move, Jump, Fly
@@ -185,43 +225,53 @@ export class CharacterActionAnimator {
 
   // ---------------------------------------------------------------- Fades
 
-  private async animateFadeIn(characterId: string, duration: number): Promise<void> {
+  /**
+   * Starts the appearance of a piece and returns its animation (null if the
+   * piece is not on screen). The piece grows from nothing, with its opacity.
+   */
+  private startFadeIn(characterId: string, duration: number, delay = 0): Animation | null {
     const content = findPieceContent(characterId)
     if (content === null) {
-      return
+      return null
     }
 
     // The scale is applied to the inner content so that it grows around the
     // center of the piece (the outer element is positioned with a translate).
-    const animation = content.animate(
+    return content.animate(
       [
         { transform: 'scale(0)', opacity: 0 },
         { transform: 'scale(1)', opacity: 1 },
       ],
       {
         duration: this.getAnimationDuration(duration),
+        delay: this.getAnimationDuration(delay),
         easing: toCssEasing(accelerateDecelerate),
+        // Stays invisible during the delay.
+        fill: 'backwards',
       },
     )
-    await animation.finished
   }
 
-  private async animateFadeOut(characterId: string, duration: number): Promise<void> {
+  /**
+   * Starts the disappearance of a piece and returns its animation (null if the
+   * piece is not on screen). The piece stays invisible after the end of the
+   * animation (fill: 'forwards') until the caller removes or cancels it.
+   */
+  private startFadeOut(characterId: string, duration: number): Animation | null {
     const element = findPieceElement(characterId)
     const content = findPieceContent(characterId)
     if (element === null || content === null) {
-      return
+      return null
     }
 
-    // Equivalent of setIsHighlighted(false): no highlight and default size
-    // (the piece is about to be removed, so React never needs these back).
+    // Equivalent of setIsHighlighted(false): no highlight and default size.
     const highlight = element.querySelector<HTMLElement>('.character-piece__highlight')
     if (highlight !== null) {
       highlight.style.display = 'none'
     }
     content.style.inset = '0'
 
-    const animation = content.animate(
+    return content.animate(
       [
         { transform: 'scale(1)', opacity: 1 },
         { transform: 'scale(0)', opacity: 0 },
@@ -229,11 +279,9 @@ export class CharacterActionAnimator {
       {
         duration: this.getAnimationDuration(duration),
         easing: toCssEasing(accelerateDecelerate),
-        // Stays invisible until the piece is removed from the DOM (no flash).
         fill: 'forwards',
       },
     )
-    await animation.finished
   }
 
   private getAnimationDuration(duration: number): number {
@@ -293,4 +341,12 @@ function findPieceElement(characterId: string): HTMLElement | null {
 /** Finds the inner element of a piece: the equivalent of Android's CharacterView. */
 function findPieceContent(characterId: string): HTMLElement | null {
   return findPieceElement(characterId)?.querySelector<HTMLElement>('.character-piece__content') ?? null
+}
+
+/** Undoes the inline styles set by startFadeOut on a piece that stays on screen. */
+function resetFadeOutStyles(characterId: string): void {
+  const content = findPieceContent(characterId)
+  if (content !== null) {
+    content.style.inset = ''
+  }
 }
