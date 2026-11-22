@@ -19,7 +19,7 @@ export function Board({ pieces, markers }: BoardProps) {
         <img className="board__image" src={boardImage} alt="" />
 
         {BOARD_CELLS.map((position) => (
-          <Cell key={`${position.getQ},${position.getR}`} position={position} />
+          <Cell key={`${position.getQ()},${position.getR()}`} position={position} />
         ))}
 
         {pieces.map((piece) => (
@@ -28,7 +28,7 @@ export function Board({ pieces, markers }: BoardProps) {
 
         {markers.map((marker) => (
           <Marker
-            key={`${marker.type}:${marker.position.getQ},${marker.position.getR}`}
+            key={`${marker.type}:${marker.position.getQ()},${marker.position.getR()}`}
             marker={marker}
           />
         ))}
