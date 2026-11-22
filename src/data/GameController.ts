@@ -9,7 +9,6 @@ import { InteractionResult } from "../gamelogic/entities/interactions/Interactio
 import type { InteractionTarget } from "../gamelogic/entities/interactions/InteractionTarget";
 import type { Game } from "../gamelogic/entities/projection/Game";
 import { InteractionResultType } from "../gamelogic/enums/interactions/InteractionResultType";
-import { InteractionTargetType } from "../gamelogic/enums/interactions/InteractionTargetType";
 
 /**
  * Builds the immutable context handed to the UI from snapshots of the game.
@@ -158,7 +157,7 @@ export class GameController {
         }
 
         return this.respond(request, new InteractionResult(
-            InteractionTargetType.getResultType(legalTarget.getTargetType()),
+            InteractionResultType.PositionChosen,
             request.getContext(),
             legalTarget
         ));
