@@ -18,7 +18,7 @@ import { InteractionResultType } from "../enums/interactions/InteractionResultTy
 import type { Cell } from "../entities/projection/Cell";
 import { InteractionRequestType } from "../enums/interactions/InteractionRequestType";
 
-export class ResolverUtils {
+export class ResolverQuery {
     private constructor() {
         throw new Error("Cannot instantiate utility class");
     }
