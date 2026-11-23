@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
+import { ActionAnimator } from './animation/ActionAnimator'
 import { Board } from './components/Board/Board'
+import { applyMotions } from './data/applyMotions'
 import { createMarkers } from './data/MarkerAsset'
 import { createPieceData } from './data/PieceData'
 import { GameLoader } from './data/parser/import/GameLoader'
@@ -8,27 +10,30 @@ import { useGameController } from './hooks/useGameController'
 import { useUndoShortcut } from './hooks/useUndoShortcut'
 import { positionKey } from './utils/positionKey'
 
-// Computed once, outside the component, so the reference stays stable.
+// Created once, outside the component, so the references stay stable.
 const gameHistory = GameLoader.fromUrl()
+const animator = new ActionAnimator()
 
 export default function App() {
-  const { context, request, selectTarget, cancel, undo, canUndo } = useGameController(gameHistory)
+  const { context, request, motions, selectTarget, cancel, undo, canUndo } =
+    useGameController(gameHistory, animator)
 
   useUndoShortcut(canUndo, undo)
 
   // The character the player is currently acting with (null if none is selected yet).
-  // At most one piece can be selected, so a single id is enough.
   const selectedCharacterId = request?.getContext().getTargetCharacter()?.id ?? null
 
-  const pieces = context
-    ? context
-        .getCharacterStates()
-        .map((state) =>
-          createPieceData(state, state.getCharacter().id === selectedCharacterId),
-        )
-    : []
+  // Pieces as displayed: the state of the context, plus the motions already played.
+  const pieces = useMemo(() => {
+    const basePieces = context
+      ? context
+          .getCharacterStates()
+          .map((state) => createPieceData(state, state.getCharacter().id === selectedCharacterId))
+      : []
 
-  // Both are derived from the current request, and recomputed only when it changes.
+    return applyMotions(basePieces, motions)
+  }, [context, motions, selectedCharacterId])
+
   const targetsByPosition = useMemo(() => {
     const map = new Map<string, InteractionTarget>()
     for (const target of request?.getLegalTargets() ?? []) {
@@ -37,7 +42,9 @@ export default function App() {
     return map
   }, [request])
 
-  const markers = useMemo(() => createMarkers(request, context), [request, context])
+  // Markers now use the displayed pieces (not the context) to find where the
+  // moving character stands.
+  const markers = useMemo(() => createMarkers(request, pieces), [request, pieces])
 
   return (
     <Board

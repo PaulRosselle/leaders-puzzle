@@ -29,7 +29,7 @@ export class GameQuery {
 
         const opponentTeam = Team.getOpposite(leaderTeam);
         for (const characterPos of BoardQuery.findCharacterPositions(game.getBoard(), opponentTeam, null)) {
-            totalCaptureValue += AbilityQuery.getCaptureContribution(characterPos, leaderPos);
+            totalCaptureValue += AbilityQuery.getCaptureContribution(leaderPos, characterPos);
 
             if (totalCaptureValue >= AbilityQuery.LEADER_CAPTURE_VALUE) {
                 return true;
