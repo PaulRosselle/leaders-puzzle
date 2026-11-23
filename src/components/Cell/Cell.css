@@ -4,6 +4,7 @@
   top: 0;
   width: var(--cell_size);
   height: var(--cell_size);
+  touch-action: manipulation;
 
   --x: calc(var(--sp) * 1.5 * var(--q));
   --y: calc(var(--sp) * 1.7320508 * (var(--q) * 0.5 + var(--r)));

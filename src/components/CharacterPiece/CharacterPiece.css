@@ -1,5 +1,6 @@
 .character-piece {
   border-radius: 50%;
+  touch-action: manipulation;
 }
 
 .character-piece img {
