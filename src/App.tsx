@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { ActionAnimator } from './animation/ActionAnimator'
 import { Board } from './components/Board/Board'
 import { applyMotions } from './data/applyMotions'
@@ -6,11 +6,14 @@ import { createMarkers } from './data/MarkerAsset'
 import { createPieceData, type PieceData } from './data/PieceData'
 import { GameLoader } from './data/parser/import/GameLoader'
 import type { InteractionTarget } from './gamelogic/entities/interactions/InteractionTarget'
-import { useGameController } from './hooks/useGameController'
+import { useGameController, type GameResult } from './hooks/useGameController'
 import { useUndoShortcut } from './hooks/useUndoShortcut'
 import { positionKey } from './utils/positionKey'
 import { usePlayableShine } from './hooks/usePlayableShine'
 import { HighlightStatus } from './data/HighlightStatus'
+import { GameQuery } from './gamelogic/queries/GameQuery'
+import { CharacterType } from './gamelogic/enums/CharacterType'
+import { EndGameModal } from './components/EndGameModal/EndGameModal'
 
 // Created once, outside the component, so the references stay stable.
 const gameHistory = GameLoader.fromUrl()
@@ -24,7 +27,7 @@ function compareForShine(a: PieceData, b: PieceData): number {
 }
 
 export default function App() {
-  const { context, request, motions, selectTarget, cancel, undo, canUndo } =
+  const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo } =
     useGameController(gameHistory, animator)
 
   useUndoShortcut(canUndo, undo)
@@ -65,13 +68,36 @@ export default function App() {
   // moving character stands.
   const markers = useMemo(() => createMarkers(request, pieces), [request, pieces])
 
+  // The modal is dismissed per result, so a new game shows it again without any reset.
+  const [dismissedResult, setDismissedResult] = useState<GameResult | null>(null)
+  const playerLeader = useMemo(
+    () =>
+      context
+        ?.getCharacterStates()
+        .map((state) => state.getCharacter())
+        .find(
+          (character) =>
+            character.team === GameQuery.getPlayerTeam() && CharacterType.isLeader(character.characterType),
+        )?.characterType ?? null,
+    [context],
+  )
+
   return (
-    <Board
-      pieces={pieces}
-      markers={markers}
-      targetsByPosition={targetsByPosition}
-      onSelectTarget={selectTarget}
-      onCancel={cancel}
-    />
+    <>
+      <Board
+        pieces={pieces}
+        markers={markers}
+        targetsByPosition={targetsByPosition}
+        onSelectTarget={selectTarget}
+        onCancel={cancel}
+      />
+      {gameResult !== null && gameResult !== dismissedResult && (
+        <EndGameModal
+          playerWon={gameResult.playerWon}
+          leader={playerLeader}
+          onClosed={() => setDismissedResult(gameResult)}
+        />
+      )}
+    </>
   )
 }

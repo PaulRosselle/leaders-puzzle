@@ -20,9 +20,12 @@ export type MotionAnimator = {
     animateMotion(motion: ActionMotion, commit: () => void): Promise<void>
 }
 
+export type GameResult = { readonly playerWon: boolean }
+
 export function useGameController(gameHistory: GameHistory | null, animator: MotionAnimator) {
     const [context, setContext] = useState<GameContext | null>(null)
     const [request, setRequest] = useState<InteractionRequest | null>(null)
+    const [gameResult, setGameResult] = useState<GameResult | null>(null)
 
     // Motions already shown on screen during the current action, but not yet
     // part of `context`: the engine only applies the action to its state at the
@@ -64,10 +67,14 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
 
         const controller = new GameController({
             onGameStarted: () => {
-                if (active) setContext(controller.getCurrentContext())
+                if (!active) return
+                setContext(controller.getCurrentContext())
+                setGameResult(null)
             },
-            onGameEnded: () => {
-                if (active) setContext(controller.getCurrentContext())
+            onGameEnded: (playerWon) => {
+                if (!active) return
+                setContext(controller.getCurrentContext())
+                setGameResult({ playerWon })
             },
             onActionUndone: () => {
                 if (active) setContext(controller.getCurrentContext())
@@ -107,6 +114,7 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
             setContext(null)
             setRequest(null)
             setMotions([])
+            setGameResult(null)
             void controller.dispose()
         }
     }, [gameHistory, animator])
@@ -131,5 +139,5 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
     const canUndo =
         request?.getLegalResults().includes(InteractionResultType.UndoLastAction) ?? false
 
-    return { context, request, motions, selectTarget, cancel, undo, canUndo }
+    return { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo }
 }
