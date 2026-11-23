@@ -48,6 +48,6 @@ export const TOOLBAR_ITEMS: readonly ToolbarItem[] = [
   { id: 'grid', icon: gridIcon, label: 'Puzzles officiels', group: 'end', visibleOn: 'landscape', separatorBefore: true },
   { id: 'import', icon: importIcon, label: 'Importer', group: 'end', visibleOn: 'landscape' },
   { id: 'edit', icon: editIcon, label: 'Ouvrir dans l\'éditeur', group: 'end', visibleOn: 'landscape' },
-  { id: 'settings', icon: settingsIcon, label: 'Paramètres', group: 'end', visibleOn: 'landscape' },
+  { id: 'settings', icon: settingsIcon, label: 'Paramètres', group: 'end', visibleOn: 'landscape', separatorBefore: true  },
   { id: 'more', icon: moreIcon, label: 'Plus d\u2019options', group: 'end', visibleOn: 'portrait' },
 ]
