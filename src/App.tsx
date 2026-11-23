@@ -14,6 +14,7 @@ import { HighlightStatus } from './data/HighlightStatus'
 import { GameQuery } from './gamelogic/queries/GameQuery'
 import { CharacterType } from './gamelogic/enums/CharacterType'
 import { EndGameModal } from './components/EndGameModal/EndGameModal'
+import { Toolbar } from './components/Toolbar/Toolbar'
 
 // Created once, outside the component, so the references stay stable.
 const gameHistory = GameLoader.fromUrl()
@@ -91,6 +92,7 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
       />
+      <Toolbar />
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}
