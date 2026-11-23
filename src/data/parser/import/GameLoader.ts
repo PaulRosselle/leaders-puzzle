@@ -16,4 +16,14 @@ export class GameLoader {
 
         return GameHistoryFactory.fromParsedState(parsedState);
     }
+
+    public static fromRawState(rawState: string | null): GameHistory | null {
+        if (!rawState) {
+            return null;
+        }
+
+        const parsedState = GameStateParser.parse(rawState);
+
+        return GameHistoryFactory.fromParsedState(parsedState);
+    }
 }

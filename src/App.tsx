@@ -16,9 +16,11 @@ import { CharacterType } from './gamelogic/enums/CharacterType'
 import { EndGameModal } from './components/EndGameModal/EndGameModal'
 import { Toolbar } from './components/Toolbar/Toolbar'
 import { openInEditor } from './utils/openInEditor'
+import { GameUrlReader } from './data/parser/import/GameUrlReader'
 
 // Created once, outside the component, so the references stay stable.
-const gameHistory = GameLoader.fromUrl()
+const puzzleRawState = GameUrlReader.getRawState()
+const createGameHistory = () => GameLoader.fromRawState(puzzleRawState)
 const animator = new ActionAnimator()
 
 // TODO: to be driven by a UI setting.
@@ -29,8 +31,8 @@ function compareForShine(a: PieceData, b: PieceData): number {
 }
 
 export default function App() {
-  const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo } =
-    useGameController(gameHistory, animator)
+  const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
+    useGameController(createGameHistory, animator)
 
   useUndoShortcut(canUndo, undo)
 
@@ -94,11 +96,8 @@ export default function App() {
         onCancel={cancel}
       />
       <Toolbar
-        actions={{
-          undo,
-          edit: () => { if (context) openInEditor(context) },
-        }}
-        disabled={{ undo: !canUndo, edit: context === null }}
+        actions={{ undo, restart, edit: () => { if (context) openInEditor(context) } }}
+        disabled={{ undo: !canUndo, restart: !canRestart, edit: context === null }}
       />
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal

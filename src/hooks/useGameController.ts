@@ -22,7 +22,7 @@ export type MotionAnimator = {
 
 export type GameResult = { readonly playerWon: boolean }
 
-export function useGameController(gameHistory: GameHistory | null, animator: MotionAnimator) {
+export function useGameController(createGameHistory: () => GameHistory | null, animator: MotionAnimator) {
     const [context, setContext] = useState<GameContext | null>(null)
     const [request, setRequest] = useState<InteractionRequest | null>(null)
     const [gameResult, setGameResult] = useState<GameResult | null>(null)
@@ -33,8 +33,12 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
     const [motions, setMotions] = useState<readonly ActionMotion[]>([])
 
     const controllerRef = useRef<GameController | null>(null)
+    // Incremented on each restart: animations of the previous game stop applying their motions.
+    const generationRef = useRef(0)
+    const restartingRef = useRef(false)
 
     useEffect(() => {
+        const gameHistory = createGameHistory()
         if (gameHistory === null) {
             return
         }
@@ -43,14 +47,16 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
 
         /** Plays each motion of a feedback, one after the other. */
         const playFeedback = async (feedback: InteractionFeedback): Promise<void> => {
-            for (const motion of feedback.getActionsMotions()) {
-                if (!active) return
+            const generation = generationRef.current
+            const isStale = (): boolean => !active || generationRef.current !== generation
 
-                // Renders the state AFTER the motion. flushSync makes React update the
-                // DOM right now, so the animator finds it up to date. Idempotent.
+
+            for (const motion of feedback.getActionsMotions()) {
+                if (isStale()) return
+
                 let committed = false
                 const commit = (): void => {
-                    if (committed) return
+                    if (committed || isStale()) return
                     committed = true
                     flushSync(() => setMotions((previous) => [...previous, motion]))
                 }
@@ -117,7 +123,7 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
             setGameResult(null)
             void controller.dispose()
         }
-    }, [gameHistory, animator])
+    }, [animator])
 
     const selectTarget = useCallback(
         (target: InteractionTarget) => {
@@ -136,8 +142,28 @@ export function useGameController(gameHistory: GameHistory | null, animator: Mot
         if (request !== null) controllerRef.current?.undoLastAction(request)
     }, [request])
 
-    const canUndo =
-        request?.getLegalResults().includes(InteractionResultType.UndoLastAction) ?? false
+    const canUndo = request?.getLegalResults().includes(InteractionResultType.UndoLastAction) ?? false
 
-    return { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo }
+    const restart = useCallback(() => {
+        const controller = controllerRef.current
+        const gameHistory = createGameHistory() // Fresh history: never reuse a played one.
+
+        // Also ignores a second click while the restart is in progress.
+        if (controller === null || gameHistory === null || restartingRef.current) return
+
+        restartingRef.current = true
+        generationRef.current += 1
+        setMotions([])
+
+        controller
+            .restartGame(gameHistory)
+            .catch((error) => console.error('Restart error', error))
+            .finally(() => {
+                restartingRef.current = false
+            })
+    }, [createGameHistory])
+
+    const canRestart = canUndo || gameResult !== null
+
+    return { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart }
 }
