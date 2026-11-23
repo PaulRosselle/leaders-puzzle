@@ -1,0 +1,118 @@
+.settings-modal {
+  --modal-width: 440px;
+}
+
+/* ---------- Header ---------- */
+
+.settings-modal__header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px; /* Empty | title (centered) | close button */
+  flex: none;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-1, #ebdfc7) 12%, transparent);
+}
+
+.settings-modal__title {
+  grid-column: 2;
+  font-size: 1.75rem;
+  font-weight: normal; /* Bebas Neue has a single weight. */
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-align: center;
+  color: var(--app-golden, #f9b235);
+}
+
+.settings-modal__close {
+  grid-column: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--text-2, #857f73);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+@media (hover: hover) {
+  .settings-modal__close:hover {
+    background: color-mix(in srgb, #000 30%, transparent);
+    color: var(--text-1, #ebdfc7);
+  }
+}
+
+.settings-modal__close:focus-visible {
+  outline: 2px solid var(--app-golden, #f9b235);
+  outline-offset: -2px;
+}
+
+/* ---------- Body ---------- */
+
+.settings-modal__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+  padding: 20px 24px 24px;
+  overflow-y: auto;
+}
+
+/* ---------- Setting row ---------- */
+
+.setting-row {
+  display: flex;
+  gap: 8px 16px;
+}
+
+.setting-row--inline {
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.setting-row--inline .setting-row__text {
+  flex: 1 1 180px;
+}
+
+.setting-row--inline .setting-row__control {
+  flex: none;
+  margin-left: auto;
+}
+
+.setting-row--stacked {
+  flex-direction: column;
+}
+
+.setting-row__text {
+  min-width: 0;
+}
+
+.setting-row__title {
+  font-family: var(--font-title, 'Bebas neue', sans-serif);
+  font-size: 1.375rem;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: var(--text-1, #ebdfc7);
+}
+
+.setting-row__description {
+  margin-top: 2px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--text-2, #857f73);
+}
+
+/* The position of the toolbar only matters when the toolbar is vertical. */
+@media (orientation: portrait) {
+  .setting-row--landscape-only {
+    display: none;
+  }
+}

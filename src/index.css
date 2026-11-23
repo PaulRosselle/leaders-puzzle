@@ -11,8 +11,11 @@ html {
 :root {
   --bg-0: #1C1E20;
   --text-1: #EBDFC7;
+  --text-2: #857F73;
   --app-golden: #F9B235;
   --app-red: #F14A40;
+  --font-title: 'Bebas neue', sans-serif;
+  --font-body: 'Jost', sans-serif;
 }
 
 html, body, #root {

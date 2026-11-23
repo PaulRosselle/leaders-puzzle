@@ -143,6 +143,13 @@
   background: var(--toolbar-separator);
 }
 
+/* Vertical bar on the right side. Must stay before the portrait block below,
+   which wins in portrait (the bar is then at the bottom, whatever the setting). */
+.toolbar--right {
+  left: auto;
+  right: var(--toolbar-inset-right);
+}
+
 /* Items only meant for the portrait layout. */
 .toolbar__button--portrait {
   display: none;

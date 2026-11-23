@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { SettingsContext, type SettingsContextValue } from './SettingsContext'
 
+// TODO - move into hooks ?
 export function useSettings(): SettingsContextValue {
   const context = useContext(SettingsContext)
 

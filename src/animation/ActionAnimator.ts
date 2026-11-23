@@ -40,11 +40,15 @@ const FLY_SAMPLES = 20
  *  - in the middle of the animation (Teleport: the pieces are moved while invisible).
  */
 export class ActionAnimator {
-  private readonly speedMultiplier: number
+  private speedMultiplier: number
 
   /** @param speedMultiplier Equivalent of AnimationSpeed.getMultiplier() (1 = normal). */
   public constructor(speedMultiplier = 1) {
     this.speedMultiplier = speedMultiplier
+  }
+
+  public setSpeedMultiplier(speedMultiplier: number): void {
+    this.speedMultiplier = speedMultiplier;
   }
 
   public async animateMotion(motion: ActionMotion, commit: () => void): Promise<void> {

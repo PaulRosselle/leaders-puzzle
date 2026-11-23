@@ -7,9 +7,10 @@ type CellProps = {
   position: Position
   /** Defined only if this cell is a legal target of the current request. */
   onSelect?: () => void
+  label?: string
 }
 
-export function Cell({ position, onSelect }: CellProps) {
+export function Cell({ position, onSelect, label }: CellProps) {
   const isTargetable = onSelect !== undefined
 
   const handleClick = (event: MouseEvent) => {
@@ -22,7 +23,8 @@ export function Cell({ position, onSelect }: CellProps) {
     <div
       className={`cell ${isTargetable ? 'cell--targetable' : ''}`}
       style={cellStyle(position)}
-      onClick={isTargetable ? handleClick : undefined}
-    />
+      onClick={isTargetable ? handleClick : undefined}>
+        {label && <span className="cell__label">{label}</span>}
+    </div>
   )
 }

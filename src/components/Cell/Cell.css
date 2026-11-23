@@ -24,3 +24,15 @@
 
 @property --q { syntax: '<number>'; inherits: false; initial-value: 0; }
 @property --r { syntax: '<number>'; inherits: false; initial-value: 0; }
+
+.cell__label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--u) * 26);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  pointer-events: none;
+}
