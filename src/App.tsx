@@ -17,20 +17,22 @@ import { EndGameModal } from './components/EndGameModal/EndGameModal'
 import { Toolbar } from './components/Toolbar/Toolbar'
 import { openInEditor } from './utils/openInEditor'
 import { GameUrlReader } from './data/parser/import/GameUrlReader'
+import { reloadWithPuzzle } from './utils/reloadWithPuzzle'
+import { ImportModal } from './components/ImportModal/ImportModal'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
 const createGameHistory = () => GameLoader.fromRawState(puzzleRawState)
 const animator = new ActionAnimator()
 
-// TODO: to be driven by a UI setting.
-const shineAnimationEnabled = true
-
 function compareForShine(a: PieceData, b: PieceData): number {
   return a.position.getQ() - b.position.getQ() || a.position.getR() - b.position.getR()
 }
 
 export default function App() {
+  const shineAnimationEnabled = true // TODO: to be driven by a UI setting.
+  const [importOpen, setImportOpen] = useState(false)
+  
   const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
 
@@ -96,9 +98,12 @@ export default function App() {
         onCancel={cancel}
       />
       <Toolbar
-        actions={{ undo, restart, edit: () => { if (context) openInEditor(context) } }}
+        actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, import: () => setImportOpen(true) }}
         disabled={{ undo: !canUndo, restart: !canRestart, edit: context === null }}
       />
+      {importOpen && (
+        <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
+      )}
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}

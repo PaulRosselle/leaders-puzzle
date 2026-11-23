@@ -11,6 +11,8 @@ html {
 :root {
   --bg-0: #1C1E20;
   --text-1: #EBDFC7;
+  --app-golden: #F9B235;
+  --app-red: #F14A40;
 }
 
 html, body, #root {
