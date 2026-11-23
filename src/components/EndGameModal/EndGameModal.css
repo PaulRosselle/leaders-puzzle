@@ -163,6 +163,6 @@
   border-left: var(--sub-border) solid var(--end-color);
   border-right: var(--sub-border) solid var(--end-color);
   border-bottom: var(--sub-border) solid var(--end-color);
-
+    
   border-radius: 0 0 calc(var(--bar-h) * 2 / 15) calc(var(--bar-h) * 2 / 15);
 }

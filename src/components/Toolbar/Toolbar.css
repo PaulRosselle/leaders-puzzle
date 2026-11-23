@@ -1,0 +1,142 @@
+.toolbar {
+  /* Theme (self-contained: nothing to add to index.css). */
+  --toolbar-bg: #151719;
+  --toolbar-icon: #8d9094;
+  --toolbar-icon-hover: var(--text-1, #ebdfc7);
+  --toolbar-icon-disabled: #4a4d51;
+  --toolbar-hover-bg: #0b0c0d;
+  --toolbar-separator: rgba(255, 255, 255, 0.08);
+  --toolbar-focus: #f2a93b;
+
+  --toolbar-button-size: 44px; /* Comfortable touch target (>= 44px). */
+  --toolbar-icon-size: 24px;
+  --toolbar-padding: 4px;
+  --toolbar-margin: 12px;
+
+  position: fixed;
+  z-index: 10; /* Above the board, below the end game modal (z-index: 100). */
+  display: flex;
+  padding: var(--toolbar-padding);
+  background: var(--toolbar-bg);
+  border-radius: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.toolbar__group {
+  display: flex;
+  gap: 2px;
+}
+
+.toolbar__button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--toolbar-button-size);
+  height: var(--toolbar-button-size);
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--toolbar-icon);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    transform 80ms ease;
+}
+
+.toolbar__icon {
+  width: var(--toolbar-icon-size);
+  height: var(--toolbar-icon-size);
+  background-color: currentColor;
+  -webkit-mask: var(--toolbar-icon-url) center / contain no-repeat;
+  mask: var(--toolbar-icon-url) center / contain no-repeat;
+}
+
+/* Hover only on devices that really hover: avoids a "stuck" hover after a tap. */
+@media (hover: hover) {
+  .toolbar__button:not(:disabled):hover {
+    background: var(--toolbar-hover-bg);
+    color: var(--toolbar-icon-hover);
+  }
+}
+
+.toolbar__button:not(:disabled):active {
+  background: var(--toolbar-hover-bg);
+  color: var(--toolbar-icon-hover);
+  transform: scale(0.94);
+}
+
+/* Keyboard navigation only (no ring after a mouse click). */
+.toolbar__button:focus-visible {
+  outline: 2px solid var(--toolbar-focus);
+  outline-offset: -2px;
+}
+
+.toolbar__button:disabled {
+  color: var(--toolbar-icon-disabled);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toolbar__button {
+    transition: none;
+  }
+}
+
+/* ---------- Landscape (default): vertical bar on the left ---------- */
+
+.toolbar {
+  top: max(var(--toolbar-margin), env(safe-area-inset-top));
+  bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
+  left: max(var(--toolbar-margin), env(safe-area-inset-left));
+  flex-direction: column;
+  justify-content: space-between; /* "start" group on top, "end" group at the bottom. */
+}
+
+.toolbar__group {
+  flex-direction: column;
+}
+
+.toolbar__separator {
+  height: 1px;
+  margin: 4px 10px;
+  background: var(--toolbar-separator);
+}
+
+/* Items only meant for the portrait layout. */
+.toolbar__button--portrait {
+  display: none;
+}
+
+/* ---------- Portrait: horizontal bar at the bottom ---------- */
+
+@media (orientation: portrait) {
+  .toolbar {
+    top: auto;
+    left: max(var(--toolbar-margin), env(safe-area-inset-left));
+    right: max(var(--toolbar-margin), env(safe-area-inset-right));
+    bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
+    flex-direction: row;
+    align-items: center;
+    padding-inline: 12px;
+  }
+
+  /* Buttons become direct flex items of the bar: restart on the left,
+     undo in the middle, more on the right (space-between). */
+  .toolbar__group {
+    display: contents;
+  }
+
+  /* No separators: the buttons are already spread apart. */
+  .toolbar__separator {
+    display: none;
+  }
+
+  .toolbar__button--landscape {
+    display: none;
+  }
+
+  .toolbar__button--portrait {
+    display: grid;
+  }
+}
