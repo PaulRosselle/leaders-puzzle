@@ -92,7 +92,7 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
       />
-      <Toolbar />
+      <Toolbar actions={{ undo }} disabled={{ undo: !canUndo }} />
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}
