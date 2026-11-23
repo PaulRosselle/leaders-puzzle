@@ -63,7 +63,12 @@ function moveTargets(pieces: PieceData[], targets: readonly ActionTarget[]): Pie
 
     // A moved piece loses its highlight (and therefore the 6.5% inset that
     // goes with it), like setIsHighlighted(false) in setupForMovement.
-    return { ...piece, position: destination, highlightStatus: HighlightStatus.Disabled }
+    return { 
+      ...piece, 
+      position: destination, 
+      highlightStatus: HighlightStatus.Disabled, 
+      ransformedCharacter: null, 
+    }
   })
 }
 
@@ -78,5 +83,6 @@ function createPiece(target: ActionTarget): PieceData {
     team: target.character.team,
     position: target.destPos,
     highlightStatus: HighlightStatus.Disabled,
+    transformedCharacter: null,
   }
 }

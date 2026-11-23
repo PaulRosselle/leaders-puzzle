@@ -19,8 +19,30 @@ type CharacterPieceProps = {
   onSelect?: () => void
 }
 
+type PieceLayersProps = {
+  character: CharacterType
+  team: Team
+}
+
+/** Team background, leader outline and illustration of a character. */
+function PieceLayers({ character, team }: PieceLayersProps) {
+  return (
+    <>
+      <img className="character-piece__layer" src={PIECE_BACKGROUNDS[team]} alt={Team[team]} />
+      {CharacterType.isLeader(character) && (
+        <img className="character-piece__layer" src={LEADER_OUTLINE} alt="" />
+      )}
+      <img
+        className="character-piece__layer"
+        src={CHARACTER_ILLUSTRATIONS[character]}
+        alt={CharacterType[character]}
+      />
+    </>
+  )
+}
+
 export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
-  const { character, team, position, highlightStatus } = piece
+  const { character, team, position, highlightStatus, transformedCharacter } = piece
   const isHighlighted = highlightStatus !== HighlightStatus.Disabled
   const isAnimated = highlightStatus === HighlightStatus.Animated
   const isTargetable = onSelect !== undefined
@@ -48,20 +70,18 @@ export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
         />
       )}
       <div className={`character-piece__content ${isHighlighted ? 'character-piece__content--highlighted' : ''}`}>
-        <img
-          className="character-piece__layer"
-          src={PIECE_BACKGROUNDS[team]}
-          alt={Team[team]}
-        />
-        {CharacterType.isLeader(character) && (
-          <img className="character-piece__layer" src={LEADER_OUTLINE} alt="" />
-        )}
-        <img
-          className="character-piece__layer"
-          src={CHARACTER_ILLUSTRATIONS[character]}
-          alt={CharacterType[character]}
-        />
+        <PieceLayers character={character} team={team} />
       </div>
+      {transformedCharacter !== null && (
+        <div className="character-piece__transformed">
+          <div className="character-piece__transformed-content">
+            <PieceLayers
+              character={transformedCharacter.characterType}
+              team={transformedCharacter.team}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
