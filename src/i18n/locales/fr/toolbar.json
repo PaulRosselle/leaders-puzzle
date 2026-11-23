@@ -1,0 +1,12 @@
+{
+  "label": "Outils",
+  "items": {
+    "restart": "Recommencer",
+    "undo": "Annuler (Ctrl+Z)",
+    "grid": "Puzzles officiels",
+    "import": "Importer",
+    "edit": "Ouvrir dans l’éditeur",
+    "settings": "Paramètres",
+    "more": "Plus d’options"
+  }
+}

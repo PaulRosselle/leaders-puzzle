@@ -1,15 +1,8 @@
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PuzzleCodeFinder } from '../../data/parser/import/PuzzleCodeFinder'
 import { Modal } from '../Modal/Modal'
 import './ImportModal.css'
-
-const TEXTS = {
-  title: 'Importer un puzzle', // TODO - handle english
-  fieldLabel: 'Code du puzzle', // TODO - handle english
-  placeholder: 'code du puzzle (exemple : #white=b5:2&black=c4:1,d4:3)', // TODO - handle english
-  submit: 'Importer', // TODO - handle english
-  invalid: 'Code invalide', // TODO - handle english
-}
 
 type ImportModalProps = {
   /** Called with the first valid code found in the text (without any "#"). */
@@ -18,6 +11,7 @@ type ImportModalProps = {
 }
 
 export function ImportModal({ onSubmit, onClose }: ImportModalProps) {
+  const { t } = useTranslation('importModal')
   const [text, setText] = useState('')
   const [invalid, setInvalid] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -41,7 +35,7 @@ export function ImportModal({ onSubmit, onClose }: ImportModalProps) {
       panelClassName="import-modal"
     >
       <h2 id="import-modal-title" className="import-modal__title">
-        {TEXTS.title}
+        {t('title')}
       </h2>
 
       <textarea
@@ -49,8 +43,8 @@ export function ImportModal({ onSubmit, onClose }: ImportModalProps) {
         className="import-modal__field"
         rows={3}
         value={text}
-        placeholder={TEXTS.placeholder}
-        aria-label={TEXTS.fieldLabel}
+        placeholder={t('placeholder')}
+        aria-label={t('fieldLabel')}
         aria-invalid={invalid}
         aria-describedby={invalid ? 'import-modal-error' : undefined}
         spellCheck={false}
@@ -72,11 +66,11 @@ export function ImportModal({ onSubmit, onClose }: ImportModalProps) {
 
       <div className="import-modal__footer">
         <p id="import-modal-error" className="import-modal__error" role="alert">
-          {invalid ? TEXTS.invalid : ''}
+          {invalid ? t('invalid') : ''}
         </p>
 
         <button type="button" className="import-modal__submit" onClick={submit}>
-          {TEXTS.submit}
+          {t('submit')}
         </button>
       </div>
     </Modal>

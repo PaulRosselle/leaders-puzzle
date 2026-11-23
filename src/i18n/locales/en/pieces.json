@@ -1,0 +1,90 @@
+{
+  "team": {
+    "white": "White team",
+    "black": "Black team"
+  },
+  "highlight": {
+    "playable": "Playable",
+    "selected": "Selected"
+  },
+  "characters": {
+    "acrobat": {
+      "name": "Acrobat"
+    },
+    "archer": {
+      "name": "Archer"
+    },
+    "assassin": {
+      "name": "Assassin"
+    },
+    "brewmaster": {
+      "name": "Brewmaster"
+    },
+    "bruiser": {
+      "name": "Bruiser"
+    },
+    "claw_launcher": {
+      "name": "Claw Launcher"
+    },
+    "cub": {
+      "name": "Cub"
+    },
+    "hermit": {
+      "name": "Hermit"
+    },
+    "illusionist": {
+      "name": "Illusionist"
+    },
+    "jailer": {
+      "name": "Jailer"
+    },
+    "leader_king": {
+      "name": "King"
+    },
+    "leader_queen": {
+      "name": "Queen"
+    },
+    "manipulator": {
+      "name": "Manipulator"
+    },
+    "nemesis": {
+      "name": "Nemesis"
+    },
+    "protector": {
+      "name": "Protector"
+    },
+    "rider": {
+      "name": "Rider"
+    },
+    "royal_guard": {
+      "name": "Royal Guard"
+    },
+    "vizier": {
+      "name": "Vizier"
+    },
+    "wanderer": {
+      "name": "Wanderer"
+    },
+    "leader_vermilion": {
+      "name": "Vermilion"
+    },
+    "shaman": {
+      "name": "Shaman"
+    },
+    "frog": {
+      "name": "Frog"
+    },
+    "sniper": {
+      "name": "Sniper"
+    },
+    "tactician": {
+      "name": "Tactician"
+    },
+    "wisp": {
+      "name": "Wisp"
+    },
+    "elite_archer": {
+      "name": "Elite Archer"
+    }
+  }
+}

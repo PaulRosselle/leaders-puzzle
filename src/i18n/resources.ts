@@ -1,0 +1,51 @@
+import type { Language } from '../settings/Settings'
+
+import frEndGame from './locales/fr/endGame.json'
+import frImportModal from './locales/fr/importModal.json'
+import frPieces from './locales/fr/pieces.json'
+import frSettings from './locales/fr/settings.json'
+import frToolbar from './locales/fr/toolbar.json'
+
+import enEndGame from './locales/en/endGame.json'
+import enImportModal from './locales/en/importModal.json'
+import enPieces from './locales/en/pieces.json'
+import enSettings from './locales/en/settings.json'
+import enToolbar from './locales/en/toolbar.json'
+
+/*
+ * One JSON file per namespace (= one area of the UI), one folder per language.
+ *
+ * To add a namespace: create `locales/fr/<name>.json` and `locales/en/<name>.json`,
+ * then add one line for each language below. The types of `t()` follow.
+ */
+export const fr = {
+  endGame: frEndGame,
+  importModal: frImportModal,
+  pieces: frPieces,
+  settings: frSettings,
+  toolbar: frToolbar,
+}
+
+export const en = {
+  endGame: enEndGame,
+  importModal: enImportModal,
+  pieces: enPieces,
+  settings: enSettings,
+  toolbar: enToolbar,
+}
+
+export const resources = { fr, en } satisfies Record<Language, unknown>
+
+/** French is the reference: its JSON files define the keys accepted by `t()`. */
+export type Resources = typeof fr
+
+type SameShape<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false
+
+/**
+ * Compilation fails here ("false" does not satisfy "true") when a key exists
+ * in one language and not in the other: compare the two JSON files of the
+ * namespace you just edited.
+ */
+export type TranslationsAreComplete = SameShape<typeof fr, typeof en> extends true ? true : never
+const translationsAreComplete: TranslationsAreComplete = true
+void translationsAreComplete

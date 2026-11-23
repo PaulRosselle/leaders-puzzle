@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   MORE_MENU_ITEMS,
   TOOLBAR_ITEMS,
@@ -31,6 +32,7 @@ const MORE_MENU_ID = 'toolbar-more-menu'
  * The switch is done in CSS only (see Toolbar.css).
  */
 export function Toolbar({ position = 'left', actions = {}, disabled = {} }: ToolbarProps) {
+  const { t } = useTranslation('toolbar')
   const [menuOpen, setMenuOpen] = useState(false)
   const moreButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -58,7 +60,7 @@ export function Toolbar({ position = 'left', actions = {}, disabled = {} }: Tool
   }
 
   return (
-    <div className={`toolbar toolbar--${position}`} role="toolbar" aria-label="Outils">
+    <div className={`toolbar toolbar--${position}`} role="toolbar" aria-label={t('label')}>
       {GROUPS.map((group) => (
         <div key={group} className={`toolbar__group toolbar__group--${group}`}>
           {TOOLBAR_ITEMS.filter((item) => item.group === group).map((item) => {

@@ -1,0 +1,10 @@
+{
+  "victory": {
+    "title": "Victoire",
+    "subtitle": "Le leader adverse a été vaincu"
+  },
+  "defeat": {
+    "title": "Défaite",
+    "subtitle": "Votre leader a été vaincu"
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { AnimationEvent, CSSProperties } from 'react'
+import { useTranslation } from 'react-i18next'
 import { END_GAME_LEADERS, END_GAME_STYLES, EndGameType } from '../../data/EndGameAsset'
 import type { CharacterType } from '../../gamelogic/enums/CharacterType'
 import './EndGameModal.css'
@@ -15,8 +16,10 @@ type EndGameModalProps = {
 }
 
 export function EndGameModal({ playerWon, leader, onClosed }: EndGameModalProps) {
+  const { t } = useTranslation('endGame')
   const [phase, setPhase] = useState<Phase>('showing')
 
+  const resultKey = playerWon ? 'victory' : 'defeat'
   const type = playerWon ? EndGameType.Victory : EndGameType.Defeat
   const style = END_GAME_STYLES[type]
   const leaderImage = leader !== null ? END_GAME_LEADERS[type][leader] : undefined
@@ -66,12 +69,12 @@ export function EndGameModal({ playerWon, leader, onClosed }: EndGameModalProps)
         <div className="end-game__title-row">
           <img className="end-game__side" src={style.side} alt="" />
           <h1 id="end-game-title" className="end-game__title">
-            {style.title}
+            {t(`${resultKey}.title`)}
           </h1>
           <img className="end-game__side end-game__side--right" src={style.side} alt="" />
         </div>
 
-        <p className="end-game__subtitle">{style.subtitle}</p>
+        <p className="end-game__subtitle">{t(`${resultKey}.subtitle`)}</p>
       </div>
     </div>
   )

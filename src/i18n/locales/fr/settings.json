@@ -1,0 +1,27 @@
+{
+  "title": "Paramètres",
+  "close": "Fermer",
+  "coordinates": {
+    "title": "Indices plateau",
+    "description": "Affiche les coordonnées de chaque case du plateau"
+  },
+  "animationSpeed": {
+    "title": "Vitesse d’animation",
+    "description": "Vitesse de lecture des animations d’actions",
+    "slow": "Lente",
+    "fast": "Rapide"
+  },
+  "playableAnimation": {
+    "title": "Animation de jouabilité",
+    "description": "Joue une animation sur les éléments avec lesquels le joueur peut interagir"
+  },
+  "toolbarPosition": {
+    "title": "Position de la barre d’actions",
+    "description": "Place la barre d’actions à gauche ou à droite de l’écran",
+    "left": "Gauche",
+    "right": "Droite"
+  },
+  "language": {
+    "title": "Langue"
+  }
+}

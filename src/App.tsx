@@ -20,6 +20,7 @@ import { GameUrlReader } from './data/parser/import/GameUrlReader'
 import { reloadWithPuzzle } from './utils/reloadWithPuzzle'
 import { ImportModal } from './components/ImportModal/ImportModal'
 import { useSettings } from './settings/useSettings'
+import { useLanguageSync } from './hooks/useLanguageSync'
 import { getAnimationDurationMultiplier } from './settings/Settings'
 import { SettingsModal } from './components/SettingsModal/SettingsModal'
 
@@ -35,6 +36,7 @@ function compareForShine(a: PieceData, b: PieceData): number {
 export default function App() {
   const [importOpen, setImportOpen] = useState(false)
   const { settings } = useSettings()
+  useLanguageSync()
   const [settingsOpen, setSettingsOpen] = useState(false)
   
   const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =

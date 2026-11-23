@@ -17,8 +17,12 @@ export const LEADER_OUTLINE: string = outlineLeader
 /** Highlight resource name. */
 export const HIGHLIGHT: string = highlight
 
-/** Mapping between a CharacterType and its character_piece resource name. */
-export const CHARACTER_ASSETS: Record<CharacterType, string> = {
+/**
+ * Mapping between a CharacterType and its character_piece resource name.
+ * This name is also the key of the character in the translations
+ * (`pieces.characters.<name>`, see src/i18n/locales).
+ */
+export const CHARACTER_ASSETS = {
     [CharacterType.Acrobat]: 'acrobat',
     [CharacterType.Archer]: 'archer',
     [CharacterType.Assassin]: 'assassin',
@@ -45,7 +49,10 @@ export const CHARACTER_ASSETS: Record<CharacterType, string> = {
     [CharacterType.Tactician]: 'tactician',
     [CharacterType.Wisp]: 'wisp',
     [CharacterType.EliteArcher]: 'elite_archer',
-}
+} as const satisfies Record<CharacterType, string>
+
+/** Resource name of a character ("claw_launcher"...). */
+export type CharacterAssetName = (typeof CHARACTER_ASSETS)[CharacterType]
 
 /**
  * Automatic import of each character piece illustration.

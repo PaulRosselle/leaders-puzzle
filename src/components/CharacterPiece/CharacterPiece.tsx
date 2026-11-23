@@ -1,5 +1,7 @@
 import type { MouseEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
+  CHARACTER_ASSETS,
   CHARACTER_ILLUSTRATIONS,
   HIGHLIGHT,
   LEADER_OUTLINE,
@@ -24,24 +26,33 @@ type PieceLayersProps = {
   team: Team
 }
 
+/** Key of each team in the translations (`pieces.team.<key>`). */
+const TEAM_KEYS = {
+  [Team.White]: 'white',
+  [Team.Black]: 'black',
+} as const satisfies Record<Team, string>
+
 /** Team background, leader outline and illustration of a character. */
 function PieceLayers({ character, team }: PieceLayersProps) {
+  const { t } = useTranslation('pieces')
+
   return (
     <>
-      <img className="character-piece__layer" src={PIECE_BACKGROUNDS[team]} alt={Team[team]} />
+      <img className="character-piece__layer" src={PIECE_BACKGROUNDS[team]} alt={t(`team.${TEAM_KEYS[team]}`)} />
       {CharacterType.isLeader(character) && (
         <img className="character-piece__layer" src={LEADER_OUTLINE} alt="" />
       )}
       <img
         className="character-piece__layer"
         src={CHARACTER_ILLUSTRATIONS[character]}
-        alt={CharacterType[character]}
+        alt={t(`characters.${CHARACTER_ASSETS[character]}.name`)}
       />
     </>
   )
 }
 
 export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
+  const { t } = useTranslation('pieces')
   const { character, team, position, highlightStatus, transformedCharacter } = piece
   const isHighlighted = highlightStatus !== HighlightStatus.Disabled
   const isAnimated = highlightStatus === HighlightStatus.Animated
@@ -66,7 +77,7 @@ export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
         <img
           className={`character-piece__highlight ${isAnimated ? 'character-piece__highlight--animated' : ''}`}
           src={HIGHLIGHT}
-          alt={HighlightStatus[highlightStatus]}
+          alt={t(isAnimated ? 'highlight.selected' : 'highlight.playable')}
         />
       )}
       <div className={`character-piece__content ${isHighlighted ? 'character-piece__content--highlighted' : ''}`}>

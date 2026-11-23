@@ -1,0 +1,90 @@
+{
+  "team": {
+    "white": "Équipe blanche",
+    "black": "Équipe noire"
+  },
+  "highlight": {
+    "playable": "Jouable",
+    "selected": "Sélectionné"
+  },
+  "characters": {
+    "acrobat": {
+      "name": "Acrobate"
+    },
+    "archer": {
+      "name": "Archère"
+    },
+    "assassin": {
+      "name": "Assassin"
+    },
+    "brewmaster": {
+      "name": "Tavernier"
+    },
+    "bruiser": {
+      "name": "Cogneur"
+    },
+    "claw_launcher": {
+      "name": "Lance-grappin"
+    },
+    "cub": {
+      "name": "Ourson"
+    },
+    "hermit": {
+      "name": "Vieil ours"
+    },
+    "illusionist": {
+      "name": "Illusionniste"
+    },
+    "jailer": {
+      "name": "Geôlier"
+    },
+    "leader_king": {
+      "name": "Roi"
+    },
+    "leader_queen": {
+      "name": "Reine"
+    },
+    "manipulator": {
+      "name": "Manipulatrice"
+    },
+    "nemesis": {
+      "name": "Némésis"
+    },
+    "protector": {
+      "name": "Protecteur"
+    },
+    "rider": {
+      "name": "Cavalier"
+    },
+    "royal_guard": {
+      "name": "Garde royal"
+    },
+    "vizier": {
+      "name": "Vizir"
+    },
+    "wanderer": {
+      "name": "Rôdeuse"
+    },
+    "leader_vermilion": {
+      "name": "Empereur vermillon"
+    },
+    "shaman": {
+      "name": "Chaman"
+    },
+    "frog": {
+      "name": "Grenouille"
+    },
+    "sniper": {
+      "name": "Sniper"
+    },
+    "tactician": {
+      "name": "Tacticienne"
+    },
+    "wisp": {
+      "name": "Feu follet"
+    },
+    "elite_archer": {
+      "name": "Archère d’élite"
+    }
+  }
+}
