@@ -25,14 +25,14 @@ export type EndGameStyle = {
 
 export const END_GAME_STYLES: Record<EndGameType, EndGameStyle> = {
   [EndGameType.Victory]: {
-    color: '#F9B235',
+    color: 'var(--app-golden)',
     leaderBackground: victoryBg,
     side: victorySide,
     title: 'Victoire', // TODO - handle english
     subtitle: 'Le leader adverse a été vaincu', // TODO - handle english
   },
   [EndGameType.Defeat]: {
-    color: '#F14A40',
+    color: 'var(--app-red)',
     leaderBackground: defeatBg,
     side: defeatSide,
     title: 'Défaite', // TODO - handle english

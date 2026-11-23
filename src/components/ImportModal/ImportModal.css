@@ -1,0 +1,105 @@
+.import-modal {
+  --import-golden: var(--app-golden);
+  --import-error: #f14a40;
+  --import-panel-bg: var(--bg-0);
+  --import-field-bg: #151719;
+
+  position: fixed;
+  inset: 0;
+  z-index: 110; /* Above the end game modal (z-index: 100). */
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.66);
+}
+
+.import-modal__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(520px, 100%);
+  padding: 24px;
+  background: var(--import-panel-bg);
+  border: 1px solid color-mix(in srgb, var(--text-1) 35%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.import-modal__title {
+  font-size: 2rem;
+  font-weight: normal; /* Bebas Neue has a single weight. */
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--text-1);
+}
+
+.import-modal__field {
+  width: 100%;
+  padding: 12px;
+  resize: none;
+  background: var(--import-field-bg);
+  color: var(--text-1, #ebdfc7);
+  border: 1px solid color-mix(in srgb, var(--text-1, #ebdfc7) 20%, transparent);
+  border-radius: 10px;
+  /* Monospace: the code is case-sensitive and must be shown as it is
+     (Bebas Neue only has capitals). 16px avoids the auto-zoom of iOS Safari. */
+  font-family: ui-monospace, 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-user-select: text;
+  user-select: text; /* Disabled globally in index.css. */
+}
+
+.import-modal__field::placeholder {
+  color: color-mix(in srgb, var(--text-1, #ebdfc7) 45%, transparent);
+}
+
+.import-modal__field:focus {
+  outline: none;
+  border-color: var(--import-golden);
+}
+
+.import-modal__field[aria-invalid='true'] {
+  border-color: var(--import-error);
+}
+
+.import-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.import-modal__error {
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: var(--import-error);
+}
+
+.import-modal__submit {
+  min-width: 44px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 16px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--import-golden);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+@media (hover: hover) {
+  .import-modal__submit:hover {
+    background: color-mix(in srgb, var(--import-golden) 14%, transparent);
+  }
+}
+
+.import-modal__submit:focus-visible {
+  outline: 2px solid var(--import-golden);
+  outline-offset: 2px;
+}
