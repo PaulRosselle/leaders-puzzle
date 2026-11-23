@@ -1,3 +1,4 @@
+import type { Character } from '../gamelogic/entities/core/Character'
 import type { Position } from '../gamelogic/entities/core/Position'
 import type { CharacterState } from '../gamelogic/entities/states/CharacterState'
 import type { CharacterType } from '../gamelogic/enums/CharacterType'
@@ -11,6 +12,7 @@ export type PieceData = {
     team: Team
     position: Position
     highlightStatus: HighlightStatus
+    transformedCharacter: Character | null
 }
 
 export function createPieceData(
@@ -23,6 +25,7 @@ export function createPieceData(
         team: characterState.getCharacter().team,
         position: characterState.getPosition(),
         highlightStatus: isSelected ? HighlightStatus.Animated : 
-            characterState.isPlayable() ? HighlightStatus.Enabled : HighlightStatus.Disabled
+            characterState.isPlayable() ? HighlightStatus.Enabled : HighlightStatus.Disabled,
+        transformedCharacter: characterState.getTransformedCharacter(),
     }
 }

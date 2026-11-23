@@ -60,3 +60,37 @@
 .character-piece--targetable {
   cursor: pointer;
 }
+
+.character-piece {
+  --frog-transformation-color: #2eb695;
+  --transformed-piece-ratio: 0.46;
+  --transformed-ring-ratio: 0.0125;
+}
+
+/* Origin character badge, top left corner of the piece (not affected by the highlight inset). */
+.character-piece__transformed {
+  --ring: calc(var(--cell_size) * var(--transformed-ring-ratio));
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--transformed-piece-ratio) * 100%);
+  height: calc(var(--transformed-piece-ratio) * 100%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* The character is slightly smaller than the badge: the ring is drawn on top of it. */
+.character-piece__transformed-content {
+  position: absolute;
+  inset: calc(var(--ring) / 2);
+  border-radius: 50%;
+}
+
+.character-piece__transformed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--ring) var(--frog-transformation-color);
+}

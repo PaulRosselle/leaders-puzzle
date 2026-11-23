@@ -10,13 +10,13 @@ import { GameLoader } from './parser/import/GameLoader'
 import { createPieceData, type PieceData } from './PieceData'
 
 export const DEMO_PIECES: PieceData[] = [
-    { id: 'white-leader', character: CharacterType.LeaderKing, team: Team.White, position: Position.fromAxial(-3, 0, 3), highlightStatus: HighlightStatus.Disabled },
-    { id: 'black-leader', character: CharacterType.LeaderQueen, team: Team.Black, position: Position.fromAxial(3, 0, -3), highlightStatus: HighlightStatus.Enabled },
-    { id: 'white-1', character: CharacterType.Assassin, team: Team.White, position: Position.fromAxial(0, 1, -1), highlightStatus: HighlightStatus.Disabled },
-    { id: 'black-1', character: CharacterType.Acrobat, team: Team.Black, position: Position.fromAxial(1, 1, -2), highlightStatus: HighlightStatus.Enabled },
-    { id: 'white-2', character: CharacterType.Bruiser, team: Team.White, position: Position.fromAxial(2, -2, 0), highlightStatus: HighlightStatus.Disabled },
-    { id: 'black-2', character: CharacterType.Wisp, team: Team.Black, position: Position.fromAxial(-1, -1, 2), highlightStatus: HighlightStatus.Enabled },
-    { id: 'white-3', character: CharacterType.RoyalGuard, team: Team.White, position: Position.fromAxial(0, 0, 0), highlightStatus: HighlightStatus.Disabled },
+    { id: 'white-leader', character: CharacterType.LeaderKing, team: Team.White, position: Position.fromAxial(-3, 0, 3), highlightStatus: HighlightStatus.Disabled, transformedCharacter: null },
+    { id: 'black-leader', character: CharacterType.LeaderQueen, team: Team.Black, position: Position.fromAxial(3, 0, -3), highlightStatus: HighlightStatus.Enabled, transformedCharacter: null },
+    { id: 'white-1', character: CharacterType.Assassin, team: Team.White, position: Position.fromAxial(0, 1, -1), highlightStatus: HighlightStatus.Disabled, transformedCharacter: null },
+    { id: 'black-1', character: CharacterType.Acrobat, team: Team.Black, position: Position.fromAxial(1, 1, -2), highlightStatus: HighlightStatus.Enabled, transformedCharacter: null },
+    { id: 'white-2', character: CharacterType.Bruiser, team: Team.White, position: Position.fromAxial(2, -2, 0), highlightStatus: HighlightStatus.Disabled, transformedCharacter: null },
+    { id: 'black-2', character: CharacterType.Wisp, team: Team.Black, position: Position.fromAxial(-1, -1, 2), highlightStatus: HighlightStatus.Enabled, transformedCharacter: null },
+    { id: 'white-3', character: CharacterType.RoyalGuard, team: Team.White, position: Position.fromAxial(0, 0, 0), highlightStatus: HighlightStatus.Disabled, transformedCharacter: null },
 ]
 
 export const DEMO_MARKERS: MarkerData[] = [

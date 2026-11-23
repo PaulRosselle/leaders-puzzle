@@ -237,7 +237,7 @@ export class ActionAnimator {
 
       if (oldElement !== null && oldContent !== null) {
         restoreOut = this.setupForMovement(oldElement)
-        disableHighlight(oldElement, oldContent)
+        disableEffects(oldElement, oldContent)
 
         transformOut = oldContent.animate(TRANSFORM_OUT_KEYFRAMES, {
           duration: transformOutDuration,
@@ -412,7 +412,7 @@ export class ActionAnimator {
       return null
     }
 
-    disableHighlight(element, content)
+    disableEffects(element, content)
 
     return content.animate(
       [
@@ -531,12 +531,7 @@ function resetFadeOutStyles(characterId: string): void {
   }
 }
 
-/**
- * Equivalent of setIsHighlighted(false): no highlight and default size
- * (the 6.5% inset only applies to highlighted pieces).
- * Inline styles, to be removed with resetFadeOutStyles if the piece stays.
- */
-function disableHighlight(element: HTMLElement, content: HTMLElement): void {
+function disableEffects(element: HTMLElement, content: HTMLElement): void {
   // The shadow of the whole component goes away, and the piece gets its own shadow back.
   element.classList.remove('character-piece--highlighted')
 
@@ -544,5 +539,11 @@ function disableHighlight(element: HTMLElement, content: HTMLElement): void {
   if (highlight !== null) {
     highlight.style.display = 'none'
   }
+
+  const transformed = element.querySelector<HTMLElement>('.character-piece__transformed')
+  if (transformed !== null) {
+    transformed.style.display = 'none'
+  }
+
   content.style.inset = '0'
 }
