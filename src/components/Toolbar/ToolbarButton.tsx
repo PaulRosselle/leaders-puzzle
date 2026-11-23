@@ -1,29 +1,32 @@
-import type { CSSProperties } from 'react'
+import type { Ref } from 'react'
 import type { ToolbarItem } from '../../data/ToolbarItems'
+import { ToolbarIcon } from './ToolbarIcon'
 
 type ToolbarButtonProps = {
   item: ToolbarItem
   disabled?: boolean
-  /** Nothing happens when undefined (the buttons are not wired yet). */
+  /** Nothing happens when undefined (the button is not wired yet). */
   onClick?: () => void
+  buttonRef?: Ref<HTMLButtonElement>
+  /** For a button that opens a menu. */
+  popup?: { expanded: boolean; controls: string }
 }
 
-export function ToolbarButton({ item, disabled = false, onClick }: ToolbarButtonProps) {
+export function ToolbarButton({ item, disabled = false, onClick, buttonRef, popup }: ToolbarButtonProps) {
   return (
     <button
+      ref={buttonRef}
       type="button"
       className={`toolbar__button toolbar__button--${item.visibleOn}`}
       aria-label={item.label}
       title={item.label}
+      aria-haspopup={popup ? 'menu' : undefined}
+      aria-expanded={popup ? popup.expanded : undefined}
+      aria-controls={popup?.expanded ? popup.controls : undefined}
       disabled={disabled}
       onClick={onClick}
     >
-      {/* The icon is a mask painted with `currentColor`, so CSS drives its color. */}
-      <span
-        className="toolbar__icon"
-        aria-hidden="true"
-        style={{ '--toolbar-icon-url': `url("${item.icon}")` } as CSSProperties}
-      />
+      <ToolbarIcon icon={item.icon} />
     </button>
   )
 }

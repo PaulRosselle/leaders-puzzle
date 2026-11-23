@@ -1,0 +1,115 @@
+/* Floating menu of the "more" button. It is a child of .toolbar (same variables). */
+.toolbar-menu {
+  --menu-padding: 4px;
+  --menu-offset: 8px; /* Space between the menu and the toolbar. */
+
+  /* Same principle as the toolbar: 4 items, reduced when the screen is too small (zoom). */
+  --menu-item-size: min(
+    var(--toolbar-button-max),
+    calc(
+      (
+          100dvh - var(--toolbar-inset-top) - var(--toolbar-inset-bottom) - var(--toolbar-button-size) - 2 *
+            var(--toolbar-padding) - var(--menu-offset) - 2 * var(--menu-padding)
+        ) / 4
+    )
+  );
+
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + var(--menu-offset));
+  display: flex;
+  flex-direction: column;
+  min-width: min(200px, 100%);
+  max-width: 100%;
+  padding: var(--menu-padding);
+  background: var(--toolbar-bg);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transform-origin: bottom right;
+  animation: toolbar-menu-open 120ms ease-out;
+}
+
+@keyframes toolbar-menu-open {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.toolbar-menu__item {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--menu-item-size) * 0.27);
+  height: var(--menu-item-size);
+  padding: 0 calc(var(--menu-item-size) * 0.36) 0 calc(var(--menu-item-size) * 0.23);
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--menu-item-size) * 0.23);
+  color: var(--toolbar-icon);
+  font: inherit;
+  font-size: calc(var(--menu-item-size) * 0.45);
+  letter-spacing: 0.04em;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.toolbar-menu__item .toolbar__icon {
+  flex: none;
+  width: calc(var(--menu-item-size) * 0.5455);
+  height: calc(var(--menu-item-size) * 0.5455);
+  color: var(--text-1);
+}
+
+.toolbar-menu__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--toolbar-icon-hover);
+}
+
+@media (hover: hover) {
+  .toolbar-menu__item:not(:disabled):hover {
+    background: var(--toolbar-hover-bg);
+    color: var(--toolbar-icon-hover);
+  }
+}
+
+.toolbar-menu__item:not(:disabled):active {
+  background: var(--toolbar-hover-bg);
+  color: var(--toolbar-icon-hover);
+}
+
+.toolbar-menu__item:focus-visible {
+  outline: 2px solid var(--toolbar-focus);
+  outline-offset: -2px;
+}
+
+.toolbar-menu__item:disabled {
+  cursor: default;
+}
+
+.toolbar-menu__item:disabled,
+.toolbar-menu__item:disabled .toolbar-menu__label {
+  color: var(--toolbar-icon-disabled);
+}
+
+/* The "more" button only exists in portrait. */
+@media (orientation: landscape) {
+  .toolbar-menu {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toolbar-menu {
+    animation: none;
+  }
+
+  .toolbar-menu__item {
+    transition: none;
+  }
+}
