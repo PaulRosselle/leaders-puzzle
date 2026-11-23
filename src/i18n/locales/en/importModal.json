@@ -1,0 +1,7 @@
+{
+  "title": "Import a puzzle",
+  "fieldLabel": "Puzzle code",
+  "placeholder": "puzzle code (example: #white=b5:2&black=c4:1,d4:3)",
+  "submit": "Import",
+  "invalid": "Invalid code"
+}

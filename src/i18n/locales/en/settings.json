@@ -1,0 +1,27 @@
+{
+  "title": "Settings",
+  "close": "Close",
+  "coordinates": {
+    "title": "Board coordinates",
+    "description": "Shows the coordinates of each cell of the board"
+  },
+  "animationSpeed": {
+    "title": "Animation speed",
+    "description": "Playback speed of the action animations",
+    "slow": "Slow",
+    "fast": "Fast"
+  },
+  "playableAnimation": {
+    "title": "Playable animation",
+    "description": "Plays an animation on the elements the player can interact with"
+  },
+  "toolbarPosition": {
+    "title": "Toolbar position",
+    "description": "Places the toolbar on the left or right of the screen",
+    "left": "Left",
+    "right": "Right"
+  },
+  "language": {
+    "title": "Language"
+  }
+}

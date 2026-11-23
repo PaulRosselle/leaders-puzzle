@@ -1,4 +1,5 @@
 import type { Ref } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ToolbarItem } from '../../data/ToolbarItems'
 import { ToolbarIcon } from './ToolbarIcon'
 
@@ -13,13 +14,16 @@ type ToolbarButtonProps = {
 }
 
 export function ToolbarButton({ item, disabled = false, onClick, buttonRef, popup }: ToolbarButtonProps) {
+  const { t } = useTranslation('toolbar')
+  const label = t(`items.${item.id}`)
+
   return (
     <button
       ref={buttonRef}
       type="button"
       className={`toolbar__button toolbar__button--${item.visibleOn}`}
-      aria-label={item.label}
-      title={item.label}
+      aria-label={label}
+      title={label}
       aria-haspopup={popup ? 'menu' : undefined}
       aria-expanded={popup ? popup.expanded : undefined}
       aria-controls={popup?.expanded ? popup.controls : undefined}

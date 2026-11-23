@@ -32,24 +32,22 @@ export type ToolbarVisibility = 'both' | 'landscape' | 'portrait'
 export type ToolbarItem = {
   id: ToolbarItemId
   icon: string
-  /** Accessible name and tooltip. */
-  label: string
   group: ToolbarGroup
   visibleOn: ToolbarVisibility
   /** Draws a separator above the item (landscape layout only). */
   separatorBefore?: boolean
 }
 
-// TODO - handle english (labels below are hard-coded in French)
 // Order = display order (top to bottom, or left to right).
+// The accessible name / tooltip of each item is in the translations: `toolbar.items.<id>`.
 export const TOOLBAR_ITEMS: readonly ToolbarItem[] = [
-  { id: 'restart', icon: restartIcon, label: 'Recommencer', group: 'start', visibleOn: 'both' },
-  { id: 'undo', icon: undoIcon, label: 'Annuler (Ctrl+Z)', group: 'start', visibleOn: 'both', separatorBefore: true },
-  { id: 'grid', icon: gridIcon, label: 'Puzzles officiels', group: 'end', visibleOn: 'landscape', separatorBefore: true },
-  { id: 'import', icon: importIcon, label: 'Importer', group: 'end', visibleOn: 'landscape' },
-  { id: 'edit', icon: editIcon, label: 'Ouvrir dans l\u2019éditeur', group: 'end', visibleOn: 'landscape' },
-  { id: 'settings', icon: settingsIcon, label: 'Paramètres', group: 'end', visibleOn: 'landscape', separatorBefore: true },
-  { id: 'more', icon: moreIcon, label: 'Plus d\u2019options', group: 'end', visibleOn: 'portrait' },
+  { id: 'restart', icon: restartIcon, group: 'start', visibleOn: 'both' },
+  { id: 'undo', icon: undoIcon, group: 'start', visibleOn: 'both', separatorBefore: true },
+  { id: 'grid', icon: gridIcon, group: 'end', visibleOn: 'landscape', separatorBefore: true },
+  { id: 'import', icon: importIcon, group: 'end', visibleOn: 'landscape' },
+  { id: 'edit', icon: editIcon, group: 'end', visibleOn: 'landscape' },
+  { id: 'settings', icon: settingsIcon, group: 'end', visibleOn: 'landscape', separatorBefore: true },
+  { id: 'more', icon: moreIcon, group: 'end', visibleOn: 'portrait' },
 ]
 
 /**

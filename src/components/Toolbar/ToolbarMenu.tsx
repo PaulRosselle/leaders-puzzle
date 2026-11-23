@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { KeyboardEvent, RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ToolbarItem, ToolbarItemId } from '../../data/ToolbarItems'
 import { ToolbarIcon } from './ToolbarIcon'
 import './ToolbarMenu.css'
@@ -18,6 +19,7 @@ type ToolbarMenuProps = {
 const ENABLED_ITEMS = '[role="menuitem"]:not(:disabled)'
 
 export function ToolbarMenu({ id, items, disabled, anchorRef, onSelect, onClose }: ToolbarMenuProps) {
+  const { t } = useTranslation('toolbar')
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Keyboard users start on the first item.
@@ -75,7 +77,7 @@ export function ToolbarMenu({ id, items, disabled, anchorRef, onSelect, onClose 
       id={id}
       className="toolbar-menu"
       role="menu"
-      aria-label="Plus d’options" // TODO - handle english
+      aria-label={t('items.more')}
       onKeyDown={handleKeyDown}
     >
       {items.map((item) => (
@@ -89,7 +91,7 @@ export function ToolbarMenu({ id, items, disabled, anchorRef, onSelect, onClose 
           onClick={() => onSelect(item)}
         >
           <ToolbarIcon icon={item.icon} />
-          <span className="toolbar-menu__label">{item.label}</span>
+          <span className="toolbar-menu__label">{t(`items.${item.id}`)}</span>
         </button>
       ))}
     </div>

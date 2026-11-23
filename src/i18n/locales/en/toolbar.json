@@ -1,0 +1,12 @@
+{
+  "label": "Tools",
+  "items": {
+    "restart": "Restart",
+    "undo": "Undo (Ctrl+Z)",
+    "grid": "Official puzzles",
+    "import": "Import",
+    "edit": "Open in editor",
+    "settings": "Settings",
+    "more": "More options"
+  }
+}
