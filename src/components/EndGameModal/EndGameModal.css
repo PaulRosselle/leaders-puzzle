@@ -1,0 +1,168 @@
+.end-game {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.66);
+  cursor: pointer;
+  --end-game-surface: #1c1e20;
+
+  /* Lets the stage be sized from the available height (cqh below). */
+  container-type: size;
+}
+
+.end-game--showing {
+  animation: end-game-show 700ms ease-in-out both;
+  pointer-events: none;
+}
+
+.end-game--hiding {
+  animation: end-game-hide 200ms ease-in-out forwards;
+  pointer-events: none;
+}
+
+/* 400 ms to 1.05 (alpha 0 to 1), then 300 ms back to 1. */
+@keyframes end-game-show {
+  0% { opacity: 0; transform: scale(1); }
+  57.14% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes end-game-hide {
+  to { opacity: 0; }
+}
+
+/*
+ * The stage is never wider than 3/4 of the available height (no fixed px):
+ * on a wide screen the content keeps a portrait proportion, centered.
+ */
+.end-game__stage {
+  container-type: size;
+  position: relative;
+  width: min(100%, 75cqh);
+  height: 100%;
+  margin: 0 auto;
+
+  /*
+   * The only size reference: height of the title bar. It follows the smallest
+   * of the two available dimensions (about 9.4% of the height, 16.7% of the
+   * width). Everything else is a multiple of it. Used by the children only,
+   * so that cqh / cqw refer to the stage.
+   */
+  --bar-h: min(9.4cqh, 16.7cqw);
+}
+
+/* From the top guideline (20%) to the top of the title bar. */
+.end-game__leader-box {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 10%;
+  bottom: calc(25% + var(--bar-h) / 2);
+  display: flex;
+  justify-content: center;
+}
+
+.end-game__leader {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+.end-game__title-bar {
+  position: absolute;
+  left: 13.3%;
+  right: 13.3%;
+  top: calc(75% - var(--bar-h) / 2);
+  height: var(--bar-h);
+  border-radius: calc(var(--bar-h) * 2 / 15);
+  background: var(--end-game-surface);
+  border: calc(var(--bar-h) / 60) solid var(--end-color);
+}
+
+.end-game__title-row {
+  position: absolute;
+  left: 2.2%;
+  right: 2.2%;
+  top: calc(75% - var(--bar-h) * 0.75);
+  height: calc(var(--bar-h) * 1.5);
+  display: flex;
+  align-items: center;
+}
+
+.end-game__side {
+  height: 100%;
+  width: auto;
+  max-width: 20%;
+  flex: 0 1 auto;
+  min-width: 0;
+  object-fit: contain;
+}
+
+.end-game__side--right {
+  transform: scaleX(-1);
+}
+
+.end-game__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0 calc(var(--bar-h) / 15);
+  height: var(--bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: -1;
+  white-space: normal; 
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  font-size: calc(var(--bar-h) * 0.8);
+  font-weight: normal;
+  color: var(--end-color);
+}
+
+.end-game__subtitle {
+  --sub-border: calc(var(--bar-h) / 30);
+
+  position: absolute;
+  left: 20%;
+  right: 20%;
+
+  top: calc(75% + var(--bar-h) / 2);
+
+  height: auto;
+  min-height: calc(var(--bar-h) * 0.6);
+
+  margin: 0;
+  padding:
+    calc(var(--bar-h) / 15)
+    calc(var(--bar-h) * 4 / 15)
+    calc(var(--bar-h) / 15);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  line-height: 1;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+
+  font-size: calc(var(--bar-h) / 3);
+  color: var(--text-1);
+  background: var(--end-game-surface);
+
+  border-left: var(--sub-border) solid var(--end-color);
+  border-right: var(--sub-border) solid var(--end-color);
+  border-bottom: var(--sub-border) solid var(--end-color);
+
+  border-radius: 0 0 calc(var(--bar-h) * 2 / 15) calc(var(--bar-h) * 2 / 15);
+}
