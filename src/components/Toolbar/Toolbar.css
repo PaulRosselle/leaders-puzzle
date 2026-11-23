@@ -1,5 +1,5 @@
 .toolbar {
-  /* Theme (self-contained: nothing to add to index.css). */
+  /* ---------- Theme ---------- */
   --toolbar-bg: #151719;
   --toolbar-icon: #8d9094;
   --toolbar-icon-hover: var(--text-1, #ebdfc7);
@@ -8,24 +8,43 @@
   --toolbar-separator: rgba(255, 255, 255, 0.08);
   --toolbar-focus: #f2a93b;
 
-  --toolbar-button-size: 44px; /* Comfortable touch target (>= 44px). */
-  --toolbar-icon-size: 24px;
-  --toolbar-padding: 4px;
+  /* ---------- Layout ---------- */
+  --toolbar-button-max: 44px; /* Comfortable touch target. */
   --toolbar-margin: 12px;
+  --toolbar-padding: 4px;
+  --toolbar-gap: 2px; /* Between two items of a group. */
+  --toolbar-group-gap: 8px; /* Between the groups. */
+  --toolbar-separator-space: 9px; /* Separator: 1px line + 2 * 4px margin. */
+
+  /* Distance kept from each edge of the screen (notch / gesture bar aware). */
+  --toolbar-inset-top: max(var(--toolbar-margin), env(safe-area-inset-top));
+  --toolbar-inset-bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
+  --toolbar-inset-left: max(var(--toolbar-margin), env(safe-area-inset-left));
+  --toolbar-inset-right: max(var(--toolbar-margin), env(safe-area-inset-right));
+
+  /* Button size: the maximum, reduced when the screen is too small (zoom)
+     so that the buttons always fit. Defined per layout, below. */
+  --toolbar-button-size: var(--toolbar-button-max);
+  /* The icon and the corners follow the button size (24px / 10px at 44px). */
+  --toolbar-icon-size: calc(var(--toolbar-button-size) * 0.5455);
+  --toolbar-button-radius: calc(var(--toolbar-button-size) * 0.23);
 
   position: fixed;
   z-index: 10; /* Above the board, below the end game modal (z-index: 100). */
   display: flex;
+  gap: var(--toolbar-group-gap);
   padding: var(--toolbar-padding);
   background: var(--toolbar-bg);
   border-radius: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .toolbar__group {
   display: flex;
-  gap: 2px;
+  gap: var(--toolbar-gap);
 }
+
+/* ---------- Buttons ---------- */
 
 .toolbar__button {
   display: grid;
@@ -34,7 +53,7 @@
   width: var(--toolbar-button-size);
   height: var(--toolbar-button-size);
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--toolbar-button-radius);
   background: transparent;
   color: var(--toolbar-icon);
   cursor: pointer;
@@ -86,11 +105,31 @@
 /* ---------- Landscape (default): vertical bar on the left ---------- */
 
 .toolbar {
-  top: max(var(--toolbar-margin), env(safe-area-inset-top));
-  bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
-  left: max(var(--toolbar-margin), env(safe-area-inset-left));
+  top: var(--toolbar-inset-top);
+  bottom: var(--toolbar-inset-bottom);
+  left: var(--toolbar-inset-left);
   flex-direction: column;
   justify-content: space-between; /* "start" group on top, "end" group at the bottom. */
+
+  /* Height taken by everything that is not a button, for the 6 visible
+     buttons (restart, undo, grid, import, edit, settings):
+       - the padding of the bar (top and bottom);
+       - the gap between the 2 groups;
+       - 6 gaps inside the groups (start: 3 items, end: 5 items);
+       - 2 separators.
+     TODO: update the numbers below when a button/separator is added or removed. */
+  --toolbar-fixed-length: calc(
+    2 * var(--toolbar-padding) + var(--toolbar-group-gap) + 6 * var(--toolbar-gap) +
+      2 * var(--toolbar-separator-space)
+  );
+
+  --toolbar-button-size: min(
+    var(--toolbar-button-max),
+    calc(
+      (100dvh - var(--toolbar-inset-top) - var(--toolbar-inset-bottom) - var(--toolbar-fixed-length)) /
+        6
+    )
+  );
 }
 
 .toolbar__group {
@@ -98,8 +137,9 @@
 }
 
 .toolbar__separator {
+  flex: none;
   height: 1px;
-  margin: 4px 10px;
+  margin: 4px calc(var(--toolbar-button-size) * 0.22);
   background: var(--toolbar-separator);
 }
 
@@ -112,13 +152,26 @@
 
 @media (orientation: portrait) {
   .toolbar {
+    --toolbar-padding-inline: 12px;
+
     top: auto;
-    left: max(var(--toolbar-margin), env(safe-area-inset-left));
-    right: max(var(--toolbar-margin), env(safe-area-inset-right));
-    bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
+    left: var(--toolbar-inset-left);
+    right: var(--toolbar-inset-right);
+    bottom: var(--toolbar-inset-bottom);
     flex-direction: row;
     align-items: center;
-    padding-inline: 12px;
+    padding-inline: var(--toolbar-padding-inline);
+
+    /* 3 visible buttons (restart, undo, more) and 2 gaps between them
+       (the groups are transparent, see below). */
+    --toolbar-button-size: min(
+      var(--toolbar-button-max),
+      calc(
+        (100vw - var(--toolbar-inset-left) - var(--toolbar-inset-right) - 2 * var(--toolbar-padding-inline) -
+            2 * var(--toolbar-group-gap)) /
+          3
+      )
+    );
   }
 
   /* Buttons become direct flex items of the bar: restart on the left,

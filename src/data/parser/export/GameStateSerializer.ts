@@ -28,16 +28,16 @@ export class GameStateSerializer {
             }
         }
 
-        const params = new URLSearchParams();
+        const parts: string[] = [];
 
         if (white.length > 0) {
-            params.set("white", white.join(","));
+            parts.push(`white=${white.join(",")}`);
         }
 
         if (black.length > 0) {
-            params.set("black", black.join(","));
+            parts.push(`black=${black.join(",")}`);
         }
 
-        return params.toString();
+        return parts.join("&");
     }
 }

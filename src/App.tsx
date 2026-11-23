@@ -15,6 +15,7 @@ import { GameQuery } from './gamelogic/queries/GameQuery'
 import { CharacterType } from './gamelogic/enums/CharacterType'
 import { EndGameModal } from './components/EndGameModal/EndGameModal'
 import { Toolbar } from './components/Toolbar/Toolbar'
+import { openInEditor } from './utils/openInEditor'
 
 // Created once, outside the component, so the references stay stable.
 const gameHistory = GameLoader.fromUrl()
@@ -92,7 +93,13 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
       />
-      <Toolbar actions={{ undo }} disabled={{ undo: !canUndo }} />
+      <Toolbar
+        actions={{
+          undo,
+          edit: () => { if (context) openInEditor(context) },
+        }}
+        disabled={{ undo: !canUndo, edit: context === null }}
+      />
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}
