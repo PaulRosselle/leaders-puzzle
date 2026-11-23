@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { KeyboardEvent } from 'react'
-import './controls.css'
+import './Controls.css'
 
 export type SegmentedOption<T extends string> = { value: T; label: string }
 

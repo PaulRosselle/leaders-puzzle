@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import './controls.css'
+import './Controls.css'
 
 type SliderProps = {
   min: number
