@@ -11,11 +11,11 @@
 
 /* Shadow on the whole component, highlight included. */
 .character-piece--highlighted {
-  filter: drop-shadow(
+  box-shadow:
     calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.02) calc(var(--cell_size) * 0.04)
-    rgba(0, 0, 0, 0.3)
-  );
+    rgba(0, 0, 0, 0.3);
 }
+
 /* Shadow on the piece only. */
 .character-piece__content {
   position: absolute;

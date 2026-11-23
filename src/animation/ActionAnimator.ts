@@ -537,6 +537,9 @@ function resetFadeOutStyles(characterId: string): void {
  * Inline styles, to be removed with resetFadeOutStyles if the piece stays.
  */
 function disableHighlight(element: HTMLElement, content: HTMLElement): void {
+  // The shadow of the whole component goes away, and the piece gets its own shadow back.
+  element.classList.remove('character-piece--highlighted')
+
   const highlight = element.querySelector<HTMLElement>('.character-piece__highlight')
   if (highlight !== null) {
     highlight.style.display = 'none'
