@@ -47,7 +47,15 @@ export const TOOLBAR_ITEMS: readonly ToolbarItem[] = [
   { id: 'undo', icon: undoIcon, label: 'Annuler (Ctrl+Z)', group: 'start', visibleOn: 'both', separatorBefore: true },
   { id: 'grid', icon: gridIcon, label: 'Puzzles officiels', group: 'end', visibleOn: 'landscape', separatorBefore: true },
   { id: 'import', icon: importIcon, label: 'Importer', group: 'end', visibleOn: 'landscape' },
-  { id: 'edit', icon: editIcon, label: 'Ouvrir dans l\'éditeur', group: 'end', visibleOn: 'landscape' },
-  { id: 'settings', icon: settingsIcon, label: 'Paramètres', group: 'end', visibleOn: 'landscape', separatorBefore: true  },
+  { id: 'edit', icon: editIcon, label: 'Ouvrir dans l\u2019éditeur', group: 'end', visibleOn: 'landscape' },
+  { id: 'settings', icon: settingsIcon, label: 'Paramètres', group: 'end', visibleOn: 'landscape', separatorBefore: true },
   { id: 'more', icon: moreIcon, label: 'Plus d\u2019options', group: 'end', visibleOn: 'portrait' },
 ]
+
+/**
+ * Items folded in the "more" menu: the ones that are hidden from the toolbar
+ * in the portrait layout (they are directly in the toolbar in landscape).
+ */
+export const MORE_MENU_ITEMS: readonly ToolbarItem[] = TOOLBAR_ITEMS.filter(
+  (item) => item.visibleOn === 'landscape',
+)

@@ -10,6 +10,7 @@ import type { InteractionRequest } from '../gamelogic/entities/interactions/Inte
 import type { Position } from '../gamelogic/entities/core/Position'
 import { angleBetween } from '../utils/hexGeometry'
 import type { PieceData } from './PieceData'
+import { positionKey } from '../utils/positionKey'
 
 export const MARKER_IMAGES: Record<MarkerType, string> = {
     [MarkerType.MovementTarget]: targetMovement,
@@ -45,7 +46,7 @@ export function createMarkers(request: InteractionRequest | null, pieces: readon
         return []
     }
 
-    const markers: MarkerData[] = []
+    const markersByPosition = new Map<string, MarkerData>()
 
     // Only looked up when needed: the target character does not exist
     // for every kind of request (e.g. when choosing a character).
@@ -60,6 +61,13 @@ export function createMarkers(request: InteractionRequest | null, pieces: readon
         }
 
         const position = target.getChosenPosition()
+        const key = positionKey(position)
+
+        // One marker per position.
+        if (markersByPosition.has(key)) {
+            continue
+        }
+
         const marker: MarkerData = { type: markerType, position }
 
         if (type === InteractionTargetType.MovementDestination) {
@@ -72,8 +80,8 @@ export function createMarkers(request: InteractionRequest | null, pieces: readon
             }
         }
 
-        markers.push(marker)
+        markersByPosition.set(key, marker)
     }
 
-    return markers
+    return Array.from(markersByPosition.values())
 }
