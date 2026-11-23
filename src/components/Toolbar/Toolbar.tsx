@@ -6,11 +6,14 @@ import {
   type ToolbarItem,
   type ToolbarItemId,
 } from '../../data/ToolbarItems'
+import type { ToolbarPosition } from '../../settings/Settings'
 import { ToolbarButton } from './ToolbarButton'
 import { ToolbarMenu } from './ToolbarMenu'
 import './Toolbar.css'
 
 type ToolbarProps = {
+  /** Side of the screen of the vertical bar (landscape only). */
+  position?: ToolbarPosition
   /**
    * Action of each button (also used by the "more" menu, which has the same
    * entries). A button without action does nothing. `more` is handled here.
@@ -27,7 +30,7 @@ const MORE_MENU_ID = 'toolbar-more-menu'
  * Landscape: vertical bar on the left. Portrait: horizontal bar at the bottom.
  * The switch is done in CSS only (see Toolbar.css).
  */
-export function Toolbar({ actions = {}, disabled = {} }: ToolbarProps) {
+export function Toolbar({ position = 'left', actions = {}, disabled = {} }: ToolbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const moreButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -55,7 +58,7 @@ export function Toolbar({ actions = {}, disabled = {} }: ToolbarProps) {
   }
 
   return (
-    <div className="toolbar" role="toolbar" aria-label="Outils">
+    <div className={`toolbar toolbar--${position}`} role="toolbar" aria-label="Outils">
       {GROUPS.map((group) => (
         <div key={group} className={`toolbar__group toolbar__group--${group}`}>
           {TOOLBAR_ITEMS.filter((item) => item.group === group).map((item) => {

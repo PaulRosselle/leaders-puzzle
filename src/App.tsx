@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ActionAnimator } from './animation/ActionAnimator'
 import { Board } from './components/Board/Board'
 import { applyMotions } from './data/applyMotions'
@@ -19,6 +19,9 @@ import { openInEditor } from './utils/openInEditor'
 import { GameUrlReader } from './data/parser/import/GameUrlReader'
 import { reloadWithPuzzle } from './utils/reloadWithPuzzle'
 import { ImportModal } from './components/ImportModal/ImportModal'
+import { useSettings } from './settings/useSettings'
+import { getAnimationDurationMultiplier } from './settings/Settings'
+import { SettingsModal } from './components/SettingsModal/SettingsModal'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -30,8 +33,9 @@ function compareForShine(a: PieceData, b: PieceData): number {
 }
 
 export default function App() {
-  const shineAnimationEnabled = true // TODO: to be driven by a UI setting.
   const [importOpen, setImportOpen] = useState(false)
+  const { settings } = useSettings()
+  const [settingsOpen, setSettingsOpen] = useState(false)
   
   const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
@@ -60,7 +64,11 @@ export default function App() {
         .map((piece) => piece.id),
     [pieces],
   )
-  usePlayableShine(request, shineIds, shineAnimationEnabled)
+  
+  useEffect(() => {
+    animator.setSpeedMultiplier(getAnimationDurationMultiplier(settings.animationSpeed))
+  }, [settings.animationSpeed])
+  usePlayableShine(request, shineIds, settings.playableAnimation)
 
   const targetsByPosition = useMemo(() => {
     const map = new Map<string, InteractionTarget>()
@@ -96,14 +104,20 @@ export default function App() {
         targetsByPosition={targetsByPosition}
         onSelectTarget={selectTarget}
         onCancel={cancel}
+        showCoordinates={settings.showBoardCoordinates}
       />
       <Toolbar
-        actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, import: () => setImportOpen(true) }}
+        position={settings.toolbarPosition}
+        actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, 
+          import: () => setImportOpen(true ), 
+          settings: () => setSettingsOpen(true) 
+        }}
         disabled={{ undo: !canUndo, restart: !canRestart, edit: context === null }}
       />
       {importOpen && (
         <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
       )}
+      {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}

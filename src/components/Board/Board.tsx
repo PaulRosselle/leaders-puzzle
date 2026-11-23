@@ -8,6 +8,7 @@ import { Cell } from '../Cell/Cell'
 import { CharacterPiece } from '../CharacterPiece/CharacterPiece'
 import { Marker } from '../Marker/Marker'
 import './Board.css'
+import { PositionLabelMapper } from '../../data/parser/PositionLabelMapper'
 
 type BoardProps = {
   pieces: PieceData[]
@@ -17,6 +18,7 @@ type BoardProps = {
   onSelectTarget: (target: InteractionTarget) => void
   /** Called when the click is not caught by a legal target. */
   onCancel: () => void
+  showCoordinates: boolean
 }
 
 export function Board({
@@ -25,6 +27,7 @@ export function Board({
   targetsByPosition,
   onSelectTarget,
   onCancel,
+  showCoordinates,
 }: BoardProps) {
   return (
     // Legal targets call stopPropagation(), so any click that reaches this
@@ -42,6 +45,7 @@ export function Board({
               key={key}
               position={position}
               onSelect={target ? () => onSelectTarget(target) : undefined}
+              label={showCoordinates ? PositionLabelMapper.toLabel(position) : undefined} 
             />
           )
         })}

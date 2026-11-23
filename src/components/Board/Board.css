@@ -13,7 +13,7 @@
   width: 0;
   height: 0;
 
-  --margin-ratio: 0.9;
+  --margin-ratio: 0.96;
 
   /* Displayed width using the source image ratio. */
   --img-w: calc(min(100cqw, 100cqh * 683 / 785) * var(--margin-ratio));

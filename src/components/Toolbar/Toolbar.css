@@ -10,17 +10,18 @@
 
   /* ---------- Layout ---------- */
   --toolbar-button-max: 44px; /* Comfortable touch target. */
-  --toolbar-margin: 12px;
+  --toolbar-default-inset: 12px;
   --toolbar-padding: 4px;
   --toolbar-gap: 2px; /* Between two items of a group. */
   --toolbar-group-gap: 8px; /* Between the groups. */
-  --toolbar-separator-space: 9px; /* Separator: 1px line + 2 * 4px margin. */
+  --toolbar-separator-space: 9px; /* Separator: 1px line + 2 * 4px inset. */
+  --toolbar-margin: 2%;
 
   /* Distance kept from each edge of the screen (notch / gesture bar aware). */
-  --toolbar-inset-top: max(var(--toolbar-margin), env(safe-area-inset-top));
-  --toolbar-inset-bottom: max(var(--toolbar-margin), env(safe-area-inset-bottom));
-  --toolbar-inset-left: max(var(--toolbar-margin), env(safe-area-inset-left));
-  --toolbar-inset-right: max(var(--toolbar-margin), env(safe-area-inset-right));
+  --toolbar-inset-top: max(var(--toolbar-default-inset), env(safe-area-inset-top));
+  --toolbar-inset-bottom: max(var(--toolbar-default-inset), env(safe-area-inset-bottom));
+  --toolbar-inset-left: max(var(--toolbar-default-inset), env(safe-area-inset-left));
+  --toolbar-inset-right: max(var(--toolbar-default-inset), env(safe-area-inset-right));
 
   /* Button size: the maximum, reduced when the screen is too small (zoom)
      so that the buttons always fit. Defined per layout, below. */
@@ -105,8 +106,8 @@
 /* ---------- Landscape (default): vertical bar on the left ---------- */
 
 .toolbar {
-  top: var(--toolbar-inset-top);
-  bottom: var(--toolbar-inset-bottom);
+  top: var(--toolbar-margin);
+  bottom: var(--toolbar-margin);
   left: var(--toolbar-inset-left);
   flex-direction: column;
   justify-content: space-between; /* "start" group on top, "end" group at the bottom. */
@@ -143,6 +144,13 @@
   background: var(--toolbar-separator);
 }
 
+/* Vertical bar on the right side. Must stay before the portrait block below,
+   which wins in portrait (the bar is then at the bottom, whatever the setting). */
+.toolbar--right {
+  left: auto;
+  right: var(--toolbar-inset-right);
+}
+
 /* Items only meant for the portrait layout. */
 .toolbar__button--portrait {
   display: none;
@@ -155,8 +163,8 @@
     --toolbar-padding-inline: 12px;
 
     top: auto;
-    left: var(--toolbar-inset-left);
-    right: var(--toolbar-inset-right);
+    left: var(--toolbar-margin);
+    right: var(--toolbar-margin);
     bottom: var(--toolbar-inset-bottom);
     flex-direction: row;
     align-items: center;
