@@ -3,6 +3,7 @@ import type { ActionTarget } from '../gamelogic/entities/actions/ActionTarget'
 import type { Position } from '../gamelogic/entities/core/Position'
 import { ActionMotionType } from '../gamelogic/enums/ActionMotionType'
 import { accelerate, accelerateDecelerate, anticipate, decelerate, toCssEasing } from './Easings'
+import { stopShine } from './ShineAnimation'
 
 const DURATION_ADD = 200
 const DURATION_REMOVE = 200
@@ -543,6 +544,15 @@ function disableEffects(element: HTMLElement, content: HTMLElement): void {
   const transformed = element.querySelector<HTMLElement>('.character-piece__transformed')
   if (transformed !== null) {
     transformed.style.display = 'none'
+  }
+
+  const characterId = element.dataset.pieceId
+  if (characterId !== undefined) {
+    stopShine(characterId)
+  }
+  const shine = element.querySelector<HTMLElement>('.character-piece__shine')
+  if (shine !== null) {
+    shine.style.display = 'none'
   }
 
   content.style.inset = '0'

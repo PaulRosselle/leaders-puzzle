@@ -72,6 +72,11 @@ export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
       <div className={`character-piece__content ${isHighlighted ? 'character-piece__content--highlighted' : ''}`}>
         <PieceLayers character={character} team={team} />
       </div>
+      {isHighlighted && (
+        <div className="character-piece__shine">
+          <span className="character-piece__shine-band" />
+        </div>
+      )}
       {transformedCharacter !== null && (
         <div className="character-piece__transformed">
           <div className="character-piece__transformed-content">
