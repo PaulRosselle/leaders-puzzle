@@ -11,6 +11,7 @@ const DURATION_JUMP = 400
 const DURATION_FLY = 600
 const DURATION_TELEPORT = 800
 const DURATION_PUSH = 400
+const DURATION_TRANSFORM = 800
 
 /** How far (ratio of the push distance) the pushing piece pulls back before pushing. */
 const PUSH_ANTICIPATION_RATIO = 0.08
@@ -37,7 +38,7 @@ const FLY_SAMPLES = 20
  *    their animation (Remove);
  *  - in the middle of the animation (Teleport: the pieces are moved while invisible).
  */
-export class CharacterActionAnimator {
+export class ActionAnimator {
   private readonly speedMultiplier: number
 
   /** @param speedMultiplier Equivalent of AnimationSpeed.getMultiplier() (1 = normal). */
@@ -70,12 +71,16 @@ export class CharacterActionAnimator {
       case ActionMotionType.Push:
         await this.animatePushCharacter(motion.targets, commit)
         break
+      case ActionMotionType.Transform:
+      case ActionMotionType.Untransform:
+        await this.animateTransformCharacter(motion.targets, commit)
+        break
       case ActionMotionType.Remove:
         await this.animateRemoveCharacter(motion.targets, commit)
         break
       default:
-        // Not animated yet: the pieces simply appear in their final state.
-        console.warn(`Motion animation not handled yet: ${ActionMotionType[motion.motionType]}`)
+        // Unknown motion: the pieces simply appear in their final state.
+        console.warn(`Motion animation not handled: ${ActionMotionType[motion.motionType]}`)
     }
   }
 
@@ -205,6 +210,75 @@ export class CharacterActionAnimator {
     } finally {
       restorePushed()
       restorePushing()
+    }
+  }
+
+  // ---------------------------------------------------------------- Transform
+
+  private async animateTransformCharacter(targets: readonly ActionTarget[], commit: () => void): Promise<void> {
+    if (targets.length !== 2) {
+      throw new Error('Invalid transform motion : expected exactly 2 targets')
+    }
+    // First target = the character before, second target = the character after.
+    const [source, destination] = targets
+
+    const duration = this.getAnimationDuration(DURATION_TRANSFORM)
+    const transformOutDuration = Math.floor(duration / 2)
+    const transformInDuration = duration - transformOutDuration
+
+    let restoreOut: () => void = () => {}
+    let restoreIn: () => void = () => {}
+
+    try {
+      // TRANSFORM OUT: the current character, still on screen.
+      let transformOut: Animation | null = null
+      const oldElement = findPieceElement(source.character.id)
+      const oldContent = findPieceContent(source.character.id)
+
+      if (oldElement !== null && oldContent !== null) {
+        restoreOut = this.setupForMovement(oldElement)
+        disableHighlight(oldElement, oldContent)
+
+        transformOut = oldContent.animate(TRANSFORM_OUT_KEYFRAMES, {
+          duration: transformOutDuration,
+          easing: toCssEasing(accelerateDecelerate),
+          // Stays invisible until the character is replaced.
+          fill: 'forwards',
+        })
+        await transformOut.finished
+      }
+
+      // The change of character happens between the two phases. The piece of
+      // the old character is replaced by the piece of the new one (or, if both
+      // have the same id, the same piece is updated).
+      commit()
+
+      // If the piece is the same, drop the inline styles of disableHighlight
+      // (React now renders it without highlight).
+      resetFadeOutStyles(destination.character.id)
+
+      // TRANSFORM IN: the new character. It holds its first frame (invisible)
+      // from its creation (fill: 'backwards'), so the transform out can be
+      // cancelled right away without the piece flashing.
+      const newElement = findPieceElement(destination.character.id)
+      const newContent = findPieceContent(destination.character.id)
+
+      if (newElement !== null && newContent !== null) {
+        restoreIn = this.setupForMovement(newElement)
+
+        const transformIn = newContent.animate(TRANSFORM_IN_KEYFRAMES, {
+          duration: transformInDuration,
+          easing: toCssEasing(decelerate(1.5)),
+          fill: 'backwards',
+        })
+        transformOut?.cancel()
+        await transformIn.finished
+      } else {
+        transformOut?.cancel()
+      }
+    } finally {
+      restoreOut()
+      restoreIn()
     }
   }
 
@@ -338,12 +412,7 @@ export class CharacterActionAnimator {
       return null
     }
 
-    // Equivalent of setIsHighlighted(false): no highlight and default size.
-    const highlight = element.querySelector<HTMLElement>('.character-piece__highlight')
-    if (highlight !== null) {
-      highlight.style.display = 'none'
-    }
-    content.style.inset = '0'
+    disableHighlight(element, content)
 
     return content.animate(
       [
@@ -380,6 +449,25 @@ function requirePositions(target: ActionTarget, name: string): { origin: Positio
   }
   return { origin: target.originPos, dest: target.destPos }
 }
+
+// ---------------------------------------------------------------- Transform keyframes
+
+// Values are evenly spaced, like the multi-value ObjectAnimators of the Java version.
+// Opacity and scale are applied to the inner content (scale around the center).
+
+const TRANSFORM_OUT_KEYFRAMES: Keyframe[] = [
+  { transform: 'scale(1) rotate(0deg)', opacity: 1 },
+  { transform: 'scale(1.15) rotate(-8deg)', opacity: 1 },
+  { transform: 'scale(1.3) rotate(12deg)', opacity: 0.6 },
+  { transform: 'scale(0.75) rotate(0deg)', opacity: 0 },
+]
+
+const TRANSFORM_IN_KEYFRAMES: Keyframe[] = [
+  { transform: 'scale(0.75) rotate(0deg)', opacity: 0 },
+  { transform: 'scale(1.15) rotate(-8deg)', opacity: 1 / 3 },
+  { transform: 'scale(0.95) rotate(4deg)', opacity: 2 / 3 },
+  { transform: 'scale(1) rotate(0deg)', opacity: 1 },
+]
 
 // ---------------------------------------------------------------- Effects
 
@@ -441,4 +529,17 @@ function resetFadeOutStyles(characterId: string): void {
   if (content !== null) {
     content.style.inset = ''
   }
+}
+
+/**
+ * Equivalent of setIsHighlighted(false): no highlight and default size
+ * (the 6.5% inset only applies to highlighted pieces).
+ * Inline styles, to be removed with resetFadeOutStyles if the piece stays.
+ */
+function disableHighlight(element: HTMLElement, content: HTMLElement): void {
+  const highlight = element.querySelector<HTMLElement>('.character-piece__highlight')
+  if (highlight !== null) {
+    highlight.style.display = 'none'
+  }
+  content.style.inset = '0'
 }

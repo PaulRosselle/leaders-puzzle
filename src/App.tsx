@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { CharacterActionAnimator } from './animation/CharacterActionAnimator'
+import { ActionAnimator } from './animation/ActionAnimator'
 import { Board } from './components/Board/Board'
 import { applyMotions } from './data/applyMotions'
 import { createMarkers } from './data/MarkerAsset'
@@ -12,7 +12,7 @@ import { positionKey } from './utils/positionKey'
 
 // Created once, outside the component, so the references stay stable.
 const gameHistory = GameLoader.fromUrl()
-const animator = new CharacterActionAnimator()
+const animator = new ActionAnimator()
 
 export default function App() {
   const { context, request, motions, selectTarget, cancel, undo, canUndo } =
