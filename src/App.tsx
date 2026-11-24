@@ -26,6 +26,7 @@ import { SettingsModal } from './components/SettingsModal/SettingsModal'
 import { CharacterNotification } from './components/CharacterNotification/CharacterNotification'
 import { useCharacterNotification } from './hooks/useCharacterNotification'
 import { createNotificationData } from './data/CharacterNotificationData'
+import { OfficialPuzzlesModal } from './components/OfficialPuzzlesModal/OfficialPuzzlesModal'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -41,6 +42,7 @@ export default function App() {
   const { settings } = useSettings()
   useLanguageSync()
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [puzzlesOpen, setPuzzlesOpen] = useState(false)
   const { data: notification, toggle: toggleNotification, hide: hideNotification } = useCharacterNotification()
 
   // Long press on a piece: shows (or hides) the description of its character.
@@ -122,6 +124,7 @@ export default function App() {
       <Toolbar
         position={settings.toolbarPosition}
         actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, 
+          grid: () => setPuzzlesOpen(true),
           import: () => setImportOpen(true ), 
           settings: () => setSettingsOpen(true) 
         }}
@@ -130,6 +133,9 @@ export default function App() {
       <CharacterNotification data={notification} onClose={hideNotification} />
       {importOpen && (
         <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
+      )}
+      {puzzlesOpen && (
+        <OfficialPuzzlesModal onSelect={reloadWithPuzzle} onClose={() => setPuzzlesOpen(false)} />
       )}
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
       {gameResult !== null && gameResult !== dismissedResult && (
