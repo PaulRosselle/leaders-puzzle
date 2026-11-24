@@ -137,7 +137,11 @@ export default function App() {
         <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
       )}
       {puzzlesOpen && (
-        <OfficialPuzzlesModal onSelect={reloadWithPuzzle} onClose={() => setPuzzlesOpen(false)} />
+        <OfficialPuzzlesModal
+          currentPuzzleId={officialPuzzle?.id ?? null}
+          onSelect={reloadWithPuzzle} 
+          onClose={() => setPuzzlesOpen(false)}
+        />
       )}
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
       {gameResult !== null && gameResult !== dismissedResult && (

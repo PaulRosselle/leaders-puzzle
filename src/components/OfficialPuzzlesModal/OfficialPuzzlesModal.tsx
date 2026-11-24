@@ -5,12 +5,13 @@ import { PuzzleCard } from './PuzzleCard'
 import './OfficialPuzzlesModal.css'
 
 type OfficialPuzzlesModalProps = {
+  currentPuzzleId: number | null
   /** Receives the code to put in the URL (without the leading `#`). */
   onSelect: (code: string) => void
   onClose: () => void
 }
 
-export function OfficialPuzzlesModal({ onSelect, onClose }: OfficialPuzzlesModalProps) {
+export function OfficialPuzzlesModal({ currentPuzzleId, onSelect, onClose }: OfficialPuzzlesModalProps) {
   const { t } = useTranslation('puzzles')
 
   const handleSelect = (puzzle: OfficialPuzzle) => onSelect(puzzle.data.replace(/^#/, ''))
@@ -32,7 +33,12 @@ export function OfficialPuzzlesModal({ onSelect, onClose }: OfficialPuzzlesModal
       <div className="puzzles-modal__body">
         <div className="puzzles-modal__grid">
           {OFFICIAL_PUZZLES.map((puzzle) => (
-            <PuzzleCard key={puzzle.id} puzzle={puzzle} onSelect={handleSelect} />
+            <PuzzleCard
+              key={puzzle.id}
+              puzzle={puzzle}
+              isCurrent={puzzle.id === currentPuzzleId}
+              onSelect={handleSelect}
+            />
           ))}
         </div>
       </div>

@@ -163,3 +163,7 @@
 .puzzle-card__marker--empty {
   --marker-image: var(--marker-empty-url);
 }
+
+.puzzle-card--current {
+  background: #674710;
+}
