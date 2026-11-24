@@ -117,7 +117,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  line-height: -1;
+  line-height: 1.1;
   white-space: normal; 
   overflow: visible;
   overflow-wrap: anywhere;
@@ -125,6 +125,7 @@
   font-size: calc(var(--bar-h) * 0.8);
   font-weight: normal;
   color: var(--end-color);
+  transform: translateY(-3%);
 }
 
 .end-game__subtitle {
@@ -150,13 +151,13 @@
   justify-content: center;
 
   text-align: center;
-  line-height: 1;
+  line-height: 1.1;
   white-space: normal;
   overflow: visible;
   overflow-wrap: anywhere;
   text-wrap: balance;
 
-  font-size: calc(var(--bar-h) / 3);
+  font-size: calc(var(--bar-h) / 3.5);
   color: var(--text-1);
   background: var(--end-game-surface);
 
