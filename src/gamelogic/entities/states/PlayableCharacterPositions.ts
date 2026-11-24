@@ -18,6 +18,6 @@ export class PlayableCharacterPositions {
     }
 
     public static createMandatory(position: Position): PlayableCharacterPositions {
-        return new PlayableCharacterPositions([position], false);
+        return new PlayableCharacterPositions([position], true);
     }
 }

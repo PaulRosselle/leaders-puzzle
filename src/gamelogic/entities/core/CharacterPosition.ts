@@ -15,4 +15,14 @@ export class CharacterPosition {
     public static copy(characterPosition: CharacterPosition): CharacterPosition {
         return new CharacterPosition(characterPosition.character, characterPosition.position);
     }
+
+    public static readonly byCharacterAndCoordinates = (a: CharacterPosition, b: CharacterPosition): number => {
+        return (
+            a.character.characterType - b.character.characterType ||
+            a.character.team - b.character.team ||
+            a.position.getQ() - b.position.getQ() ||
+            a.position.getR() - b.position.getR() ||
+            a.position.getS() - b.position.getS()
+        );
+    };
 }

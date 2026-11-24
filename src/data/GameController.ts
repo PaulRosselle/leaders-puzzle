@@ -62,6 +62,7 @@ export class GameController {
     private run: ActiveRun | null = null;
     private runPromise: Promise<void> = Promise.resolve();
     private latestContext: GameContext | null = null;
+    private latestHandler: GameHandler | null = null;
     private disposed = false;
 
     public constructor(listener: GameControllerListener) {
@@ -86,6 +87,7 @@ export class GameController {
 
         const handler = new GameHandler(gameHistory, this.createGameListener(run));
         run.handler = handler;
+        this.latestHandler = handler;
 
         this.runPromise = this.executeRun(run, handler);
     }
@@ -134,6 +136,16 @@ export class GameController {
             throw new Error("No game in progress");
         }
         return this.latestContext;
+    }
+
+    /**
+     * Snapshot of the history of the current (or last) game.
+     */
+    public getCurrentHistory(): GameHistory {
+        if (this.latestHandler === null) {
+            throw new Error("No game in progress");
+        }
+        return this.latestHandler.getCurrentHistory();
     }
 
     public isRequestPending(request: InteractionRequest): boolean {

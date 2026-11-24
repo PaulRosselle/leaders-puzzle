@@ -12,6 +12,8 @@ import { GameCancelledError } from '../gamelogic/entities/states/GameCancelledEr
 import { InteractionRequestType } from '../gamelogic/enums/interactions/InteractionRequestType'
 import { InteractionResultType } from '../gamelogic/enums/interactions/InteractionResultType'
 import { createHash } from '../utils/hashGameState'
+import { AutoPlayer } from '../data/AutoPlayer'
+import { loadNemesisMoves } from '../data/NemesisMoves'
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {
@@ -47,9 +49,12 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
         }
 
         // We search for an official puzzle matching the game history
-        setOfficialPuzzle(findOfficialPuzzleMatch(gameHistory))
+        const puzzle = findOfficialPuzzleMatch(gameHistory)
+        setOfficialPuzzle(puzzle)
 
         let active = true
+        // Replaced once the Nemesis moves of an official puzzle are loaded (before the game starts).
+        let autoPlayer = new AutoPlayer(null)
 
         /** Plays each motion of a feedback, one after the other. */
         const playFeedback = async (feedback: InteractionFeedback): Promise<void> => {
@@ -93,7 +98,16 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
             },
             onInteractionRequired: (newRequest) => {
                 if (!active) return
-                setContext(controller.getCurrentContext())
+                const currentContext = controller.getCurrentContext()
+                setContext(currentContext)
+
+                // Requests answered automatically are never shown to the player.
+                const autoTarget = autoPlayer.findTarget(newRequest, controller.getCurrentHistory())
+                if (autoTarget !== null) {
+                    controller.selectTarget(newRequest, autoTarget)
+                    return
+                }
+
                 setRequest(newRequest)
 
                 // A new action starts (after the previous one was done, cancelled or
@@ -117,8 +131,21 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
             },
         })
 
-        controllerRef.current = controller
-        controller.startGame(gameHistory)
+        const start = async (): Promise<void> => {
+            if (puzzle !== null) {
+                try {
+                    autoPlayer = new AutoPlayer(await loadNemesisMoves(puzzle.id))
+                } catch (error) {
+                    // The game remains playable, the Nemesis just has to be played manually.
+                    console.error('Unable to load Nemesis moves', error)
+                }
+            }
+
+            if (!active) return
+            controllerRef.current = controller
+            controller.startGame(gameHistory)
+        }
+        void start()
 
         return () => {
             active = false
