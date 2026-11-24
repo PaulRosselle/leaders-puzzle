@@ -1,0 +1,31 @@
+.difficulty-markers {
+  display: flex;
+  justify-content: center;
+  gap: 0.25em;
+}
+
+.difficulty-markers__marker {
+  flex: 0 1 2.25em;
+  aspect-ratio: 7 / 8;
+  background-image: var(--marker-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  /*
+   * Same tint for filled and empty markers: the color is multiplied with the
+   * image, and the mask restricts the result to the shape of the marker
+   * (the background color would otherwise also fill the transparent areas).
+   */
+  background-color: var(--marker-tint, transparent);
+  background-blend-mode: multiply;
+  -webkit-mask: var(--marker-image) center / contain no-repeat;
+  mask: var(--marker-image) center / contain no-repeat;
+}
+
+.difficulty-markers__marker--filled {
+  --marker-image: var(--marker-url);
+}
+
+.difficulty-markers__marker--empty {
+  --marker-image: var(--marker-empty-url);
+}

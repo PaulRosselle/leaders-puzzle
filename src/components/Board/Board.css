@@ -17,6 +17,7 @@
 
   /* Displayed width using the source image ratio. */
   --img-w: calc(min(100cqw, 100cqh * 683 / 785) * var(--margin-ratio));
+  --img-h: calc(var(--img-w) * 785 / 683);
 
   /* 1 unit = 1 pixel in the source image. */
   --u: calc(var(--img-w) / 683);
@@ -31,7 +32,7 @@
   left: 0;
   top: 0;
   width: var(--img-w);
-  height: calc(var(--img-w) * 785 / 683);
+  height: var(--img-h);
   transform: translate(-50%, -50%);
   pointer-events: none;
 }

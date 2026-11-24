@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { GameController } from '../data/GameController' // adapt the path
+import { GameController } from '../data/GameController'
+import { OFFICIAL_PUZZLES, type OfficialPuzzle } from '../data/OfficialPuzzle'
 import type { ActionMotion } from '../gamelogic/entities/actions/ActionMotion'
 import type { GameHistory } from '../gamelogic/entities/actions/GameHistory'
 import type { InteractionFeedback } from '../gamelogic/entities/interactions/InteractionFeedback'
@@ -10,6 +11,7 @@ import type { GameContext } from '../gamelogic/entities/states/GameContext'
 import { GameCancelledError } from '../gamelogic/entities/states/GameCancelledError'
 import { InteractionRequestType } from '../gamelogic/enums/interactions/InteractionRequestType'
 import { InteractionResultType } from '../gamelogic/enums/interactions/InteractionResultType'
+import { createHash } from '../utils/hashGameState'
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {
@@ -26,6 +28,7 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
     const [context, setContext] = useState<GameContext | null>(null)
     const [request, setRequest] = useState<InteractionRequest | null>(null)
     const [gameResult, setGameResult] = useState<GameResult | null>(null)
+    const [officialPuzzle, setOfficialPuzzle] = useState<OfficialPuzzle | null>(null)
 
     // Motions already shown on screen during the current action, but not yet
     // part of `context`: the engine only applies the action to its state at the
@@ -42,6 +45,9 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
         if (gameHistory === null) {
             return
         }
+
+        // We search for an official puzzle matching the game history
+        setOfficialPuzzle(findOfficialPuzzleMatch(gameHistory))
 
         let active = true
 
@@ -165,5 +171,16 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
 
     const canRestart = canUndo || gameResult !== null
 
-    return { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart }
+    return { context, request, motions, gameResult, officialPuzzle, selectTarget, cancel, undo, canUndo, restart, canRestart }
+}
+
+function findOfficialPuzzleMatch(gameHistory: GameHistory): OfficialPuzzle | null {
+    const hash = createHash(gameHistory)
+    for (const officialPuzzle of OFFICIAL_PUZZLES) {
+        if (hash === officialPuzzle.hash) {
+            return officialPuzzle;
+        }
+    }
+
+    return null;
 }

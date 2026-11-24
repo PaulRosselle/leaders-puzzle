@@ -8,7 +8,7 @@ export class GameContext {
     private readonly characterStates: readonly CharacterState[];
 
     public constructor(game: Game, gameHistory: GameHistory) {
-        const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(game, gameHistory);
+        const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(game, gameHistory).positions;
 
         const characterStates: CharacterState[] = [];
 

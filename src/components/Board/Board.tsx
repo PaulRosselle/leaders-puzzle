@@ -9,6 +9,7 @@ import { CharacterPiece } from '../CharacterPiece/CharacterPiece'
 import { Marker } from '../Marker/Marker'
 import './Board.css'
 import { PositionLabelMapper } from '../../data/parser/PositionLabelMapper'
+import type { ReactNode } from 'react'
 
 type BoardProps = {
   pieces: PieceData[]
@@ -21,6 +22,7 @@ type BoardProps = {
   /** Called after a long press on a piece. */
   onCharacterLongPress: (piece: PieceData) => void
   showCoordinates: boolean
+  children?: ReactNode
 }
 
 export function Board({
@@ -31,6 +33,7 @@ export function Board({
   onCancel,
   onCharacterLongPress,
   showCoordinates,
+  children,
 }: BoardProps) {
   return (
     // Legal targets call stopPropagation(), so any click that reaches this
@@ -70,6 +73,8 @@ export function Board({
         {markers.map((marker) => (
           <Marker key={`${marker.type}:${positionKey(marker.position)}`} marker={marker} />
         ))}
+
+        {children}
       </div>
     </div>
   )

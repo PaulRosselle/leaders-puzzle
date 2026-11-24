@@ -27,6 +27,7 @@ import { CharacterNotification } from './components/CharacterNotification/Charac
 import { useCharacterNotification } from './hooks/useCharacterNotification'
 import { createNotificationData } from './data/CharacterNotificationData'
 import { OfficialPuzzlesModal } from './components/OfficialPuzzlesModal/OfficialPuzzlesModal'
+import { PuzzleBadge } from './components/PuzzleBadge/PuzzleBadge'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -51,7 +52,7 @@ export default function App() {
     [toggleNotification],
   )
   
-  const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
+  const { context, request, motions, gameResult, officialPuzzle, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
 
   useUndoShortcut(canUndo, undo)
@@ -119,8 +120,9 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
         onCharacterLongPress={handleCharacterLongPress}
-        showCoordinates={settings.showBoardCoordinates}
-      />
+        showCoordinates={settings.showBoardCoordinates}>
+          {officialPuzzle && <PuzzleBadge puzzle={officialPuzzle} />}
+      </Board>
       <Toolbar
         position={settings.toolbarPosition}
         actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, 
@@ -135,7 +137,11 @@ export default function App() {
         <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
       )}
       {puzzlesOpen && (
-        <OfficialPuzzlesModal onSelect={reloadWithPuzzle} onClose={() => setPuzzlesOpen(false)} />
+        <OfficialPuzzlesModal
+          currentPuzzleId={officialPuzzle?.id ?? null}
+          onSelect={reloadWithPuzzle} 
+          onClose={() => setPuzzlesOpen(false)}
+        />
       )}
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
       {gameResult !== null && gameResult !== dismissedResult && (

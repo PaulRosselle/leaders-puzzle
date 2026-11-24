@@ -134,7 +134,7 @@ export class GameHandler {
     private selectPlayableCharacterAsync(): Promise<InteractionResult> {
         const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(this.game, this.gameHistory);
 
-        const legalTargets = playableCharacterPositions.map(position =>
+        const legalTargets = playableCharacterPositions.positions.map(position =>
             new InteractionTarget(InteractionTargetType.PlayableCharacterPosition, position)
         );
 

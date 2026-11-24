@@ -7,6 +7,7 @@ import { ActionResolverFactory } from "../factories/ActionResolverFactory";
 import { ActionBuilder } from "../entities/interactions/ActionBuilder";
 import type { InteractionRequest } from "../entities/interactions/InteractionRequest";
 import type { Position } from "../entities/core/Position";
+import { PlayableCharacterPositions } from "../entities/states/PlayableCharacterPositions";
 
 export class PlayabilityQuery {
 
@@ -54,7 +55,7 @@ export class PlayabilityQuery {
      * @param gameHistory The game history.
      * @returns The list of playable character positions.
      */
-    public static getPlayableCharacterPositions(game: Game, gameHistory: GameHistory): Position[] {
+    public static getPlayableCharacterPositions(game: Game, gameHistory: GameHistory): PlayableCharacterPositions {
         const playableCharacterPositions: Position[] = [];
 
         const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
@@ -65,7 +66,7 @@ export class PlayabilityQuery {
             // If a character is forced to play immediately, we return them alone.
             if (AbilityQuery.mustActNow(gameHistory, character) &&
                 this.hasValidAction(game, gameHistory, character)) {
-                return [characterPos.position];
+                return PlayableCharacterPositions.createMandatory(characterPos.position);
             }
 
             // If a character is allowed to act, we add them to the list.
@@ -74,6 +75,6 @@ export class PlayabilityQuery {
             }
         }
 
-        return playableCharacterPositions;
+        return PlayableCharacterPositions.create(playableCharacterPositions);
     }
 }
