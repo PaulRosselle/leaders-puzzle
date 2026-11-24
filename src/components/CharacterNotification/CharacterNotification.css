@@ -1,0 +1,153 @@
+.character-notification {
+  /* Distance from the top of the screen (notch aware). */
+  --notification-top: max(8px, env(safe-area-inset-top, 0px));
+  --notification-duration: 200ms;
+  --notification-max-width: 640px;
+  --notification-separator: color-mix(in srgb, var(--app-golden, #f9b235) 35%, transparent);
+
+  /* Space kept on each side of the screen. In landscape, the vertical toolbar
+     (left or right) takes about 52px + its inset, see Toolbar.css. */
+  --notification-side: max(8px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+
+  position: fixed;
+  top: var(--notification-top);
+  left: 0;
+  right: 0;
+  z-index: 50; /* Above the toolbar (10), below the end game modal (100). */
+  width: min(var(--notification-max-width), 100% - 2 * var(--notification-side));
+  max-height: 45dvh;
+  margin-inline: auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+
+  /* Lets the content adapt to the width of the notification (cqw, @container). */
+  container-type: inline-size;
+
+  background: var(--bg-0, #1c1e20);
+  border: 2px solid var(--app-golden, #f9b235);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+
+  /* Hidden: slid above the screen. */
+  visibility: hidden;
+  transform: translateY(calc(-100% - var(--notification-top) - 16px));
+  transition:
+    transform var(--notification-duration) ease,
+    visibility 0s linear var(--notification-duration);
+}
+
+.character-notification[data-open='true'] {
+  visibility: visible;
+  transform: none;
+  transition: transform var(--notification-duration) ease;
+}
+
+/* The vertical toolbar is on a side: keep the space it needs on both sides. */
+@media (orientation: landscape) {
+  .character-notification {
+    --notification-side: calc(
+      max(12px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)) + 60px
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-notification,
+  .character-notification[data-open='true'] {
+    transition: none;
+  }
+}
+
+/* ---------- Content ---------- */
+
+.character-notification__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.character-notification__separator {
+  height: 1px;
+  margin-inline: 10px;
+  background: var(--notification-separator);
+}
+
+/* Enough room: the two characters side by side. */
+@container (min-width: 520px) {
+  .character-notification__body--double {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .character-notification__separator {
+    width: 1px;
+    height: auto;
+    margin: 10px 0;
+  }
+}
+
+.portrait-description {
+  display: grid;
+  grid-template-columns: clamp(44px, 20%, 84px) minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: start;
+  padding: 10px;
+}
+
+.portrait-description__image {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  -webkit-user-drag: none;
+}
+
+.portrait-description__header,
+.portrait-description__info {
+  grid-column: 2;
+}
+
+.portrait-description__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+}
+
+.portrait-description__abilities {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portrait-description__ability {
+  display: block;
+  height: clamp(16px, 4cqw, 22px);
+  width: auto;
+  object-fit: contain;
+}
+
+.portrait-description__title {
+  font-family: var(--font-title, 'Bebas neue', sans-serif);
+  font-size: clamp(18px, 4.5cqw, 26px);
+  font-weight: normal;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--app-golden, #f9b235);
+}
+
+.portrait-description__info {
+  margin-top: 2px;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: clamp(13px, 3.4cqw, 16px);
+  line-height: 1.3;
+  color: var(--text-1, #ebdfc7);
+}
+
+.portrait-description__info p + p {
+  margin-top: 0.5em;
+}

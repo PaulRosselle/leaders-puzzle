@@ -1,6 +1,8 @@
 .character-piece {
   border-radius: 50%;
   touch-action: manipulation;
+  /* No system menu on a long press (iOS). */
+  -webkit-touch-callout: none;
 }
 
 .character-piece img {

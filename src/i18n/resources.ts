@@ -3,12 +3,14 @@ import type { Language } from '../settings/Settings'
 import frEndGame from './locales/fr/endGame.json'
 import frImportModal from './locales/fr/importModal.json'
 import frPieces from './locales/fr/pieces.json'
+import frPortraits from './locales/fr/portraits.json'
 import frSettings from './locales/fr/settings.json'
 import frToolbar from './locales/fr/toolbar.json'
 
 import enEndGame from './locales/en/endGame.json'
 import enImportModal from './locales/en/importModal.json'
 import enPieces from './locales/en/pieces.json'
+import enPortraits from './locales/en/portraits.json'
 import enSettings from './locales/en/settings.json'
 import enToolbar from './locales/en/toolbar.json'
 
@@ -22,6 +24,7 @@ export const fr = {
   endGame: frEndGame,
   importModal: frImportModal,
   pieces: frPieces,
+  portraits: frPortraits,
   settings: frSettings,
   toolbar: frToolbar,
 }
@@ -30,6 +33,7 @@ export const en = {
   endGame: enEndGame,
   importModal: enImportModal,
   pieces: enPieces,
+  portraits: enPortraits,
   settings: enSettings,
   toolbar: enToolbar,
 }
