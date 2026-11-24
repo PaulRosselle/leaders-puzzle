@@ -17,6 +17,7 @@ import { InteractionResultType } from "./enums/interactions/InteractionResultTyp
 import { InteractionTargetType } from "./enums/interactions/InteractionTargetType";
 import { ActionResolverFactory } from "./factories/ActionResolverFactory";
 import { GameFactory } from "./factories/GameFactory";
+import { AutoPlayQuery } from "./queries/AutoPlayQuery";
 import { BoardQuery } from "./queries/BoardQuery";
 import { GameQuery } from "./queries/GameQuery";
 import { PlayabilityQuery } from "./queries/PlayabilityQuery";
@@ -40,6 +41,13 @@ export class GameHandler {
         this.game = GameFactory.create(gameHistory);
         this.gameHistory = GameHistory.copy(gameHistory);
         this.listener = listener;
+    }
+
+    /**
+     * Returns a snapshot of the current game history.
+     */
+    public getCurrentHistory(): GameHistory {
+        return GameHistory.copy(this.gameHistory);
     }
 
     /**
@@ -118,9 +126,18 @@ export class GameHandler {
         const result = await this.selectPlayableCharacterAsync();
 
         switch (result.getResultType()) {
-            case InteractionResultType.PositionChosen:
-                await this.playCharacterAsync(this.getPlayableCharacterFromResult(result));
+            case InteractionResultType.PositionChosen: {
+                const character = this.getPlayableCharacterFromResult(result);
+                // Computed before playing: a cancelled action never modifies the game.
+                const isAutoCharacter = AutoPlayQuery.isAutoPlayableCharacter(character, true);
+                const resolved = await this.playCharacterAsync(character);
+
+                // The cancellation of an auto action requires to undo the action that forced it.
+                if (!resolved && isAutoCharacter) {
+                    await this.undoLastActionAsync();
+                }
                 break;
+            }
             case InteractionResultType.UndoLastAction:
                 await this.undoLastActionAsync();
                 break;
@@ -144,12 +161,19 @@ export class GameHandler {
             legalResults.push(InteractionResultType.UndoLastAction);
         }
 
-        return this.requestInputAsync(new InteractionRequest(
+        const selectRequest = new InteractionRequest(
             InteractionRequestType.PlayableCharacterExpected,
             new InteractionContext(),
             legalTargets,
             legalResults
-        ));
+        );
+
+        const autoSelectResult = AutoPlayQuery.getAutoSelectResult(selectRequest, playableCharacterPositions);
+        if (autoSelectResult !== null) {
+            return Promise.resolve(autoSelectResult);
+        }
+
+        return this.requestInputAsync(selectRequest);
     }
 
     /**
@@ -157,7 +181,7 @@ export class GameHandler {
      * the required inputs until the action is complete or cancelled.
      * A cancelled action is never applied to the game.
      */
-    private async playCharacterAsync(playableCharacter: Character): Promise<void> {
+    private async playCharacterAsync(playableCharacter: Character): Promise<boolean> {
         const builder = new ActionBuilder(playableCharacter);
         const resolver = ActionResolverFactory.create(this.game, this.gameHistory, playableCharacter);
 
@@ -165,7 +189,7 @@ export class GameHandler {
             this.checkStopped();
 
             if (builder.isBuildCancelled()) {
-                return;
+                return false;
             }
 
             const request = resolver.getNextInteraction(builder);
@@ -173,7 +197,7 @@ export class GameHandler {
             // No further input is required: build and execute the action.
             if (request === null) {
                 this.doAction(resolver.buildAction(builder));
-                return;
+                return true;
             }
 
             builder.addResult(await this.requestInputAsync(request));
@@ -222,12 +246,17 @@ export class GameHandler {
     }
 
     private async undoLastActionAsync(): Promise<void> {
-        const lastAction = this.gameHistory.actions.pop();
-        if (lastAction === undefined) {
+        if (this.gameHistory.actions.length === 0) {
             throw new Error("Cannot undo an action when no action was done");
         }
 
-        new ActionHandler(this.game, lastAction).undoAction();
+        let playerActionUndone = false;
+        while (!playerActionUndone && this.gameHistory.actions.length > 0) {
+            const lastAction = this.gameHistory.actions.pop()!;
+            playerActionUndone = !AutoPlayQuery.isAutoCancellableAction(lastAction);
+
+            new ActionHandler(this.game, lastAction).undoAction();
+        }
 
         await this.listener.onActionUndone(this.getCurrentContext());
     }
@@ -246,7 +275,7 @@ export class GameHandler {
         if (target.getTargetType() !== InteractionTargetType.PlayableCharacterPosition) {
             throw new Error("Invalid interaction result: playable character missing");
         }
-        
+
         return BoardQuery.getNonNullCharacterAt(this.game.board, target.getChosenPosition());
     }
 }

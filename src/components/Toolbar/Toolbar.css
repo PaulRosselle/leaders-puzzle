@@ -117,11 +117,11 @@
        - the padding of the bar (top and bottom);
        - the gap between the 2 groups;
        - 6 gaps inside the groups (start: 3 items, end: 5 items);
-       - 2 separators.
+       - 3 separators.
      TODO: update the numbers below when a button/separator is added or removed. */
   --toolbar-fixed-length: calc(
     2 * var(--toolbar-padding) + var(--toolbar-group-gap) + 6 * var(--toolbar-gap) +
-      2 * var(--toolbar-separator-space)
+      3 * var(--toolbar-separator-space)
   );
 
   --toolbar-button-size: min(

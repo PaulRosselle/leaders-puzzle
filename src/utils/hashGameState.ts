@@ -1,5 +1,5 @@
 import type { GameHistory } from "../gamelogic/entities/actions/GameHistory";
-import type { CharacterPosition } from "../gamelogic/entities/core/CharacterPosition";
+import { CharacterPosition } from "../gamelogic/entities/core/CharacterPosition";
 import { Position } from "../gamelogic/entities/core/Position";
 import type { Game } from "../gamelogic/entities/projection/Game";
 import { GameFactory } from "../gamelogic/factories/GameFactory";
@@ -23,9 +23,12 @@ const POSITION_COLUMN_OFFSETS = [0, 4, 9, 15, 22, 28, 33];
  */
 export function createHash(gameHistory: GameHistory): string {
     const game = GameFactory.create(gameHistory);
-    const boardHash = createBoardHash(game);
-    const turnHash = createTurnHash(game, gameHistory);
-    const playabilityHash = createPlayabilityHash(game, gameHistory);
+    const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null)
+        .toSorted(CharacterPosition.byCharacterAndCoordinates);
+
+    const boardHash = createBoardHash(characterPositions);
+    const turnHash = createTurnHash(characterPositions, game, gameHistory);
+    const playabilityHash = createPlayabilityHash(characterPositions, game, gameHistory);
 
     return [boardHash, turnHash, playabilityHash].join(GLOBAL_SEPARATOR);
 }
@@ -37,9 +40,7 @@ export function createHash(gameHistory: GameHistory): string {
  * - Character type
  * - Character position
  */
-function createBoardHash(game: Game): string {
-    const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
-
+function createBoardHash(characterPositions: CharacterPosition[]): string {
     return characterPositions
         .map(characterPosition =>
             createCharacterPositionHash(characterPosition)
@@ -54,9 +55,7 @@ function createBoardHash(game: Game): string {
  * - Character type
  * - Character position
  */
-function createTurnHash(game: Game, gameHistory: GameHistory): string {
-    const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
-
+function createTurnHash(characterPositions: CharacterPosition[], game: Game, gameHistory: GameHistory): string {
     return characterPositions
         .filter(({ character }) =>
             AbilityQuery.canAct(game, gameHistory, character)
@@ -76,9 +75,8 @@ function createTurnHash(game: Game, gameHistory: GameHistory): string {
  * - Whether playing it is mandatory
  * - Whether its active ability can be used
  */
-function createPlayabilityHash(game: Game, gameHistory: GameHistory): string {
+function createPlayabilityHash(characterPositions: CharacterPosition[], game: Game, gameHistory: GameHistory): string {
     const playableCharacterPositions = PlayabilityQuery.getPlayableCharacterPositions(game, gameHistory);
-    const characterPositions = BoardQuery.findCharacterPositions(game.board, null, null);
 
     return playableCharacterPositions.positions
         .map(position => {
