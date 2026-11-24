@@ -7,13 +7,15 @@
   },
   "animationSpeed": {
     "title": "Vitesse d’animation",
-    "description": "Vitesse de lecture des animations d’actions",
     "slow": "Lente",
     "fast": "Rapide"
   },
   "playableAnimation": {
     "title": "Animation de jouabilité",
     "description": "Joue une animation sur les éléments avec lesquels le joueur peut interagir"
+  },
+  "highlightColor": {
+    "title": "Couleur de surbrillance"
   },
   "toolbarPosition": {
     "title": "Position de la barre d’actions",

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import {
   CHARACTER_ASSETS,
   CHARACTER_ILLUSTRATIONS,
-  HIGHLIGHT,
   LEADER_OUTLINE,
   PIECE_BACKGROUNDS,
 } from '../../data/CharacterAsset'
+import { HIGHLIGHT_OUTLINES } from '../../data/HighlightAsset'
 import type { PieceData } from '../../data/PieceData'
 import { cellStyle } from '../../utils/cellStyle'
 import './CharacterPiece.css'
@@ -15,9 +15,11 @@ import { HighlightStatus } from '../../data/HighlightStatus'
 import { Team } from '../../gamelogic/enums/Team'
 import { CharacterType } from '../../gamelogic/enums/CharacterType'
 import { useLongPress } from '../../hooks/useLongPress'
+import type { HighlightColor } from '../../data/HighlightColor'
 
 type CharacterPieceProps = {
   piece: PieceData
+  highlightColor: HighlightColor
   /** Defined only if this piece's position is a legal target of the current request. */
   onSelect?: () => void
   /** Called after a long press (or a right click) on the piece. */
@@ -54,7 +56,7 @@ function PieceLayers({ character, team }: PieceLayersProps) {
   )
 }
 
-export function CharacterPiece({ piece, onSelect, onLongPress }: CharacterPieceProps) {
+export function CharacterPiece({ piece, highlightColor, onSelect, onLongPress }: CharacterPieceProps) {
   const { t } = useTranslation('pieces')
   const { character, team, position, highlightStatus, transformedCharacter } = piece
   const isHighlighted = highlightStatus !== HighlightStatus.Disabled
@@ -94,7 +96,7 @@ export function CharacterPiece({ piece, onSelect, onLongPress }: CharacterPieceP
       {isHighlighted && (
         <img
           className={`character-piece__highlight ${isAnimated ? 'character-piece__highlight--animated' : ''}`}
-          src={HIGHLIGHT}
+          src={HIGHLIGHT_OUTLINES[highlightColor]}
           alt={t(isAnimated ? 'highlight.selected' : 'highlight.playable')}
         />
       )}

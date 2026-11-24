@@ -12,11 +12,21 @@ import { Slider } from '../controls/Slider'
 import { Switch } from '../controls/Switch'
 import { SettingRow } from './SettingRow'
 import './SettingsModal.css'
+import { HighlightColor } from '../../data/HighlightColor'
+import { HighlightColorControl, type HighlightColorOption } from '../controls/HighlightColorControl/HighlightColorControl'
 
 // Each language is written in its own language, so that anyone can find theirs.
 const LANGUAGE_OPTIONS: readonly SegmentedOption<Language>[] = [
   { value: 'fr', label: 'Français' },
   { value: 'en', label: 'English' },
+]
+
+const HIGHLIGHT_COLOR_OPTIONS: readonly HighlightColorOption[] = [
+  { value: HighlightColor.Default, label: 'Default' },
+  { value: HighlightColor.Blue, label: 'Blue' },
+  { value: HighlightColor.Red, label: 'Red' },
+  { value: HighlightColor.Green, label: 'Green' },
+  { value: HighlightColor.Neon, label: 'Neon' },
 ]
 
 /** "×0,75" in French, "×0.75" in English. */
@@ -64,7 +74,6 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
         <SettingRow
           id="setting-animation-speed"
           title={t('animationSpeed.title')}
-          description={t('animationSpeed.description')}
           layout="stacked"
         >
           {(a11y) => (
@@ -90,6 +99,21 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             <Switch
               checked={settings.playableAnimation}
               onChange={(playableAnimation) => updateSettings({ playableAnimation })}
+              {...a11y}
+            />
+          )}
+        </SettingRow>
+
+        <SettingRow
+          id="setting-highlight-color"
+          title={t('highlightColor.title')}
+          layout="stacked"
+        >
+          {(a11y) => (
+            <HighlightColorControl
+              options={HIGHLIGHT_COLOR_OPTIONS}
+              value={settings.highlightColor}
+              onChange={(highlightColor) => updateSettings({ highlightColor })}
               {...a11y}
             />
           )}

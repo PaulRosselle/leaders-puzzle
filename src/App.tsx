@@ -109,7 +109,8 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
         onCharacterLongPress={handleCharacterLongPress}
-        showCoordinates={settings.showBoardCoordinates}>
+        showCoordinates={settings.showBoardCoordinates}
+        highlightColor={settings.highlightColor}>
           {officialPuzzle && <PuzzleBadge puzzle={officialPuzzle} />}
       </Board>
       <Toolbar

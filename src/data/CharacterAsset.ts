@@ -1,7 +1,6 @@
 import bgWhite from '../assets/pieces/character_piece_bg_white.webp'
 import bgBlack from '../assets/pieces/character_piece_bg_black.webp'
 import outlineLeader from '../assets/pieces/character_piece_outline_leader.webp'
-import highlight from '../assets/highlights/character_piece_highlight_default.webp'
 import { Team } from '../gamelogic/enums/Team'
 import { CharacterType } from '../gamelogic/enums/CharacterType'
 
@@ -13,9 +12,6 @@ export const PIECE_BACKGROUNDS: Record<Team, string> = {
 
 /** Outline resource name for leaders and alternative skins. */
 export const LEADER_OUTLINE: string = outlineLeader
-
-/** Highlight resource name. */
-export const HIGHLIGHT: string = highlight
 
 /**
  * Mapping between a CharacterType and its character_piece resource name.
