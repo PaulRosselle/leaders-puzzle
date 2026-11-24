@@ -1,3 +1,4 @@
+import { HighlightColor } from '../data/HighlightColor'
 import {
   ANIMATION_SPEED_LEVELS,
   DEFAULT_SETTINGS,
@@ -36,6 +37,10 @@ export function loadSettings(): Settings {
       showBoardCoordinates: pickBoolean(record.showBoardCoordinates, DEFAULT_SETTINGS.showBoardCoordinates),
       animationSpeed: pickOption(record.animationSpeed, ANIMATION_SPEED_LEVELS, DEFAULT_SETTINGS.animationSpeed),
       playableAnimation: pickBoolean(record.playableAnimation, DEFAULT_SETTINGS.playableAnimation),
+      highlightColor: pickOption(record.highlightColor,
+        Object.values(HighlightColor).filter((value): value is HighlightColor => typeof value === 'number'),
+        DEFAULT_SETTINGS.highlightColor,
+      ),
       toolbarPosition: pickOption(record.toolbarPosition, TOOLBAR_POSITIONS, DEFAULT_SETTINGS.toolbarPosition),
       language: pickOption(record.language, LANGUAGES, DEFAULT_SETTINGS.language),
     }

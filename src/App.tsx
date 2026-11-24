@@ -100,6 +100,8 @@ export default function App() {
   const [dismissedResult, setDismissedResult] = useState<GameResult | null>(null)
   const playerLeader = useMemo(() => findPlayerLeader(context), [context])
 
+  console.log(settings.highlightColor)
+
   return (
     <>
       <Board
@@ -109,7 +111,8 @@ export default function App() {
         onSelectTarget={selectTarget}
         onCancel={cancel}
         onCharacterLongPress={handleCharacterLongPress}
-        showCoordinates={settings.showBoardCoordinates}>
+        showCoordinates={settings.showBoardCoordinates}
+        highlightColor={settings.highlightColor}>
           {officialPuzzle && <PuzzleBadge puzzle={officialPuzzle} />}
       </Board>
       <Toolbar

@@ -10,6 +10,7 @@ import { Marker } from '../Marker/Marker'
 import './Board.css'
 import { PositionLabelMapper } from '../../data/parser/PositionLabelMapper'
 import type { ReactNode } from 'react'
+import type { HighlightColor } from '../../data/HighlightColor'
 
 type BoardProps = {
   pieces: PieceData[]
@@ -22,6 +23,7 @@ type BoardProps = {
   /** Called after a long press on a piece. */
   onCharacterLongPress: (piece: PieceData) => void
   showCoordinates: boolean
+  highlightColor: HighlightColor
   children?: ReactNode
 }
 
@@ -33,6 +35,7 @@ export function Board({
   onCancel,
   onCharacterLongPress,
   showCoordinates,
+  highlightColor,
   children,
 }: BoardProps) {
   return (
@@ -64,6 +67,7 @@ export function Board({
             <CharacterPiece
               key={piece.id}
               piece={piece}
+              highlightColor={highlightColor}
               onSelect={target ? () => onSelectTarget(target) : undefined}
               onLongPress={() => onCharacterLongPress(piece)}
             />
