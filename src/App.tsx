@@ -28,6 +28,7 @@ import { useCharacterNotification } from './hooks/useCharacterNotification'
 import { createNotificationData } from './data/CharacterNotificationData'
 import { OfficialPuzzlesModal } from './components/OfficialPuzzlesModal/OfficialPuzzlesModal'
 import { PuzzleBadge } from './components/PuzzleBadge/PuzzleBadge'
+import { findPlayerLeader } from './utils/findPlayerLeader'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -99,17 +100,7 @@ export default function App() {
 
   // The modal is dismissed per result, so a new game shows it again without any reset.
   const [dismissedResult, setDismissedResult] = useState<GameResult | null>(null)
-  const playerLeader = useMemo(
-    () =>
-      context
-        ?.getCharacterStates()
-        .map((state) => state.getCharacter())
-        .find(
-          (character) =>
-            character.team === GameQuery.getPlayerTeam() && CharacterType.isLeader(character.characterType),
-        )?.characterType ?? null,
-    [context],
-  )
+  const playerLeader = useMemo(() => findPlayerLeader(context), [context])
 
   return (
     <>
