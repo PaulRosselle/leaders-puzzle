@@ -1,0 +1,11 @@
+{
+  "title": "Puzzles officiels",
+  "close": "Fermer",
+  "puzzleLabel": "Puzzle {{id}}, difficulté {{difficulty}}",
+  "difficulty": {
+    "Easy": "Facile",
+    "Medium": "Moyen",
+    "Hard": "Difficile",
+    "Extreme": "Extrême"
+  }
+}
