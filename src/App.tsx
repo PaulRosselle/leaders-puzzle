@@ -100,8 +100,6 @@ export default function App() {
   const [dismissedResult, setDismissedResult] = useState<GameResult | null>(null)
   const playerLeader = useMemo(() => findPlayerLeader(context), [context])
 
-  console.log(settings.highlightColor)
-
   return (
     <>
       <Board

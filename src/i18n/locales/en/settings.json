@@ -7,13 +7,15 @@
   },
   "animationSpeed": {
     "title": "Animation speed",
-    "description": "Playback speed of the action animations",
     "slow": "Slow",
     "fast": "Fast"
   },
   "playableAnimation": {
     "title": "Playable animation",
     "description": "Plays an animation on the elements the player can interact with"
+  },
+  "highlightColor": {
+    "title": "Highlight color"
   },
   "toolbarPosition": {
     "title": "Toolbar position",
