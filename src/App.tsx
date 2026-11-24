@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActionAnimator } from './animation/ActionAnimator'
 import { Board } from './components/Board/Board'
 import { applyMotions } from './data/applyMotions'
@@ -23,6 +23,9 @@ import { useSettings } from './settings/useSettings'
 import { useLanguageSync } from './hooks/useLanguageSync'
 import { getAnimationDurationMultiplier } from './settings/Settings'
 import { SettingsModal } from './components/SettingsModal/SettingsModal'
+import { CharacterNotification } from './components/CharacterNotification/CharacterNotification'
+import { useCharacterNotification } from './hooks/useCharacterNotification'
+import { createNotificationData } from './data/CharacterNotificationData'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -38,6 +41,13 @@ export default function App() {
   const { settings } = useSettings()
   useLanguageSync()
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const { data: notification, toggle: toggleNotification, hide: hideNotification } = useCharacterNotification()
+
+  // Long press on a piece: shows (or hides) the description of its character.
+  const handleCharacterLongPress = useCallback(
+    (piece: PieceData) => toggleNotification(createNotificationData(piece)),
+    [toggleNotification],
+  )
   
   const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
@@ -106,6 +116,7 @@ export default function App() {
         targetsByPosition={targetsByPosition}
         onSelectTarget={selectTarget}
         onCancel={cancel}
+        onCharacterLongPress={handleCharacterLongPress}
         showCoordinates={settings.showBoardCoordinates}
       />
       <Toolbar
@@ -116,6 +127,7 @@ export default function App() {
         }}
         disabled={{ undo: !canUndo, restart: !canRestart, edit: context === null }}
       />
+      <CharacterNotification data={notification} onClose={hideNotification} />
       {importOpen && (
         <ImportModal onSubmit={reloadWithPuzzle} onClose={() => setImportOpen(false)} />
       )}

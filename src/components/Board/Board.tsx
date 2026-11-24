@@ -18,6 +18,8 @@ type BoardProps = {
   onSelectTarget: (target: InteractionTarget) => void
   /** Called when the click is not caught by a legal target. */
   onCancel: () => void
+  /** Called after a long press on a piece. */
+  onCharacterLongPress: (piece: PieceData) => void
   showCoordinates: boolean
 }
 
@@ -27,6 +29,7 @@ export function Board({
   targetsByPosition,
   onSelectTarget,
   onCancel,
+  onCharacterLongPress,
   showCoordinates,
 }: BoardProps) {
   return (
@@ -59,6 +62,7 @@ export function Board({
               key={piece.id}
               piece={piece}
               onSelect={target ? () => onSelectTarget(target) : undefined}
+              onLongPress={() => onCharacterLongPress(piece)}
             />
           )
         })}

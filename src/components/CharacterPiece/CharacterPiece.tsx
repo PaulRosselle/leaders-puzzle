@@ -14,11 +14,14 @@ import '../Cell/Cell.css'
 import { HighlightStatus } from '../../data/HighlightStatus'
 import { Team } from '../../gamelogic/enums/Team'
 import { CharacterType } from '../../gamelogic/enums/CharacterType'
+import { useLongPress } from '../../hooks/useLongPress'
 
 type CharacterPieceProps = {
   piece: PieceData
   /** Defined only if this piece's position is a legal target of the current request. */
   onSelect?: () => void
+  /** Called after a long press (or a right click) on the piece. */
+  onLongPress?: () => void
 }
 
 type PieceLayersProps = {
@@ -51,14 +54,28 @@ function PieceLayers({ character, team }: PieceLayersProps) {
   )
 }
 
-export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
+export function CharacterPiece({ piece, onSelect, onLongPress }: CharacterPieceProps) {
   const { t } = useTranslation('pieces')
   const { character, team, position, highlightStatus, transformedCharacter } = piece
   const isHighlighted = highlightStatus !== HighlightStatus.Disabled
   const isAnimated = highlightStatus === HighlightStatus.Animated
   const isTargetable = onSelect !== undefined
 
+  const { handlers: longPressHandlers, consumeLongPress } = useLongPress(onLongPress)
+
   const handleClick = (event: MouseEvent) => {
+    // The click that ends a long press is ignored: it must neither select the
+    // piece nor reach the board (which would cancel the action).
+    if (consumeLongPress()) {
+      event.stopPropagation()
+      return
+    }
+
+    // Not a legal target: the click bubbles up to the board, which cancels the action.
+    if (!isTargetable) {
+      return
+    }
+
     // Prevents the click from bubbling up to the board (which would cancel the action).
     event.stopPropagation()
     onSelect?.()
@@ -71,7 +88,8 @@ export function CharacterPiece({ piece, onSelect }: CharacterPieceProps) {
         ${isHighlighted || isAnimated ? 'character-piece--highlighted' : ''}`}
       data-piece-id={piece.id}
       style={cellStyle(position)}
-      onClick={isTargetable ? handleClick : undefined}
+      {...longPressHandlers}
+      onClick={handleClick}
     >
       {isHighlighted && (
         <img
