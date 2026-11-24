@@ -2,6 +2,7 @@ import type { GameHistory } from "../gamelogic/entities/actions/GameHistory";
 import type { CharacterPosition } from "../gamelogic/entities/core/CharacterPosition";
 import { Position } from "../gamelogic/entities/core/Position";
 import type { Game } from "../gamelogic/entities/projection/Game";
+import { GameFactory } from "../gamelogic/factories/GameFactory";
 import { AbilityQuery } from "../gamelogic/queries/AbilityQuery";
 import { BoardQuery } from "../gamelogic/queries/BoardQuery";
 import { PlayabilityQuery } from "../gamelogic/queries/PlayabilityQuery";
@@ -20,7 +21,8 @@ const POSITION_COLUMN_OFFSETS = [0, 4, 9, 15, 22, 28, 33];
  * - Characters that can still act during the turn
  * - Characters that can currently be played
  */
-export function createHash(game: Game, gameHistory: GameHistory): string {
+export function createHash(gameHistory: GameHistory): string {
+    const game = GameFactory.create(gameHistory);
     const boardHash = createBoardHash(game);
     const turnHash = createTurnHash(game, gameHistory);
     const playabilityHash = createPlayabilityHash(game, gameHistory);

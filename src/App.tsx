@@ -51,7 +51,7 @@ export default function App() {
     [toggleNotification],
   )
   
-  const { context, request, motions, gameResult, selectTarget, cancel, undo, canUndo, restart, canRestart } =
+  const { context, request, motions, gameResult, officialPuzzle, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
 
   useUndoShortcut(canUndo, undo)

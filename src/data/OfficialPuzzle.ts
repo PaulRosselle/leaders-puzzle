@@ -8,6 +8,7 @@ export type OfficialPuzzle = {
   difficulty: Difficulty
   /** Arguments to put in the URL (e.g. `#white=...&black=...`). */
   data: string
+  hash: string
 }
 
 type DifficultyStyle = {
