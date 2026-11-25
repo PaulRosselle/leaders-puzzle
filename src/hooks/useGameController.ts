@@ -14,6 +14,7 @@ import { InteractionResultType } from '../gamelogic/enums/interactions/Interacti
 import { createHash } from '../utils/hashGameState'
 import { AutoPlayer } from '../data/AutoPlayer'
 import { loadNemesisMoves } from '../data/NemesisMoves'
+import { markPuzzleCompleted } from '../data/CompletedPuzzles'
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {
@@ -90,6 +91,7 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
             },
             onGameEnded: (playerWon) => {
                 if (!active) return
+                if (playerWon && puzzle !== null) markPuzzleCompleted(puzzle.id)
                 setContext(controller.getCurrentContext())
                 setGameResult({ playerWon })
             },
