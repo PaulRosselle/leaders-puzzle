@@ -15,6 +15,7 @@ import { createHash } from '../utils/hashGameState'
 import { AutoPlayer } from '../data/controller/AutoPlayer'
 import { loadNemesisMoves } from '../data/controller/NemesisMoves'
 import { markPuzzleCompleted } from '../data/puzzle/CompletedPuzzles'
+import { getSpecialVictory } from '../data/controller/SpecialVictories'
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {
@@ -131,6 +132,8 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
                 if (error instanceof GameCancelledError) return
                 console.error('Game error', error)
             },
+        }, {
+            victoryCondition: puzzle !== null ? getSpecialVictory(puzzle.id) : null,
         })
 
         const start = async (): Promise<void> => {
