@@ -167,3 +167,58 @@
 .puzzle-card--current {
   background: #674710;
 }
+
+/* ---------- Sort ---------- */
+
+.puzzles-modal__sort {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap; /* Le libellé passe au-dessus des boutons sur écran étroit. */
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-1, #ebdfc7) 12%, transparent);
+}
+
+.puzzles-modal__sort-label {
+  color: var(--text-2, #857f73);
+  font-size: 0.95rem;
+}
+
+.puzzles-modal__sort-options {
+  display: flex;
+  gap: 8px;
+}
+
+.puzzles-modal__sort-option {
+  min-height: 36px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--text-1, #ebdfc7) 30%, transparent);
+  border-radius: 999px;
+  color: var(--text-2, #857f73);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+@media (hover: hover) {
+  .puzzles-modal__sort-option:hover {
+    color: var(--text-1, #ebdfc7);
+  }
+}
+
+.puzzles-modal__sort-option--active {
+  background: color-mix(in srgb, var(--app-golden, #f9b235) 18%, transparent);
+  border-color: var(--app-golden, #f9b235);
+  color: var(--app-golden, #f9b235);
+}
+
+.puzzles-modal__sort-option:focus-visible {
+  outline: 2px solid var(--app-golden, #f9b235);
+  outline-offset: 2px;
+}

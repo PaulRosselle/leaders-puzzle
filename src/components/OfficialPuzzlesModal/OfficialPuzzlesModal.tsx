@@ -1,8 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { OFFICIAL_PUZZLES, type OfficialPuzzle } from '../../data/OfficialPuzzle'
+import { OFFICIAL_PUZZLES, sortPuzzles, type OfficialPuzzle } from '../../data/OfficialPuzzle'
 import { Modal } from '../Modal/Modal'
 import { PuzzleCard } from './PuzzleCard'
 import './OfficialPuzzlesModal.css'
+import { useSettings } from '../../settings/useSettings'
+import { useMemo } from 'react'
+import { PUZZLE_SORTS } from '../../settings/Settings'
 
 type OfficialPuzzlesModalProps = {
   currentPuzzleId: number | null
@@ -13,6 +16,12 @@ type OfficialPuzzlesModalProps = {
 
 export function OfficialPuzzlesModal({ currentPuzzleId, onSelect, onClose }: OfficialPuzzlesModalProps) {
   const { t } = useTranslation('puzzles')
+  const { settings, updateSettings } = useSettings()
+
+  const sortedPuzzles = useMemo(
+    () => sortPuzzles(OFFICIAL_PUZZLES, settings.puzzleSort),
+    [settings.puzzleSort],
+  )
 
   const handleSelect = (puzzle: OfficialPuzzle) => onSelect(puzzle.data.replace(/^#/, ''))
 
@@ -30,9 +39,30 @@ export function OfficialPuzzlesModal({ currentPuzzleId, onSelect, onClose }: Off
         </button>
       </header>
 
+      <div className="puzzles-modal__sort">
+        <span id="puzzles-sort-label" className="puzzles-modal__sort-label">
+          {t('sort.label')}
+        </span>
+
+        <div className="puzzles-modal__sort-options" role="radiogroup" aria-labelledby="puzzles-sort-label">
+          {PUZZLE_SORTS.map((sort) => (
+            <button
+              key={sort}
+              type="button"
+              role="radio"
+              aria-checked={settings.puzzleSort === sort}
+              className={`puzzles-modal__sort-option${settings.puzzleSort === sort ? ' puzzles-modal__sort-option--active' : ''}`}
+              onClick={() => updateSettings({ puzzleSort: sort })}
+            >
+              {t(`sort.${sort}`)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="puzzles-modal__body">
         <div className="puzzles-modal__grid">
-          {OFFICIAL_PUZZLES.map((puzzle) => (
+          {sortedPuzzles.map((puzzle) => (
             <PuzzleCard
               key={puzzle.id}
               puzzle={puzzle}

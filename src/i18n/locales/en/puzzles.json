@@ -7,5 +7,10 @@
     "Medium": "Medium",
     "Hard": "Hard",
     "Extreme": "Extreme"
+  },
+  "sort": {
+    "label": "Sort by",
+    "id": "Number",
+    "difficulty": "Difficulty"
   }
 }

@@ -6,6 +6,9 @@ export type ToolbarPosition = (typeof TOOLBAR_POSITIONS)[number]
 export const LANGUAGES = ['fr', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
 
+export const PUZZLE_SORTS = ['id', 'difficulty'] as const
+export type PuzzleSort = (typeof PUZZLE_SORTS)[number]
+
 /** French if the browser is in French (`fr`, `fr-CA`...), English otherwise. */
 export function detectLanguage(): Language {
   const browserLanguage = typeof navigator === 'undefined' ? '' : navigator.language
@@ -22,6 +25,7 @@ export type Settings = {
   highlightColor: HighlightColor
   toolbarPosition: ToolbarPosition
   language: Language
+  puzzleSort: PuzzleSort
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -32,6 +36,7 @@ export const DEFAULT_SETTINGS: Settings = {
   toolbarPosition: 'left',
   // Only used until the player picks a language (the saved choice always wins).
   language: detectLanguage(),
+  puzzleSort: 'id'
 }
 
 /** `ActionAnimator` works with a multiplier of the durations: slower = bigger. */

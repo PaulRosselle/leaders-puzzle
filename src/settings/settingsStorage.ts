@@ -3,6 +3,7 @@ import {
   ANIMATION_SPEED_LEVELS,
   DEFAULT_SETTINGS,
   LANGUAGES,
+  PUZZLE_SORTS,
   TOOLBAR_POSITIONS,
   type Settings,
 } from './Settings'
@@ -43,6 +44,7 @@ export function loadSettings(): Settings {
       ),
       toolbarPosition: pickOption(record.toolbarPosition, TOOLBAR_POSITIONS, DEFAULT_SETTINGS.toolbarPosition),
       language: pickOption(record.language, LANGUAGES, DEFAULT_SETTINGS.language),
+      puzzleSort: pickOption(record.puzzleSort, PUZZLE_SORTS, DEFAULT_SETTINGS.puzzleSort),
     }
   } catch {
     // Storage unavailable (private mode...) or corrupted JSON.
