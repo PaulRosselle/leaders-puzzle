@@ -6,5 +6,9 @@
   "defeat": {
     "title": "Défaite",
     "subtitle": "Votre leader a été vaincu"
+  },
+  "actions": {
+    "close": "Fermer",
+    "nextPuzzle": "Puzzle suivant"
   }
 }

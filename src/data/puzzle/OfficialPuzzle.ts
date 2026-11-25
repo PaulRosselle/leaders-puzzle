@@ -41,3 +41,12 @@ export function sortPuzzles(puzzles: readonly OfficialPuzzle[], sort: PuzzleSort
     return a.id - b.id
   })
 }
+
+export function getNextPuzzle(current: OfficialPuzzle,
+                              sort: PuzzleSort,
+                              puzzles: readonly OfficialPuzzle[] = OFFICIAL_PUZZLES): OfficialPuzzle | null {
+  const sorted = sortPuzzles(puzzles, sort)
+  const index = sorted.findIndex((puzzle) => puzzle.id === current.id)
+  if (index === -1) return null
+  return sorted[(index + 1) % sorted.length]
+}

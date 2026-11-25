@@ -131,7 +131,6 @@
 .end-game__subtitle {
   --sub-border: calc(var(--bar-h) / 30);
 
-  position: absolute;
   left: 20%;
   right: 20%;
 
@@ -166,4 +165,47 @@
   border-bottom: var(--sub-border) solid var(--end-color);
     
   border-radius: 0 0 calc(var(--bar-h) * 2 / 15) calc(var(--bar-h) * 2 / 15);
+}
+
+.end-game__footer {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: calc(75% + var(--bar-h) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--bar-h) / 5);
+}
+
+.end-game__subtitle {
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
+}
+
+.end-game__actions {
+  display: flex;
+  gap: calc(var(--bar-h) / 6);
+}
+
+.end-game__button {
+  flex: 1;
+  min-width: 0;
+  padding: calc(var(--bar-h) / 10) calc(var(--bar-h) / 6);
+  font: inherit;
+  font-size: calc(var(--bar-h) / 3.2);
+  line-height: 1.1;
+  color: var(--end-color);
+  background: var(--end-game-surface);
+  border: calc(var(--bar-h) / 30) solid var(--end-color);
+  border-radius: calc(var(--bar-h) * 2 / 15);
+  cursor: pointer;
+}
+
+.end-game__button:hover,
+.end-game__button:focus-visible {
+  background: var(--end-color);
+  color: var(--end-game-surface);
+  outline: none;
 }

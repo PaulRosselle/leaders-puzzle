@@ -29,6 +29,7 @@ import { PuzzleBadge } from './components/PuzzleBadge/PuzzleBadge'
 import { findPlayerLeader } from './utils/findPlayerLeader'
 import { PuzzleLoader } from './data/puzzle/PuzzleLoader'
 import { PuzzleErrorModal } from './components/PuzzleErrorModal/PuzzleErrorModal'
+import { getNextPuzzle } from './data/puzzle/OfficialPuzzle'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
@@ -59,6 +60,11 @@ export default function App() {
   
   const { context, request, motions, gameResult, officialPuzzle, selectTarget, cancel, undo, canUndo, restart, canRestart } =
     useGameController(createGameHistory, animator)
+    
+  const nextPuzzle = useMemo(
+    () => (officialPuzzle ? getNextPuzzle(officialPuzzle, settings.puzzleSort) : null),
+    [officialPuzzle, settings.puzzleSort],
+  )
 
   useUndoShortcut(canUndo, undo)
 
@@ -147,6 +153,7 @@ export default function App() {
         <EndGameModal
           playerWon={gameResult.playerWon}
           leader={playerLeader}
+          onNextPuzzle={nextPuzzle ? () => reloadWithPuzzle(nextPuzzle.data) : undefined}
           onClosed={() => setDismissedResult(gameResult)}
         />
       )}
