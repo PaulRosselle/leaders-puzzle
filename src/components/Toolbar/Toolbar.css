@@ -1,11 +1,11 @@
 .toolbar {
   /* ---------- Theme ---------- */
   --toolbar-bg: #151719;
-  --toolbar-icon: #8d9094;
+  --toolbar-icon: #b2b5ba;
   --toolbar-icon-hover: var(--text-1, #ebdfc7);
-  --toolbar-icon-disabled: #4a4d51;
+  --toolbar-icon-disabled: #5d6065;
   --toolbar-hover-bg: #0b0c0d;
-  --toolbar-separator: rgba(255, 255, 255, 0.08);
+  --toolbar-separator: #f9b135a6;
   --toolbar-focus: #f2a93b;
 
   /* ---------- Layout ---------- */
@@ -38,6 +38,7 @@
   background: var(--toolbar-bg);
   border-radius: 14px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--toolbar-separator);
 }
 
 .toolbar__group {
