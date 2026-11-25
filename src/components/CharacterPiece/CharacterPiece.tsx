@@ -5,17 +5,17 @@ import {
   CHARACTER_ILLUSTRATIONS,
   LEADER_OUTLINE,
   PIECE_BACKGROUNDS,
-} from '../../data/CharacterAsset'
-import { HIGHLIGHT_OUTLINES } from '../../data/HighlightAsset'
+} from '../../data/asset/CharacterAsset'
+import { HIGHLIGHT_OUTLINES } from '../../data/asset/HighlightAsset'
 import type { PieceData } from '../../data/PieceData'
 import { cellStyle } from '../../utils/cellStyle'
 import './CharacterPiece.css'
 import '../Cell/Cell.css'
-import { HighlightStatus } from '../../data/HighlightStatus'
+import { HighlightStatus } from '../../data/highlight/HighlightStatus'
 import { Team } from '../../gamelogic/enums/Team'
 import { CharacterType } from '../../gamelogic/enums/CharacterType'
 import { useLongPress } from '../../hooks/useLongPress'
-import type { HighlightColor } from '../../data/HighlightColor'
+import type { HighlightColor } from '../../data/highlight/HighlightColor'
 
 type CharacterPieceProps = {
   piece: PieceData

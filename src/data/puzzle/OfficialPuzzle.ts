@@ -1,5 +1,5 @@
-import officialPuzzles from '../resources/official_puzzles.json'
-import type { PuzzleSort } from '../settings/Settings'
+import officialPuzzles from '../../resources/official_puzzles.json'
+import type { PuzzleSort } from '../../settings/Settings'
 
 export const DIFFICULTIES = ['Easy', 'Medium', 'Hard', 'Extreme'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]

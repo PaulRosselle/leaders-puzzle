@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { GameController } from '../data/GameController'
-import { OFFICIAL_PUZZLES, type OfficialPuzzle } from '../data/OfficialPuzzle'
+import { GameController } from '../data/controller/GameController'
+import { OFFICIAL_PUZZLES, type OfficialPuzzle } from '../data/puzzle/OfficialPuzzle'
 import type { ActionMotion } from '../gamelogic/entities/actions/ActionMotion'
 import type { GameHistory } from '../gamelogic/entities/actions/GameHistory'
 import type { InteractionFeedback } from '../gamelogic/entities/interactions/InteractionFeedback'
@@ -12,9 +12,9 @@ import { GameCancelledError } from '../gamelogic/entities/states/GameCancelledEr
 import { InteractionRequestType } from '../gamelogic/enums/interactions/InteractionRequestType'
 import { InteractionResultType } from '../gamelogic/enums/interactions/InteractionResultType'
 import { createHash } from '../utils/hashGameState'
-import { AutoPlayer } from '../data/AutoPlayer'
-import { loadNemesisMoves } from '../data/NemesisMoves'
-import { markPuzzleCompleted } from '../data/CompletedPuzzles'
+import { AutoPlayer } from '../data/controller/AutoPlayer'
+import { loadNemesisMoves } from '../data/controller/NemesisMoves'
+import { markPuzzleCompleted } from '../data/puzzle/CompletedPuzzles'
 
 /** Anything able to play the animation of a motion (see CharacterActionAnimator). */
 export type MotionAnimator = {

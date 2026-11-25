@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
-import { MARKER_IMAGES } from '../../data/MarkerAsset'
-import type { MarkerData } from '../../data/MarkerData'
+import { MARKER_IMAGES } from '../../data/asset/MarkerAsset'
+import type { MarkerData } from '../../data/marker/MarkerData'
 import { cellStyle } from '../../utils/cellStyle'
 import './Marker.css'
 import '../Cell/Cell.css'

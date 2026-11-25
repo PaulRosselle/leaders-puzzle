@@ -1,5 +1,5 @@
 /** Automatic import of the puzzle card images (`assets/puzzles/*.webp`). */
-const files = import.meta.glob<string>('../assets/puzzles/*.webp', {
+const files = import.meta.glob<string>('../../assets/puzzles/*.webp', {
   eager: true,
   import: 'default',
 })

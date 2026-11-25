@@ -1,13 +1,13 @@
-import type { GameHistory } from "../gamelogic/entities/actions/GameHistory";
-import type { Position } from "../gamelogic/entities/core/Position";
-import type { InteractionRequest } from "../gamelogic/entities/interactions/InteractionRequest";
-import type { InteractionTarget } from "../gamelogic/entities/interactions/InteractionTarget";
-import { GameFactory } from "../gamelogic/factories/GameFactory";
-import { BoardQuery } from "../gamelogic/queries/BoardQuery";
-import { GameQuery } from "../gamelogic/queries/GameQuery";
-import { getClosestTarget } from "../utils/botUtils";
-import { createHash } from "../utils/hashGameState";
-import { PositionLabelMapper } from "./parser/PositionLabelMapper";
+import type { GameHistory } from "../../gamelogic/entities/actions/GameHistory";
+import type { Position } from "../../gamelogic/entities/core/Position";
+import type { InteractionRequest } from "../../gamelogic/entities/interactions/InteractionRequest";
+import type { InteractionTarget } from "../../gamelogic/entities/interactions/InteractionTarget";
+import { GameFactory } from "../../gamelogic/factories/GameFactory";
+import { BoardQuery } from "../../gamelogic/queries/BoardQuery";
+import { GameQuery } from "../../gamelogic/queries/GameQuery";
+import { getClosestTarget } from "../../utils/botUtils";
+import { createHash } from "../../utils/hashGameState";
+import { PositionLabelMapper } from "../parser/PositionLabelMapper";
 
 type RawNemesisMoves = Readonly<Record<string, string>>;
 

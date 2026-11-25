@@ -1,6 +1,6 @@
 import boardImage from '../../assets/board.webp'
 import { BOARD_CELLS } from '../../data/BoardCells'
-import type { MarkerData } from '../../data/MarkerData'
+import type { MarkerData } from '../../data/marker/MarkerData'
 import type { PieceData } from '../../data/PieceData'
 import { positionKey } from '../../utils/positionKey'
 import type { InteractionTarget } from '../../gamelogic/entities/interactions/InteractionTarget'
@@ -10,7 +10,7 @@ import { Marker } from '../Marker/Marker'
 import './Board.css'
 import { PositionLabelMapper } from '../../data/parser/PositionLabelMapper'
 import type { ReactNode } from 'react'
-import type { HighlightColor } from '../../data/HighlightColor'
+import type { HighlightColor } from '../../data/highlight/HighlightColor'
 
 type BoardProps = {
   pieces: PieceData[]

@@ -12,7 +12,7 @@ import { Slider } from '../controls/Slider'
 import { Switch } from '../controls/Switch'
 import { SettingRow } from './SettingRow'
 import './SettingsModal.css'
-import { HighlightColor } from '../../data/HighlightColor'
+import { HighlightColor } from '../../data/highlight/HighlightColor'
 import { HighlightColorControl, type HighlightColorOption } from '../controls/HighlightColorControl/HighlightColorControl'
 
 // Each language is written in its own language, so that anyone can find theirs.

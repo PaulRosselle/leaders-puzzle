@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DIFFICULTY_STYLES, type OfficialPuzzle } from '../../data/OfficialPuzzle'
-import { getPuzzleAssetSource } from '../../data/PuzzleAsset'
+import { DIFFICULTY_STYLES, type OfficialPuzzle } from '../../data/puzzle/OfficialPuzzle'
+import { getPuzzleAssetSource } from '../../data/asset/PuzzleAsset'
 import { cssUrl } from '../../utils/cssUrl'
 import { DifficultyMarkers } from '../DifficultyMarkers/DifficultyMarkers'
 

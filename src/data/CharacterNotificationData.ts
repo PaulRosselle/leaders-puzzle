@@ -1,4 +1,4 @@
-import { CHARACTER_PORTRAITS, type CharacterPortrait } from './CharacterPortrait'
+import { CHARACTER_PORTRAITS, type CharacterPortrait } from './portrait/CharacterPortrait'
 import type { PieceData } from './PieceData'
 
 /** What the character notification displays. */

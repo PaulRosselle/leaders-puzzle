@@ -1,4 +1,4 @@
-import { HighlightColor } from './HighlightColor'
+import { HighlightColor } from '../highlight/HighlightColor'
 
 export const HIGHLIGHT_ASSETS = {
   [HighlightColor.Default]: 'default',
@@ -10,7 +10,7 @@ export const HIGHLIGHT_ASSETS = {
 
 
 /** Highlight outline resources. */
-const highlightOutlineFiles = import.meta.glob<string>('../assets/highlights/highlight_outline_*.webp', {
+const highlightOutlineFiles = import.meta.glob<string>('../../assets/highlights/highlight_outline_*.webp', {
   eager: true,
   import: 'default',
 })
@@ -18,7 +18,7 @@ const highlightOutlineFiles = import.meta.glob<string>('../assets/highlights/hig
 export const HIGHLIGHT_OUTLINES: Record<HighlightColor, string> = {} as Record<HighlightColor, string>
 
 for (const [id, asset] of Object.entries(HIGHLIGHT_ASSETS)) {
-  const path = `../assets/highlights/highlight_outline_${asset}.webp`
+  const path = `../../assets/highlights/highlight_outline_${asset}.webp`
   const outline = highlightOutlineFiles[path]
 
   if (outline) {
@@ -27,7 +27,7 @@ for (const [id, asset] of Object.entries(HIGHLIGHT_ASSETS)) {
 }
 
 /** Highlight color resources. */
-const highlightColorFiles = import.meta.glob<string>('../assets/highlights/highlight_color_*.webp',{
+const highlightColorFiles = import.meta.glob<string>('../../assets/highlights/highlight_color_*.webp',{
   eager: true,
   import: 'default',
 })
@@ -35,7 +35,7 @@ const highlightColorFiles = import.meta.glob<string>('../assets/highlights/highl
 export const HIGHLIGHT_COLOR_PREVIEWS: Record<HighlightColor, string> = {} as Record<HighlightColor, string>
 
 for (const [id, asset] of Object.entries(HIGHLIGHT_ASSETS)) {
-  const path = `../assets/highlights/highlight_color_${asset}.webp`
+  const path = `../../assets/highlights/highlight_color_${asset}.webp`
   const preview = highlightColorFiles[path]
 
   if (preview) {
