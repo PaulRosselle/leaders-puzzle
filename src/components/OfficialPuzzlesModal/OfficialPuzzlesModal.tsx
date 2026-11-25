@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { OFFICIAL_PUZZLES, sortPuzzles, type OfficialPuzzle } from '../../data/OfficialPuzzle'
+import { OFFICIAL_PUZZLES, sortPuzzles, type OfficialPuzzle } from '../../data/puzzle/OfficialPuzzle'
 import { Modal } from '../Modal/Modal'
 import { PuzzleCard } from './PuzzleCard'
 import './OfficialPuzzlesModal.css'
 import { useSettings } from '../../settings/useSettings'
 import { useMemo, useState } from 'react'
 import { PUZZLE_SORTS } from '../../settings/Settings'
-import { loadCompletedPuzzleIds } from '../../data/CompletedPuzzles'
+import { loadCompletedPuzzleIds } from '../../data/puzzle/CompletedPuzzles'
 
 type OfficialPuzzlesModalProps = {
   currentPuzzleId: number | null

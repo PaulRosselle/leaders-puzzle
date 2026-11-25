@@ -1,4 +1,4 @@
-import { HighlightColor } from '../data/HighlightColor'
+import { HighlightColor } from '../data/highlight/HighlightColor'
 import {
   ANIMATION_SPEED_LEVELS,
   DEFAULT_SETTINGS,

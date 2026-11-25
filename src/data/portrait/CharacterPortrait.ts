@@ -1,4 +1,4 @@
-import { CharacterType } from '../gamelogic/enums/CharacterType'
+import { CharacterType } from '../../gamelogic/enums/CharacterType'
 
 /**
  * Mapping between a CharacterType and its portrait name. This name is the

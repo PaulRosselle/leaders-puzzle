@@ -1,16 +1,16 @@
-import { MarkerType } from './MarkerType'
+import { MarkerType } from '../marker/MarkerType'
 
-import { InteractionTargetType } from '../gamelogic/enums/interactions/InteractionTargetType'
-import type { MarkerData } from './MarkerData'
+import { InteractionTargetType } from '../../gamelogic/enums/interactions/InteractionTargetType'
+import type { MarkerData } from '../marker/MarkerData'
 
-import targetMovement from '../assets/markers/target_movement.webp'
-import targetAbilityCharacter from '../assets/markers/target_ability_character.webp'
-import targetAbilityMovement from '../assets/markers/target_ability_movement.webp'
-import type { InteractionRequest } from '../gamelogic/entities/interactions/InteractionRequest'
-import type { Position } from '../gamelogic/entities/core/Position'
-import { angleBetween } from '../utils/hexGeometry'
-import type { PieceData } from './PieceData'
-import { positionKey } from '../utils/positionKey'
+import targetMovement from '../../assets/markers/target_movement.webp'
+import targetAbilityCharacter from '../../assets/markers/target_ability_character.webp'
+import targetAbilityMovement from '../../assets/markers/target_ability_movement.webp'
+import type { InteractionRequest } from '../../gamelogic/entities/interactions/InteractionRequest'
+import type { Position } from '../../gamelogic/entities/core/Position'
+import { angleBetween } from '../../utils/hexGeometry'
+import type { PieceData } from '../PieceData'
+import { positionKey } from '../../utils/positionKey'
 
 export const MARKER_IMAGES: Record<MarkerType, string> = {
     [MarkerType.MovementTarget]: targetMovement,

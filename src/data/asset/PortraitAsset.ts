@@ -1,10 +1,10 @@
-import type { CharacterPortrait } from './CharacterPortrait'
+import type { CharacterPortrait } from '../portrait/CharacterPortrait'
 
 /**
  * Automatic import of each portrait (`assets/portraits/portrait_<name>.<ext>`).
  * With `eager`, Vite only gives the URLs: an image is downloaded when it is displayed.
  */
-const files = import.meta.glob<string>('../assets/portraits/portrait_*.{webp,png,jpg,jpeg}', {
+const files = import.meta.glob<string>('../../assets/portraits/portrait_*.{webp,png,jpg,jpeg}', {
   eager: true,
   import: 'default',
 })

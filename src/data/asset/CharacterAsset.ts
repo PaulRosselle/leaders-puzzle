@@ -1,8 +1,8 @@
-import bgWhite from '../assets/pieces/character_piece_bg_white.webp'
-import bgBlack from '../assets/pieces/character_piece_bg_black.webp'
-import outlineLeader from '../assets/pieces/character_piece_outline_leader.webp'
-import { Team } from '../gamelogic/enums/Team'
-import { CharacterType } from '../gamelogic/enums/CharacterType'
+import bgWhite from '../../assets/pieces/character_piece_bg_white.webp'
+import bgBlack from '../../assets/pieces/character_piece_bg_black.webp'
+import outlineLeader from '../../assets/pieces/character_piece_outline_leader.webp'
+import { Team } from '../../gamelogic/enums/Team'
+import { CharacterType } from '../../gamelogic/enums/CharacterType'
 
 /** Team background resource name. */
 export const PIECE_BACKGROUNDS: Record<Team, string> = {
@@ -53,7 +53,7 @@ export type CharacterAssetName = (typeof CHARACTER_ASSETS)[CharacterType]
 /**
  * Automatic import of each character piece illustration.
  */
-const files = import.meta.glob<string>('../assets/pieces/character_piece_*.webp', {
+const files = import.meta.glob<string>('../../assets/pieces/character_piece_*.webp', {
   eager: true,
   import: 'default',
 })
@@ -61,7 +61,7 @@ const files = import.meta.glob<string>('../assets/pieces/character_piece_*.webp'
 export const CHARACTER_ILLUSTRATIONS: Record<CharacterType, string> = {} as Record<CharacterType, string>
 
 for (const [id, asset] of Object.entries(CHARACTER_ASSETS)) {
-  const path = `../assets/pieces/character_piece_${asset}.webp`
+  const path = `../../assets/pieces/character_piece_${asset}.webp`
     const illustration = files[path]
 
     if (illustration) {

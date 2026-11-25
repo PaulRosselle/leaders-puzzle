@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import type { KeyboardEvent } from 'react'
-import { HIGHLIGHT_COLOR_PREVIEWS } from '../../../data/HighlightAsset'
-import type { HighlightColor } from '../../../data/HighlightColor'
+import { HIGHLIGHT_COLOR_PREVIEWS } from '../../../data/asset/HighlightAsset'
+import type { HighlightColor } from '../../../data/highlight/HighlightColor'
 import './HighlightColorControl.css'
 
 export type HighlightColorOption = {

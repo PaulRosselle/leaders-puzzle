@@ -1,5 +1,5 @@
-import { AbilityType } from '../gamelogic/enums/AbilityType'
-import { CharacterType } from '../gamelogic/enums/CharacterType'
+import { AbilityType } from '../../gamelogic/enums/AbilityType'
+import { CharacterType } from '../../gamelogic/enums/CharacterType'
 import { getPortraitCharacterTypes, type CharacterPortrait } from './CharacterPortrait'
 
 /** Ability icon displayed after the name of a character. */

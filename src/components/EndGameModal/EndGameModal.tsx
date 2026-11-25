@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { AnimationEvent, CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
-import { END_GAME_LEADERS, END_GAME_STYLES, EndGameType } from '../../data/EndGameAsset'
+import { END_GAME_LEADERS, END_GAME_STYLES, EndGameType } from '../../data/asset/EndGameAsset'
 import type { CharacterType } from '../../gamelogic/enums/CharacterType'
 import './EndGameModal.css'
 

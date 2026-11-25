@@ -1,7 +1,7 @@
-import type { GameHistory } from "../gamelogic/entities/actions/GameHistory";
-import type { InteractionRequest } from "../gamelogic/entities/interactions/InteractionRequest";
-import type { InteractionTarget } from "../gamelogic/entities/interactions/InteractionTarget";
-import { AutoPlayQuery } from "../gamelogic/queries/AutoPlayQuery";
+import type { GameHistory } from "../../gamelogic/entities/actions/GameHistory";
+import type { InteractionRequest } from "../../gamelogic/entities/interactions/InteractionRequest";
+import type { InteractionTarget } from "../../gamelogic/entities/interactions/InteractionTarget";
+import { AutoPlayQuery } from "../../gamelogic/queries/AutoPlayQuery";
 import type { NemesisMoves } from "./NemesisMoves";
 
 /**

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { getDescriptionKey, type CharacterPortrait } from '../../data/CharacterPortrait'
-import { getPortraitSource } from '../../data/PortraitAsset'
-import { getAbilitySource } from '../../data/AbilityAsset'
-import { getPortraitAbilities } from '../../data/PortraitAbilities'
+import { getDescriptionKey, type CharacterPortrait } from '../../data/portrait/CharacterPortrait'
+import { getPortraitSource } from '../../data/asset/PortraitAsset'
+import { getAbilitySource } from '../../data/asset/AbilityAsset'
+import { getPortraitAbilities } from '../../data/portrait/PortraitAbilities'
 
 type PortraitDescriptionProps = {
   portrait: CharacterPortrait

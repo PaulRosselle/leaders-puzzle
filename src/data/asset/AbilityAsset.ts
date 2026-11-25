@@ -1,7 +1,7 @@
-import type { PortraitAbility } from './PortraitAbilities'
+import type { PortraitAbility } from '../portrait/PortraitAbilities'
 
 /** Automatic import of the ability icons (`assets/abilities/*.webp`). */
-const files = import.meta.glob<string>('../assets/abilities/*.webp', {
+const files = import.meta.glob<string>('../../assets/abilities/*.webp', {
   eager: true,
   import: 'default',
 })

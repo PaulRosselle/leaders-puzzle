@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { OfficialPuzzle } from '../../data/OfficialPuzzle'
+import type { OfficialPuzzle } from '../../data/puzzle/OfficialPuzzle'
 import { DifficultyMarkers } from '../DifficultyMarkers/DifficultyMarkers'
 import './PuzzleBadge.css'
 

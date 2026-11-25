@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
-import { DIFFICULTY_STYLES, MAX_DIFFICULTY_LEVEL, type Difficulty } from '../../data/OfficialPuzzle'
-import { getPuzzleAssetSource } from '../../data/PuzzleAsset'
+import { DIFFICULTY_STYLES, MAX_DIFFICULTY_LEVEL, type Difficulty } from '../../data/puzzle/OfficialPuzzle'
+import { getPuzzleAssetSource } from '../../data/asset/PuzzleAsset'
 import { cssUrl } from '../../utils/cssUrl'
 import './DifficultyMarkers.css'
 

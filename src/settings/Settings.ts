@@ -1,4 +1,4 @@
-import { HighlightColor } from "../data/HighlightColor"
+import { HighlightColor } from "../data/highlight/HighlightColor"
 
 export const TOOLBAR_POSITIONS = ['left', 'right'] as const
 export type ToolbarPosition = (typeof TOOLBAR_POSITIONS)[number]

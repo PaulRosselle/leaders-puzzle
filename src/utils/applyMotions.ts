@@ -2,8 +2,8 @@ import type { ActionMotion } from '../gamelogic/entities/actions/ActionMotion'
 import type { ActionTarget } from '../gamelogic/entities/actions/ActionTarget'
 import type { Position } from '../gamelogic/entities/core/Position'
 import { ActionMotionType } from '../gamelogic/enums/ActionMotionType'
-import { HighlightStatus } from './HighlightStatus'
-import type { PieceData } from './PieceData'
+import { HighlightStatus } from '../data/highlight/HighlightStatus'
+import type { PieceData } from '../data/PieceData'
 
 /**
  * Returns the pieces as they are displayed once the given motions are applied.

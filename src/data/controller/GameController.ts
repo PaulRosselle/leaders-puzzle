@@ -1,14 +1,14 @@
-import { GameCancelledError } from "../gamelogic/entities/states/GameCancelledError";
-import { GameHandler } from "../gamelogic/GameHandler";
-import type { IGameListener } from "../gamelogic/IGameListener";
-import type { GameHistory } from "../gamelogic/entities/actions/GameHistory";
-import type { GameContext } from "../gamelogic/entities/states/GameContext";
-import type { InteractionFeedback } from "../gamelogic/entities/interactions/InteractionFeedback";
-import type { InteractionRequest } from "../gamelogic/entities/interactions/InteractionRequest";
-import { InteractionResult } from "../gamelogic/entities/interactions/InteractionResult";
-import type { InteractionTarget } from "../gamelogic/entities/interactions/InteractionTarget";
-import type { Game } from "../gamelogic/entities/projection/Game";
-import { InteractionResultType } from "../gamelogic/enums/interactions/InteractionResultType";
+import { GameCancelledError } from "../../gamelogic/entities/states/GameCancelledError";
+import { GameHandler } from "../../gamelogic/GameHandler";
+import type { IGameListener } from "../../gamelogic/IGameListener";
+import type { GameHistory } from "../../gamelogic/entities/actions/GameHistory";
+import type { GameContext } from "../../gamelogic/entities/states/GameContext";
+import type { InteractionFeedback } from "../../gamelogic/entities/interactions/InteractionFeedback";
+import type { InteractionRequest } from "../../gamelogic/entities/interactions/InteractionRequest";
+import { InteractionResult } from "../../gamelogic/entities/interactions/InteractionResult";
+import type { InteractionTarget } from "../../gamelogic/entities/interactions/InteractionTarget";
+import type { Game } from "../../gamelogic/entities/projection/Game";
+import { InteractionResultType } from "../../gamelogic/enums/interactions/InteractionResultType";
 
 /**
  * Builds the immutable context handed to the UI from snapshots of the game.
