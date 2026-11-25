@@ -1,0 +1,22 @@
+{
+  "title": "Invalid puzzle",
+  "intro": "The puzzle cannot be started:",
+  "close": "Close",
+  "teams": {
+    "black": "black",
+    "white": "white"
+  },
+  "errors": {
+    "emptyPlayerTeam": "No character was found in the player's team.",
+    "unknownCharacter": "The character id \"{{characterId}}\" is unknown.",
+    "unexpected": "An unexpected error occurred while loading the puzzle.",
+    "frogLimit": "Only one character can be transformed into a frog.",
+    "leaderTransformedIntoFrog": "A leader cannot be transformed into a frog.",
+    "leaderMissing": "The leader of the {{team}} team is missing.",
+    "leaderCaptured": "The leader of the {{team}} team is already captured.",
+    "leaderSurrounded": "The leader of the {{team}} team is already surrounded.",
+    "oneLeaderPerTeam": "There must be at most one leader per team.",
+    "onePerTeamCharacter": "The character \"{{character}}\" can only appear once per team.",
+    "hermitAndCubLimit": "The player's team can only contain one hermit and one cub."
+  }
+}

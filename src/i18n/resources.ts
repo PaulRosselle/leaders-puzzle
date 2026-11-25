@@ -7,6 +7,7 @@ import frPortraits from './locales/fr/portraits.json'
 import frSettings from './locales/fr/settings.json'
 import frToolbar from './locales/fr/toolbar.json'
 import frPuzzles from './locales/fr/puzzles.json'
+import frPuzzleErrors from './locales/fr/puzzleErrors.json'
 
 import enEndGame from './locales/en/endGame.json'
 import enImportModal from './locales/en/importModal.json'
@@ -15,6 +16,7 @@ import enPortraits from './locales/en/portraits.json'
 import enSettings from './locales/en/settings.json'
 import enToolbar from './locales/en/toolbar.json'
 import enPuzzles from './locales/en/puzzles.json'
+import enPuzzleErrors from './locales/en/puzzleErrors.json'
 /*
  * One JSON file per namespace (= one area of the UI), one folder per language.
  *
@@ -28,7 +30,8 @@ export const fr = {
   portraits: frPortraits,
   settings: frSettings,
   toolbar: frToolbar,
-  puzzles: frPuzzles
+  puzzles: frPuzzles,
+  puzzleErrors: frPuzzleErrors,
 }
 
 export const en = {
@@ -39,6 +42,7 @@ export const en = {
   settings: enSettings,
   toolbar: enToolbar,
   puzzles: enPuzzles,
+  puzzleErrors: enPuzzleErrors,
 }
 
 export const resources = { fr, en } satisfies Record<Language, unknown>
