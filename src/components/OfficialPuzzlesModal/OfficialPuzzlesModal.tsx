@@ -4,8 +4,9 @@ import { Modal } from '../Modal/Modal'
 import { PuzzleCard } from './PuzzleCard'
 import './OfficialPuzzlesModal.css'
 import { useSettings } from '../../settings/useSettings'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { PUZZLE_SORTS } from '../../settings/Settings'
+import { loadCompletedPuzzleIds } from '../../data/CompletedPuzzles'
 
 type OfficialPuzzlesModalProps = {
   currentPuzzleId: number | null
@@ -23,6 +24,8 @@ export function OfficialPuzzlesModal({ currentPuzzleId, onSelect, onClose }: Off
     [settings.puzzleSort],
   )
 
+  const [completedIds] = useState(loadCompletedPuzzleIds)
+  
   const handleSelect = (puzzle: OfficialPuzzle) => onSelect(puzzle.data.replace(/^#/, ''))
 
   return (
@@ -67,6 +70,7 @@ export function OfficialPuzzlesModal({ currentPuzzleId, onSelect, onClose }: Off
               key={puzzle.id}
               puzzle={puzzle}
               isCurrent={puzzle.id === currentPuzzleId}
+              isCompleted={completedIds.has(puzzle.id)}
               onSelect={handleSelect}
             />
           ))}

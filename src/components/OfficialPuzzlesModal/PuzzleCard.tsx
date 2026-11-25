@@ -8,12 +8,13 @@ import { DifficultyMarkers } from '../DifficultyMarkers/DifficultyMarkers'
 type PuzzleCardProps = {
   puzzle: OfficialPuzzle
   isCurrent?: boolean
+  isCompleted?: boolean
   onSelect: (puzzle: OfficialPuzzle) => void
 }
 
 const CROWN_URL = cssUrl(getPuzzleAssetSource('crown'))
 
-export function PuzzleCard({ puzzle, isCurrent = false, onSelect }: PuzzleCardProps) {
+export function PuzzleCard({ puzzle, isCurrent = false, isCompleted = false, onSelect }: PuzzleCardProps) {
   const { t } = useTranslation('puzzles')
   const { crownColor } = DIFFICULTY_STYLES[puzzle.difficulty]
 
@@ -25,7 +26,7 @@ export function PuzzleCard({ puzzle, isCurrent = false, onSelect }: PuzzleCardPr
   return (
     <button
       type="button"
-      className={`puzzle-card${isCurrent ? ' puzzle-card--current' : ''}`}
+      className={`puzzle-card${isCurrent ? ' puzzle-card--current' : ''}${isCompleted ? ' puzzle-card--completed' : ''}`}
       style={style}
       aria-current={isCurrent || undefined}
       aria-label={t('puzzleLabel', {
