@@ -12,7 +12,7 @@ import { PositionLabelMapper } from "../parser/PositionLabelMapper";
 type RawNemesisMoves = Readonly<Record<string, string>>;
 
 // One file per official puzzle (see scripts/split-nemesis-moves.mjs), loaded only on demand.
-const MOVES_LOADERS = import.meta.glob<RawNemesisMoves>("../resources/nemesis_moves/*.json", {
+const MOVES_LOADERS = import.meta.glob<RawNemesisMoves>("../../resources/nemesis_moves/*.json", {
     import: "default",
 });
 
@@ -79,7 +79,7 @@ function getNemesisTargetFromDestination(targets: readonly InteractionTarget[], 
  * @returns null if the puzzle has no Nemesis moves file
  */
 export async function loadNemesisMoves(puzzleId: number): Promise<NemesisMoves | null> {
-    const loader = MOVES_LOADERS[`../resources/nemesis_moves/${puzzleId}.json`];
+    const loader = MOVES_LOADERS[`../../resources/nemesis_moves/${puzzleId}.json`];
     if (loader === undefined) {
         return null;
     }
