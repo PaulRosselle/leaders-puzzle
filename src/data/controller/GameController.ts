@@ -9,6 +9,7 @@ import { InteractionResult } from "../../gamelogic/entities/interactions/Interac
 import type { InteractionTarget } from "../../gamelogic/entities/interactions/InteractionTarget";
 import type { Game } from "../../gamelogic/entities/projection/Game";
 import { InteractionResultType } from "../../gamelogic/enums/interactions/InteractionResultType";
+import type { VictoryCondition } from "../../gamelogic/entities/states/VictoryCondition";
 
 /**
  * Builds the immutable context handed to the UI from snapshots of the game.
@@ -51,6 +52,10 @@ class ActiveRun {
     public cancelled = false;
 }
 
+export interface GameControllerOptions {
+    readonly victoryCondition?: VictoryCondition | null;
+}
+
 /**
  * Orchestrates a GameHandler: starts and stops it, and bridges its
  * asynchronous interaction requests with the outside world.
@@ -63,10 +68,12 @@ export class GameController {
     private runPromise: Promise<void> = Promise.resolve();
     private latestContext: GameContext | null = null;
     private latestHandler: GameHandler | null = null;
+    private victoryCondition: VictoryCondition | null;
     private disposed = false;
 
-    public constructor(listener: GameControllerListener) {
+    public constructor(listener: GameControllerListener, options: GameControllerOptions = {}) {
         this.listener = listener;
+        this.victoryCondition = options.victoryCondition ?? null;
     }
 
     /**
@@ -85,7 +92,7 @@ export class GameController {
         const run = new ActiveRun();
         this.run = run;
 
-        const handler = new GameHandler(gameHistory, this.createGameListener(run));
+        const handler = new GameHandler(gameHistory, this.createGameListener(run), this.victoryCondition);
         run.handler = handler;
         this.latestHandler = handler;
 

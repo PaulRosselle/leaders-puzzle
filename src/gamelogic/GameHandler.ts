@@ -12,6 +12,7 @@ import { Game } from "./entities/projection/Game";
 import { GameCancelledError } from "./entities/states/GameCancelledError";
 import { GameContext } from "./entities/states/GameContext";
 import { GameEndedError } from "./entities/states/GameEndedError";
+import type { VictoryCondition } from "./entities/states/VictoryCondition";
 import { InteractionRequestType } from "./enums/interactions/InteractionRequestType";
 import { InteractionResultType } from "./enums/interactions/InteractionResultType";
 import { InteractionTargetType } from "./enums/interactions/InteractionTargetType";
@@ -33,14 +34,18 @@ export class GameHandler {
     private readonly game: Game;
     private readonly gameHistory: GameHistory;
     private readonly listener: IGameListener;
+    private readonly victoryCondition: VictoryCondition | null;
 
     private started = false;
     private stopped = false;
 
-    public constructor(gameHistory: GameHistory, listener: IGameListener) {
+    public constructor(gameHistory: GameHistory, 
+                       listener: IGameListener,
+                       victoryCondition: VictoryCondition | null = null) {
         this.game = GameFactory.create(gameHistory);
         this.gameHistory = GameHistory.copy(gameHistory);
         this.listener = listener;
+        this.victoryCondition = victoryCondition;
     }
 
     /**
@@ -262,6 +267,14 @@ export class GameHandler {
     }
 
     private checkGameEnded(): void {
+        // The use of a custom victory condition disable the standard ending
+        if (this.victoryCondition !== null) {
+            if (this.victoryCondition.isPlayerVictory(this.game)) {
+                throw new GameEndedError(true);
+            }
+            return;
+        }
+
         const winnerTeam = GameQuery.getWinnerTeam(this.game);
 
         if (winnerTeam !== null) {
