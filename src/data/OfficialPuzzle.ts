@@ -1,4 +1,5 @@
 import officialPuzzles from '../resources/official_puzzles.json'
+import type { PuzzleSort } from '../settings/Settings'
 
 export const DIFFICULTIES = ['Easy', 'Medium', 'Hard', 'Extreme'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
@@ -30,3 +31,13 @@ export const DIFFICULTY_STYLES: Record<Difficulty, DifficultyStyle> = {
 }
 
 export const OFFICIAL_PUZZLES = officialPuzzles as OfficialPuzzle[]
+
+export function sortPuzzles(puzzles: readonly OfficialPuzzle[], sort: PuzzleSort): OfficialPuzzle[] {
+  return [...puzzles].sort((a, b) => {
+    if (sort === 'difficulty') {
+      const byDifficulty = DIFFICULTY_STYLES[a.difficulty].level - DIFFICULTY_STYLES[b.difficulty].level
+      if (byDifficulty !== 0) return byDifficulty
+    }
+    return a.id - b.id
+  })
+}
