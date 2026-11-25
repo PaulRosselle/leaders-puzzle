@@ -11,11 +11,12 @@ type EndGameModalProps = {
   playerWon: boolean
   /** Leader of the player (null if not found). */
   leader: CharacterType | null
+  onNextPuzzle?: () => void
   /** Called once the hide animation is over. */
   onClosed: () => void
 }
 
-export function EndGameModal({ playerWon, leader, onClosed }: EndGameModalProps) {
+export function EndGameModal({ playerWon, leader, onNextPuzzle, onClosed }: EndGameModalProps) {
   const { t } = useTranslation('endGame')
   const [phase, setPhase] = useState<Phase>('showing')
 
@@ -23,6 +24,7 @@ export function EndGameModal({ playerWon, leader, onClosed }: EndGameModalProps)
   const type = playerWon ? EndGameType.Victory : EndGameType.Defeat
   const style = END_GAME_STYLES[type]
   const leaderImage = leader !== null ? END_GAME_LEADERS[type][leader] : undefined
+  const close = () => {if (phase === 'shown') setPhase('hiding')}
 
   const handleAnimationEnd = (event: AnimationEvent) => {
     if (event.target !== event.currentTarget) {
@@ -74,7 +76,27 @@ export function EndGameModal({ playerWon, leader, onClosed }: EndGameModalProps)
           <img className="end-game__side end-game__side--right" src={style.side} alt="" />
         </div>
 
-        <p className="end-game__subtitle">{t(`${resultKey}.subtitle`)}</p>
+        <div className="end-game__footer">
+          <p className="end-game__subtitle">{t(`${resultKey}.subtitle`)}</p>
+
+          {onNextPuzzle !== undefined && (
+            <div className="end-game__actions">
+              <button type="button" className="end-game__button" onClick={close}>
+                {t('actions.close')}
+              </button>
+              <button
+                type="button"
+                className="end-game__button"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  if (phase === 'shown') onNextPuzzle()
+                }}
+              >
+                {t('actions.nextPuzzle')}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
