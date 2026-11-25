@@ -1,0 +1,65 @@
+/* Panel of the puzzle error modal (the shell is in Modal.css). */
+.puzzle-error-modal {
+  --modal-width: 520px;
+  --puzzle-error-golden: var(--app-golden, #f9b235);
+  --puzzle-error-color: var(--app-red);
+
+  gap: 16px;
+  padding: 24px;
+}
+
+.puzzle-error-modal__title {
+  font-size: 2rem;
+  font-weight: normal; /* Bebas Neue has a single weight. */
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--puzzle-error-golden);
+}
+
+.puzzle-error-modal__intro {
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: var(--text-1, #ebdfc7);
+}
+
+.puzzle-error-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: var(--puzzle-error-color);
+}
+
+.puzzle-error-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.puzzle-error-modal__close {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--puzzle-error-golden);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+@media (hover: hover) {
+  .puzzle-error-modal__close:hover {
+    background: color-mix(in srgb, var(--puzzle-error-golden) 14%, transparent);
+  }
+}
+
+.puzzle-error-modal__close:focus-visible {
+  outline: 2px solid var(--puzzle-error-golden);
+  outline-offset: 2px;
+}

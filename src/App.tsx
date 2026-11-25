@@ -27,10 +27,15 @@ import { createNotificationData } from './data/CharacterNotificationData'
 import { OfficialPuzzlesModal } from './components/OfficialPuzzlesModal/OfficialPuzzlesModal'
 import { PuzzleBadge } from './components/PuzzleBadge/PuzzleBadge'
 import { findPlayerLeader } from './utils/findPlayerLeader'
+import { PuzzleLoader } from './data/puzzle/PuzzleLoader'
+import { PuzzleErrorModal } from './components/PuzzleErrorModal/PuzzleErrorModal'
 
 // Created once, outside the component, so the references stay stable.
 const puzzleRawState = GameUrlReader.getRawState()
-const createGameHistory = () => GameLoader.fromRawState(puzzleRawState)
+// The puzzle is checked once, before any game is started.
+const puzzleCheck = PuzzleLoader.check(puzzleRawState)
+const createGameHistory = () =>
+  puzzleCheck.status === 'valid' ? GameLoader.fromRawState(puzzleRawState) : null
 const animator = new ActionAnimator()
 
 function compareForShine(a: PieceData, b: PieceData): number {
@@ -43,6 +48,7 @@ export default function App() {
   useLanguageSync()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [puzzlesOpen, setPuzzlesOpen] = useState(false)
+  const [puzzleErrorsOpen, setPuzzleErrorsOpen] = useState(puzzleCheck.status === 'invalid')
   const { data: notification, toggle: toggleNotification, hide: hideNotification } = useCharacterNotification()
 
   // Long press on a piece: shows (or hides) the description of its character.
@@ -134,6 +140,9 @@ export default function App() {
         />
       )}
       {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
+      {puzzleCheck.status === 'invalid' && puzzleErrorsOpen && (
+        <PuzzleErrorModal errors={puzzleCheck.errors} onClose={() => setPuzzleErrorsOpen(false)} />
+      )}
       {gameResult !== null && gameResult !== dismissedResult && (
         <EndGameModal
           playerWon={gameResult.playerWon}

@@ -1,0 +1,22 @@
+{
+  "title": "Puzzle invalide",
+  "intro": "Le puzzle ne peut pas être démarré :",
+  "close": "Fermer",
+  "teams": {
+    "black": "noire",
+    "white": "blanche"
+  },
+  "errors": {
+    "emptyPlayerTeam": "Aucun personnage n'a été trouvé dans l'équipe du joueur.",
+    "unknownCharacter": "L'id de personnage « {{characterId}} » est inconnu.",
+    "unexpected": "Une erreur inattendue est survenue pendant le chargement du puzzle.",
+    "frogLimit": "Un seul personnage peut être transformé en grenouille.",
+    "leaderTransformedIntoFrog": "Un chef ne peut pas être transformé en grenouille.",
+    "leaderMissing": "Le chef de l'équipe {{team}} est absent.",
+    "leaderCaptured": "Le chef de l'équipe {{team}} est déjà capturé.",
+    "leaderSurrounded": "Le chef de l'équipe {{team}} est déjà encerclé.",
+    "oneLeaderPerTeam": "Il ne peut y avoir qu'un chef par équipe.",
+    "onePerTeamCharacter": "Le personnage « {{character}} » ne peut être présent qu'une fois par équipe.",
+    "hermitAndCubLimit": "L'équipe du joueur ne peut contenir qu'un seul vieil ours et un seul ourson."
+  }
+}
