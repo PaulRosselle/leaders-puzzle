@@ -3,6 +3,7 @@
   touch-action: manipulation;
   /* No system menu on a long press (iOS). */
   -webkit-touch-callout: none;
+  will-change: transform;
 }
 
 .character-piece img {
@@ -101,7 +102,7 @@
 /* Circular clip of the shine (radius = 0.42 of the cell, like CharacterShineView). */
 .character-piece__shine {
   position: absolute;
-  inset: 8%;
+  inset: 6.5%;
   border-radius: 50%;
   overflow: hidden;
   pointer-events: none;
