@@ -22,3 +22,5 @@ for (const [path, source] of Object.entries(files)) {
 export function getPortraitSource(portrait: CharacterPortrait): string | undefined {
   return PORTRAIT_SOURCES.get(portrait)
 }
+
+export const PORTRAIT_SOURCE_URLS: string[] = [...PORTRAIT_SOURCES.values()]

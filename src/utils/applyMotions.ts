@@ -67,7 +67,7 @@ function moveTargets(pieces: PieceData[], targets: readonly ActionTarget[]): Pie
       ...piece, 
       position: destination, 
       highlightStatus: HighlightStatus.Disabled, 
-      ransformedCharacter: null, 
+      transformedCharacter: null, 
     }
   })
 }

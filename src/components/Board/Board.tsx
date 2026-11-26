@@ -53,22 +53,21 @@ export function Board({
             <Cell
               key={key}
               position={position}
-              onSelect={target ? () => onSelectTarget(target) : undefined}
+              target={target}
+              onSelectTarget={onSelectTarget}
               label={showCoordinates ? PositionLabelMapper.toLabel(position) : undefined} 
             />
           )
         })}
 
         {pieces.map((piece) => {
-          // A piece is drawn above its cell, so it needs its own click handler.
-          const target = targetsByPosition.get(positionKey(piece.position))
-
           return (
             <CharacterPiece
               key={piece.id}
               piece={piece}
               highlightColor={highlightColor}
-              onSelect={target ? () => onSelectTarget(target) : undefined}
+              target={targetsByPosition.get(positionKey(piece.position))}
+              onSelectTarget={onSelectTarget}
               onLongPress={() => onCharacterLongPress(piece)}
             />
           )
