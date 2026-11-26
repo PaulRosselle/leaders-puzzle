@@ -4,7 +4,8 @@ Leaders is an unofficial, independent website allowing to solve online puzzles f
 
 ## About
 
-Once finished the project will be accessible online via GitHub Pages.
+The project is accessible via GitHub Pages at the following url:
+https://paulrosselle.github.io/leaders-puzzle/
 
 ## License
 
