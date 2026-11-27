@@ -24,6 +24,7 @@ export type Settings = {
   playableAnimation: boolean
   highlightColor: HighlightColor
   toolbarPosition: ToolbarPosition
+  showToolbarLabels: boolean
   language: Language
   puzzleSort: PuzzleSort
 }
@@ -34,9 +35,10 @@ export const DEFAULT_SETTINGS: Settings = {
   playableAnimation: true,
   highlightColor: HighlightColor.Default,
   toolbarPosition: 'left',
+  showToolbarLabels: false,
   // Only used until the player picks a language (the saved choice always wins).
   language: detectLanguage(),
-  puzzleSort: 'id'
+  puzzleSort: 'difficulty'
 }
 
 /** `ActionAnimator` works with a multiplier of the durations: slower = bigger. */

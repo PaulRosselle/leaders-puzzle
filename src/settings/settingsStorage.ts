@@ -43,6 +43,7 @@ export function loadSettings(): Settings {
         DEFAULT_SETTINGS.highlightColor,
       ),
       toolbarPosition: pickOption(record.toolbarPosition, TOOLBAR_POSITIONS, DEFAULT_SETTINGS.toolbarPosition),
+      showToolbarLabels: pickBoolean(record.showToolbarLabels, DEFAULT_SETTINGS.showToolbarLabels),
       language: pickOption(record.language, LANGUAGES, DEFAULT_SETTINGS.language),
       puzzleSort: pickOption(record.puzzleSort, PUZZLE_SORTS, DEFAULT_SETTINGS.puzzleSort),
     }

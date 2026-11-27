@@ -127,6 +127,7 @@ export default function App() {
       </Board>
       <Toolbar
         position={settings.toolbarPosition}
+        showLabels={settings.showToolbarLabels}
         actions={{ undo, restart, edit: () => { if (context) openInEditor(context) }, 
           grid: () => setPuzzlesOpen(true),
           import: () => setImportOpen(true ), 

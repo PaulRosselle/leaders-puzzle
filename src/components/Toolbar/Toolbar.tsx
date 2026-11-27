@@ -15,6 +15,7 @@ import './Toolbar.css'
 type ToolbarProps = {
   /** Side of the screen of the vertical bar (landscape only). */
   position?: ToolbarPosition
+  showLabels?: boolean
   /**
    * Action of each button (also used by the "more" menu, which has the same
    * entries). A button without action does nothing. `more` is handled here.
@@ -31,7 +32,7 @@ const MORE_MENU_ID = 'toolbar-more-menu'
  * Landscape: vertical bar on the left. Portrait: horizontal bar at the bottom.
  * The switch is done in CSS only (see Toolbar.css).
  */
-export function Toolbar({ position = 'left', actions = {}, disabled = {} }: ToolbarProps) {
+export function Toolbar({ position = 'left', showLabels = false, actions = {}, disabled = {} }: ToolbarProps) {
   const { t } = useTranslation('toolbar')
   const [menuOpen, setMenuOpen] = useState(false)
   const moreButtonRef = useRef<HTMLButtonElement>(null)
@@ -60,7 +61,9 @@ export function Toolbar({ position = 'left', actions = {}, disabled = {} }: Tool
   }
 
   return (
-    <div className={`toolbar toolbar--${position}`} role="toolbar" aria-label={t('label')}>
+    <div className={`toolbar toolbar--${position}${showLabels ? ' toolbar--labels' : ''}`}
+      role="toolbar"
+      aria-label={t('label')}>
       {GROUPS.map((group) => (
         <div key={group} className={`toolbar__group toolbar__group--${group}`}>
           {TOOLBAR_ITEMS.filter((item) => item.group === group).map((item) => {
@@ -73,6 +76,7 @@ export function Toolbar({ position = 'left', actions = {}, disabled = {} }: Tool
                 )}
                 <ToolbarButton
                   item={item}
+                  showLabel={showLabels}
                   disabled={disabled[item.id] ?? false}
                   onClick={isMore ? () => setMenuOpen((open) => !open) : actions[item.id]}
                   buttonRef={isMore ? moreButtonRef : undefined}

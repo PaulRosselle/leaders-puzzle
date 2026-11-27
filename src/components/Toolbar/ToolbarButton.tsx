@@ -5,6 +5,7 @@ import { ToolbarIcon } from './ToolbarIcon'
 
 type ToolbarButtonProps = {
   item: ToolbarItem
+  showLabel?: boolean
   disabled?: boolean
   /** Nothing happens when undefined (the button is not wired yet). */
   onClick?: () => void
@@ -13,7 +14,7 @@ type ToolbarButtonProps = {
   popup?: { expanded: boolean; controls: string }
 }
 
-export function ToolbarButton({ item, disabled = false, onClick, buttonRef, popup }: ToolbarButtonProps) {
+export function ToolbarButton({ item, showLabel = false, disabled = false, onClick, buttonRef, popup }: ToolbarButtonProps) {
   const { t } = useTranslation('toolbar')
   const label = t(`items.${item.id}`)
 
@@ -31,6 +32,7 @@ export function ToolbarButton({ item, disabled = false, onClick, buttonRef, popu
       onClick={onClick}
     >
       <ToolbarIcon icon={item.icon} />
+      {showLabel && <span className="toolbar__label">{label}</span>}
     </button>
   )
 }
