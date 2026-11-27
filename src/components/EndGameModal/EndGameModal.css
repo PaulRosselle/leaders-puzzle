@@ -131,15 +131,15 @@
 .end-game__subtitle {
   --sub-border: calc(var(--bar-h) / 30);
 
-  left: 20%;
-  right: 20%;
-
-  top: calc(75% + var(--bar-h) / 2);
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
 
   height: auto;
   min-height: calc(var(--bar-h) * 0.6);
 
-  margin: 0;
+  margin: 0 var(--footer-gap);
   padding:
     calc(var(--bar-h) / 15)
     calc(var(--bar-h) * 4 / 15)
@@ -169,29 +169,35 @@
 
 .end-game__footer {
   position: absolute;
-  left: 20%;
-  right: 20%;
+
+  left: 13.3%;
+  right: 13.3%;
   top: calc(75% + var(--bar-h) / 2);
   display: flex;
   flex-direction: column;
   gap: calc(var(--bar-h) / 5);
-}
 
-.end-game__subtitle {
-  position: static;
-  left: auto;
-  right: auto;
-  top: auto;
+  --footer-gap: 6.7cqw;
 }
 
 .end-game__actions {
-  display: flex;
+  width: max-content;
+  min-width: calc(100% - 2 * var(--footer-gap));
+  max-width: 100%;
+  align-self: center;
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: calc(var(--bar-h) / 6);
 }
 
 .end-game__button {
   flex: 1;
   min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
   padding: calc(var(--bar-h) / 10) calc(var(--bar-h) / 6);
   font: inherit;
   font-size: calc(var(--bar-h) / 3.2);
