@@ -24,7 +24,6 @@ export function EndGameModal({ playerWon, leader, onNextPuzzle, onClosed }: EndG
   const type = playerWon ? EndGameType.Victory : EndGameType.Defeat
   const style = END_GAME_STYLES[type]
   const leaderImage = leader !== null ? END_GAME_LEADERS[type][leader] : undefined
-  const close = () => {if (phase === 'shown') setPhase('hiding')}
 
   const handleAnimationEnd = (event: AnimationEvent) => {
     if (event.target !== event.currentTarget) {
@@ -81,7 +80,7 @@ export function EndGameModal({ playerWon, leader, onNextPuzzle, onClosed }: EndG
 
           {onNextPuzzle !== undefined && (
             <div className="end-game__actions">
-              <button type="button" className="end-game__button" onClick={close}>
+              <button type="button" className="end-game__button" onClick={handleClick}>
                 {t('actions.close')}
               </button>
               <button
