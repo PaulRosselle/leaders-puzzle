@@ -136,6 +136,22 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
           )}
         </SettingRow>
 
+        {/* Only in landscape: labels are never displayed in the portrait toolbar. */}
+        <SettingRow
+          id="setting-toolbar-labels"
+          title={t('toolbarLabels.title')}
+          description={t('toolbarLabels.description')}
+          className="setting-row--landscape-only"
+        >
+          {(a11y) => (
+            <Switch
+              checked={settings.showToolbarLabels}
+              onChange={(showToolbarLabels) => updateSettings({ showToolbarLabels })}
+              {...a11y}
+            />
+          )}
+        </SettingRow>
+
         <SettingRow id="setting-language" title={t('language.title')}>
           {(a11y) => (
             <SegmentedControl

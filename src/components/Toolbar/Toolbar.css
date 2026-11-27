@@ -157,6 +157,53 @@
   display: none;
 }
 
+/* Hidden by default (setting off, or not enough room). */
+.toolbar__label {
+  display: none;
+}
+
+/*
+ * Enough room for the labels: the board is centered and ~83.5% of the window
+ * height wide (0.96 * 683 / 785, see Board.css). Each side keeps 250px
+ * (500px / 2) for the bar. Media queries cannot read CSS variables, so the
+ * numbers are written here: update them if --margin-ratio changes.
+ */
+@media (orientation: landscape) and (min-width: calc(83.5vh + 500px)) {
+  .toolbar--labels .toolbar__button:not(.toolbar__button--portrait) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    gap: calc(var(--toolbar-button-size) * 0.27);
+    padding: 0 calc(var(--toolbar-button-size) * 0.36) 0 calc(var(--toolbar-button-size) * 0.23);
+    font-family: var(--font-title);
+    font-size: calc(var(--toolbar-button-size) * 0.45);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .toolbar--labels .toolbar__icon {
+    flex: none;
+  }
+
+  .toolbar--labels .toolbar__label {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: inherit; /* Follows hover / active / disabled of the button. */
+  }
+
+  /* Bar on the right: mirrored, the icon stays on the outer edge of the screen. */
+  .toolbar--right.toolbar--labels .toolbar__button:not(.toolbar__button--portrait) {
+    flex-direction: row-reverse;
+    padding: 0 calc(var(--toolbar-button-size) * 0.23) 0 calc(var(--toolbar-button-size) * 0.36);
+    text-align: right;
+  }
+}
+
 /* ---------- Portrait: horizontal bar at the bottom ---------- */
 
 @media (orientation: portrait) {

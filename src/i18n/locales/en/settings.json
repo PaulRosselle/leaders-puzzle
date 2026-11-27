@@ -23,6 +23,10 @@
     "left": "Left",
     "right": "Right"
   },
+  "toolbarLabels": {
+    "title": "Button labels",
+    "description": "Shows a label next to each toolbar button when there is enough room"
+  },
   "language": {
     "title": "Language"
   }

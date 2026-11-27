@@ -23,6 +23,10 @@
     "left": "Gauche",
     "right": "Droite"
   },
+  "toolbarLabels": {
+    "title": "Libellé des boutons",
+    "description": "Affiche un libellé à côté de chaque bouton de la barre d’actions lorsque la place le permet"
+  },
   "language": {
     "title": "Langue"
   }
