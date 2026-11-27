@@ -17,7 +17,7 @@ type ToolbarButtonProps = {
 export function ToolbarButton({ item, showLabel = false, disabled = false, onClick, buttonRef, popup }: ToolbarButtonProps) {
   const { t } = useTranslation('toolbar')
   const label = t(`items.${item.id}`)
-  
+
   return (
     <button
       ref={buttonRef}

@@ -38,7 +38,7 @@ export const DEFAULT_SETTINGS: Settings = {
   showToolbarLabels: false,
   // Only used until the player picks a language (the saved choice always wins).
   language: detectLanguage(),
-  puzzleSort: 'id'
+  puzzleSort: 'difficulty'
 }
 
 /** `ActionAnimator` works with a multiplier of the durations: slower = bigger. */
