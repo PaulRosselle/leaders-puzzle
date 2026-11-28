@@ -34,6 +34,10 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
     const [gameResult, setGameResult] = useState<GameResult | null>(null)
     const [officialPuzzle, setOfficialPuzzle] = useState<OfficialPuzzle | null>(null)
 
+    const [historyLength, setHistoryLength] = useState(0);
+    const [interactionSteps, setInteractionSteps] = useState(0)
+    const pendingUndoRef = useRef(false)
+
     // Motions already shown on screen during the current action, but not yet
     // part of `context`: the engine only applies the action to its state at the
     // very end, so `context` stays the "before" state while the action is built.
@@ -53,6 +57,7 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
         // We search for an official puzzle matching the game history
         const puzzle = findOfficialPuzzleMatch(gameHistory)
         setOfficialPuzzle(puzzle)
+        const syncHistory = () => setHistoryLength(controller.getCurrentHistory().actions.length)
 
         let active = true
         // Replaced once the Nemesis moves of an official puzzle are loaded (before the game starts).
@@ -88,21 +93,37 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
             onGameStarted: () => {
                 if (!active) return
                 setContext(controller.getCurrentContext())
+                syncHistory();
                 setGameResult(null)
             },
             onGameEnded: (playerWon) => {
                 if (!active) return
                 if (playerWon && puzzle !== null) markPuzzleCompleted(puzzle.id)
                 setContext(controller.getCurrentContext())
+                syncHistory();
                 setGameResult({ playerWon })
             },
             onActionUndone: () => {
-                if (active) setContext(controller.getCurrentContext())
+                if (!active) return
+                pendingUndoRef.current = false
+                setContext(controller.getCurrentContext())
+                syncHistory();
             },
             onInteractionRequired: (newRequest) => {
                 if (!active) return
                 const currentContext = controller.getCurrentContext()
                 setContext(currentContext)
+                syncHistory()
+
+                const isIdle = newRequest.getRequestType() === InteractionRequestType.PlayableCharacterExpected;
+
+                if (isIdle && pendingUndoRef.current) {
+                    pendingUndoRef.current = false
+                    if (newRequest.getLegalResults().includes(InteractionResultType.UndoLastAction)) {
+                        controller.undoLastAction(newRequest)
+                        return
+                    }
+                }
 
                 // Requests answered automatically are never shown to the player.
                 const autoTarget = autoPlayer.findTarget(newRequest, controller.getCurrentHistory())
@@ -115,8 +136,11 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
 
                 // A new action starts (after the previous one was done, cancelled or
                 // undone): `context` is up to date again, so motions are dropped.
-                if (newRequest.getRequestType() === InteractionRequestType.PlayableCharacterExpected) {
+                if (isIdle) {
                     setMotions([])
+                    setInteractionSteps(0)
+                } else {
+                    setInteractionSteps((steps) => steps + 1)
                 }
             },
             onInteractionCleared: () => {
@@ -176,11 +200,29 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
         }
     }, [request])
 
-    const undo = useCallback(() => {
-        if (request !== null) controllerRef.current?.undoLastAction(request)
-    }, [request])
+    const results = request?.getLegalResults() ?? [];
+    const isIdle = request?.getRequestType() === InteractionRequestType.PlayableCharacterExpected;
+    const hasProgress = motions.length > 0 || interactionSteps > 1;
 
-    const canUndo = request?.getLegalResults().includes(InteractionResultType.UndoLastAction) ?? false
+    // Cancels an action in progress, otherwise undo the last action.
+    const canUndo = request === null ? false : isIdle ? 
+        results.includes(InteractionResultType.UndoLastAction) : 
+        results.includes(InteractionResultType.CancelAction);
+
+    const undo = useCallback(() => {
+        const controller = controllerRef.current
+        if (request === null || controller === null || !canUndo) return
+
+        if (isIdle) {
+            controller.undoLastAction(request)
+            return
+        }
+        // Defer the undo only if there is a previous action to undo
+        // and the current action has not yet made any changes on screen.
+        pendingUndoRef.current = !hasProgress && historyLength > 0;
+        controller.cancelAction(request);
+    }, [request, canUndo, isIdle, hasProgress, historyLength])
+
 
     const restart = useCallback(() => {
         const controller = controllerRef.current
@@ -201,7 +243,7 @@ export function useGameController(createGameHistory: () => GameHistory | null, a
             })
     }, [createGameHistory])
 
-    const canRestart = canUndo || gameResult !== null
+    const canRestart = historyLength > 0 || motions.length > 0 || gameResult !== null;
 
     return { context, request, motions, gameResult, officialPuzzle, selectTarget, cancel, undo, canUndo, restart, canRestart }
 }
